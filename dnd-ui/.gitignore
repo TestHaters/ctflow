@@ -1,0 +1,9 @@
+/node_modules/
+
+webview-ui/node_modules
+webview-ui/.DS_Store
+webview-ui/dist
+webview-ui/dist-ssr
+webview-ui/build
+webview-ui/build-ssr
+webview-ui/*.local
