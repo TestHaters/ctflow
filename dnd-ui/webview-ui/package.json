@@ -9,15 +9,17 @@
   },
   "dependencies": {
     "@vscode/webview-ui-toolkit": "^1.0.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "axios": "^1.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "reactflow": "^11.3.2"
   },
   "devDependencies": {
-    "@types/react": "^17.0.33",
-    "@types/react-dom": "^17.0.10",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.9",
     "@types/vscode-webview": "^1.57.0",
-    "@vitejs/plugin-react": "^1.0.7",
+    "@vitejs/plugin-react": "^2.2.0",
     "typescript": "^4.4.4",
-    "vite": "^2.9.13"
+    "vite": "^3.2.4"
   }
 }

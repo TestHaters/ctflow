@@ -1,8 +1,14 @@
-import { vscode } from "./utilities/vscode";
-import { VSCodeButton } from "@vscode/webview-ui-toolkit/react";
-import "./App.css";
+
+import { useState } from 'react';
+import { VSCodeButton } from '@vscode/webview-ui-toolkit/react';
+
+import Flow from './Flow';
+import { vscode } from './utilities/vscode';
+
+import './App.css';
 
 function App() {
+  const [count, setCount] = useState(0);
   function handleHowdyClick() {
     vscode.postMessage({
       command: "hello",
@@ -12,9 +18,9 @@ function App() {
 
   return (
     <main>
-      <h1>Hello World!</h1>
-      <div>Hector change things here!!!</div>
-      <VSCodeButton onClick={handleHowdyClick}>Howdy!</VSCodeButton>
+      <div className="App">
+        <Flow />
+      </div>
     </main>
   );
 }

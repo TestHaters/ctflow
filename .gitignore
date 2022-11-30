@@ -1,3 +1,6 @@
+core/node_modules/
+core/dist/
+
 dnd-ui/node_modules/
 
 dnd-ui/webview-ui/node_modules
