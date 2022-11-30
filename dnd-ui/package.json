@@ -10,10 +10,22 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:hello-world.showHelloWorld"
+    "onCommand:hello-world.showHelloWorld",
+    "onCustomEditor:codelessTesting.ctflow"
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "customEditors": [
+      {
+        "viewType": "codelessTesting.ctflow",
+        "displayName": "Codeless Testing Flow",
+        "selector": [
+          {
+            "filenamePattern": "*.ctflow"
+          }
+        ]
+      }
+    ],
     "commands": [
       {
         "command": "hello-world.showHelloWorld",
