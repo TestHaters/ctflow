@@ -1,6 +1,7 @@
 import { stringify } from "querystring";
 import { DocumentSymbol } from "vscode";
 import { vscode } from "./utilities/vscode";
+
 export class Router {
 	subscribers: any
 
@@ -11,10 +12,12 @@ export class Router {
 
 	// register all events that we listen from VS editor
 	register() {
+		console.log("ROUTER REGISTER: WINDOW EVENT")
+		console.log(window)
 		window.addEventListener('message', event => {
-			if (!this.subscribers[event.type]) { return true }
-			console.log("EVENT", event)
-			this.dispatch(event.type, event);
+			console.log("REACTAPP::ROUTER.TS NOT_READY_YET::EVENT", event)
+			if (!this.subscribers[event.data.type]) { return true }
+			this.dispatch(event.data.type, event);
 		});
 	}
 

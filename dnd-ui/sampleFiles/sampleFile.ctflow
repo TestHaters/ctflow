@@ -1,0 +1,107 @@
+---
+nodes:
+  '2':
+    id: '2'
+    type: text
+    data:
+      color: "#1A192B"
+    position:
+      x: 380
+      y: 50
+    inPorts:
+      field: "#email"
+      email: hungdh131@gmail.com
+    outPorts: {}
+    description: description
+    componentName: compName
+    outputQ:
+    - outputQ
+  '3':
+    id: '3'
+    type: text
+    data:
+      color: "#1A192B"
+    position:
+      x: 680
+      y: 50
+    inPorts:
+      field: "#password"
+      email: thisispassword
+    outPorts: {}
+    description: description
+    componentName: compName
+    outputQ:
+    - outputQ
+  '4':
+    id: '4'
+    type: text
+    data:
+      color: "#1A192B"
+    position:
+      x: 980
+      y: 50
+    inPorts:
+      field: "#password_confirmation"
+      email: thisispassword
+    outPorts: {}
+    description: description
+    componentName: compName
+    outputQ:
+    - outputQ
+  '5':
+    id: '5'
+    type: text
+    data:
+      color: "#1A192B"
+    position:
+      x: 1280
+      y: 50
+    inPorts:
+      field: "#agreement"
+      isChecked: 'on'
+    outPorts: {}
+    description: description
+    componentName: compName
+    outputQ:
+    - outputQ
+  '9':
+    id: '9'
+    type: text
+    data:
+      color: "#1A192B"
+    position:
+      x: 10
+      y: 100
+    inPorts:
+      url: https://auth.planetscale.com/sign-up
+    outPorts: {}
+    description: description
+    componentName: compName
+    outputQ:
+    - outputQ
+edges:
+  '2':
+    source: '2'
+    sourceHandle: a
+    target: '3'
+    targetHandle: w
+  '3':
+    source: '3'
+    sourceHandle: a
+    target: '4'
+    targetHandle: w
+  '4':
+    source: '4'
+    sourceHandle: a
+    target: '5'
+    targetHandle: w
+  '5':
+    source: '5'
+    sourceHandle: a
+    target: '6'
+    targetHandle: w
+  '9':
+    source: '9'
+    sourceHandle: a
+    target: '2'
+    targetHandle: w

@@ -2,13 +2,25 @@ import { useState } from "react";
 import { VSCodeButton } from "@vscode/webview-ui-toolkit/react";
 import createFastContext from "./context/createFastContext";
 
+import { useEffect } from "react";
 import Flow from "./Flow";
 import { vscode } from "./utilities/vscode";
-
 import "./App.css";
 import { TextInput } from "./models/TextInput";
-import { Router } from "./router";
 import { Provider, useStore } from "./context/store"
+import InitGlobalState from "./InitGlobalState"
+import { DataLoader } from "./dataLoader";
+import { Router } from "./router";
+
+
+declare global {
+  interface Window {
+    example: string;
+    router: any;
+    dataLoader: any;
+  }
+}
+
 
 function App() {
   // function handleHowdyClick() {
@@ -27,17 +39,28 @@ function App() {
   });
   console.log("textInputNode", textInputNode);
 
+  // const [router, setRouter] = useStore((store) => store.router);
+  // const [dataLoader, setDataLoader] = useStore((store) => store.dataLoader)
+  // useEffect(() => {
+  //   setRouter({ router: new Router() })
+  //   setDataLoader({ dataLoader: new DataLoader })
+  // }, [])
+
+
+
+
   // register router
-  window.router = new Router()
-  // const [router, _] = useStore((store) => store.router)
+
 
   return (
     <Provider>
-      <main>
-        <div className="App">
-          <Flow />
-        </div>
-      </main>
+      <InitGlobalState>
+        <main>
+          <div className="App">
+            <Flow />
+          </div>
+        </main>
+      </InitGlobalState>
     </Provider>
   );
 }

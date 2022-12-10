@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { vscode } from "./utilities/vscode";
 import ReactFlow, {
   Controls,
   Background,
@@ -6,6 +7,7 @@ import ReactFlow, {
   applyEdgeChanges,
   addEdge,
 } from "reactflow";
+import { useStore } from './context/store';
 import "reactflow/dist/style.css";
 import axios from "axios";
 
@@ -15,7 +17,7 @@ axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 const initialNodes = [
   {
     id: "1",
-    data: { label: "Run" },
+    data: { label: "PUSH_EVENT_HERE" },
     position: { x: 40, y: 40 },
     type: "input",
   },
@@ -31,6 +33,9 @@ const initialEdges = [{ id: "1-2", source: "1", target: "2", type: "step" }] as 
 function Flow() {
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
+  const [router, _] = useStore(store => store.router);
+
+  console.log('router', router)
 
   const onNodesChange = useCallback(
     (changes: any) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -44,7 +49,12 @@ function Flow() {
   const onConnect = useCallback((params: any) => setEdges((eds: any) => addEdge(params, eds)), []);
 
   const runTest = useCallback((_event: any, node: any) => {
-    console.log("node", node);
+    if (node.data.label === 'PUSH_EVENT_HERE') {
+      vscode.postMessage({
+        type: 'fireEventFromEditor',
+        data: { eventType: 'fileUpdate' }
+      })
+    }
     if (node.data.label.toLowerCase() !== "run") return;
     fetch("http://localhost:33333/", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.

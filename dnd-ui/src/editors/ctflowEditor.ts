@@ -3,6 +3,12 @@ import { getNonce } from '../utilities/nonce';
 import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vscode";
 import { getUri } from "../utilities/getUri";
 
+
+interface CtflowEdit {
+	readonly nodes: ReadonlyArray<any>;
+	readonly edges: ReadonlyArray<any>;
+}
+
 /**
  * Provider for cat scratch editors.
  * 
@@ -20,6 +26,7 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
 	public static register(context: vscode.ExtensionContext): vscode.Disposable {
 		const provider = new CtFlowEditorProvider(context);
 		const providerRegistration = vscode.window.registerCustomEditorProvider(CtFlowEditorProvider.viewType, provider);
+
 		return providerRegistration;
 	}
 
@@ -50,10 +57,12 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
 
 		function updateWebview() {
 			webviewPanel.webview.postMessage({
-				type: 'update',
+				type: 'fileUpdate',
 				text: document.getText(),
 			});
 		}
+
+		console.log("HRERERERERE POST MESSGE FILE UPDATE")
 
 		// Hook up event handlers so that we can synchronize the webview with the text document.
 		//
@@ -76,7 +85,12 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
 
 		// Receive message from the webview.
 		webviewPanel.webview.onDidReceiveMessage(e => {
+			console.log("CTFLOW.TS:: RECEIVED EVENT FROM VS EDITOR", e)
 			switch (e.type) {
+				case 'changed':
+					// this.makeEdit(message as CtflowEdit);
+					return;
+
 				case 'add':
 					this.addNewScratch(document);
 					return;
@@ -84,6 +98,26 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
 				case 'delete':
 					this.deleteScratch(document, e.id);
 					return;
+
+				case 'fireEventFromEditor':
+					console.log("CTFLOW.TS::Fire Event From Editor --------- ", e)
+					webviewPanel.webview.postMessage({
+						type: e.data.eventType,
+						text: document.getText(),
+					});
+					return;
+
+				// Push document text to web app
+				case 'fetchDocumentData':
+					updateWebview()
+					return;
+
+				// When Flow is changed, but not yet saved
+				case 'addEdit':
+					console.log("flow Updated")
+					this._savedEdits.push(e.data.yamlData)
+					return
+
 			}
 		});
 
@@ -177,4 +211,55 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
 
 		return vscode.workspace.applyEdit(edit);
 	}
+
+	private _documentData: Uint8Array;
+	private _edits: Array<CtflowEdit>;
+	private _savedEdits: Array<CtflowEdit>;
+
+
+	// When flow is changed, we will update the current text_data.
+	private makeEdit(edit: CtflowEdit) {
+		this._edits.push(edit);
+
+		// Support redo/undo - later
+
+		// this._onDidChange.fire({
+		// 	label: 'Stroke',
+		// 	undo: async () => {
+		// 		this._edits.pop();
+		// 		this._onDidChangeDocument.fire({
+		// 			edits: this._edits,
+		// 		});
+		// 	},
+		// 	redo: async () => {
+		// 		this._edits.push(edit);
+		// 		this._onDidChangeDocument.fire({
+		// 			edits: this._edits,
+		// 		});
+		// 	}
+		// });
+	}
+
+
+	/**
+	 * Called by VS Code when the user saves the document.
+	 */
+	// async save(cancellation: vscode.CancellationToken): Promise<void> {
+	// 	await this.saveAs(this.uri, cancellation);
+	// 	this._savedEdits = Array.from(this._edits);
+	// }
+
+	/**
+	 * Called by VS Code when the user saves the document to a new location.
+	 */
+	// async saveAs(targetResource: vscode.Uri, cancellation: vscode.CancellationToken): Promise<void> {
+	// 	const fileData = await this._delegate.getFileData();
+	// 	if (cancellation.isCancellationRequested) {
+	// 		return;
+	// 	}
+	// 	await vscode.workspace.fs.writeFile(targetResource, fileData);
+	// }
+
+
+
 }

@@ -8,3 +8,5 @@ Types of content that can be contained here:
 - JavaScript files
 - CSS files
 - Assets / resources (i.e. images, illustrations, etc.)
+
+> Cmd Shift P => Open Webview Developer Tools
