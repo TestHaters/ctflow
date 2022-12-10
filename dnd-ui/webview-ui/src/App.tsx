@@ -37,7 +37,6 @@ function App() {
     inPorts: { email: "hungdh131@gmail.com" },
     outPorts: {},
   });
-  console.log("textInputNode", textInputNode);
 
   // const [router, setRouter] = useStore((store) => store.router);
   // const [dataLoader, setDataLoader] = useStore((store) => store.dataLoader)
@@ -50,7 +49,8 @@ function App() {
 
 
   // register router
-
+  // window.router = new Router()
+  // const [router, _] = useStore((store) => store.router)
 
   return (
     <Provider>
