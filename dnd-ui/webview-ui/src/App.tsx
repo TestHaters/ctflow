@@ -7,11 +7,8 @@ import { vscode } from "./utilities/vscode";
 
 import "./App.css";
 import { TextInput } from "./models/TextInput";
-
-const { Provider, useStore } = createFastContext({
-  nodes: {},
-  edges: {},
-});
+import { Router } from "./router";
+import { Provider, useStore } from "./context/store"
 
 function App() {
   // function handleHowdyClick() {
@@ -29,6 +26,10 @@ function App() {
     outPorts: {},
   });
   console.log("textInputNode", textInputNode);
+
+  // register router
+  window.router = new Router()
+  // const [router, _] = useStore((store) => store.router)
 
   return (
     <Provider>
