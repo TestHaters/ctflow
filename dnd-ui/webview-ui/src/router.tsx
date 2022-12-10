@@ -20,7 +20,8 @@ export class Router {
 
 	// trigger when VScode Editor push a new message
 	subscribe(eventType: string, callbackFunc: any) {
-		this.subscribers[eventType] = (this.subscribers[eventType] || []).push(callbackFunc)
+		this.subscribers[eventType] = [...(this.subscribers?.[eventType] || []), callbackFunc]
+
 	}
 
 	// when a new message come in, dispatch the message to subscribers
