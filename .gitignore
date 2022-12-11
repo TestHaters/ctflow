@@ -10,3 +10,6 @@ dnd-ui/webview-ui/dist-ssr
 dnd-ui/webview-ui/build
 dnd-ui/webview-ui/build-ssr
 dnd-ui/webview-ui/*.local
+dnd-ui/out/
+dnd-ui/webview-ui/out
+node_modules/
