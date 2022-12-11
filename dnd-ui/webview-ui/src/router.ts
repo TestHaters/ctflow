@@ -20,8 +20,8 @@ export class Router {
 		console.log("ROUTER REGISTER: WINDOW EVENT")
 		console.log(window)
 		window.addEventListener('message', event => {
-			console.log("REACTAPP::ROUTER.TS NOT_READY_YET::EVENT", event)
 			if (!this.subscribers[event.data.type]) { return true }
+			console.log("REACTAPP::ROUTER.TS NOT_READY_YET::EVENT", event)
 			this.dispatch(event.data.type, event);
 		});
 	}

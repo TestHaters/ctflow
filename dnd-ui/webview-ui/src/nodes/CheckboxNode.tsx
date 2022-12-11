@@ -19,7 +19,7 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
       type: "text",
       data,
       position: { x: xPos, y: yPos },
-      inPorts: { field: nameRef?.current?.value, isChecked: valueRef?.current?.value },
+      inPorts: { field: nameRef?.current?.value, isChecked: valueRef?.current?.checked },
       outPorts: {},
     });
     setNodeStore({
@@ -55,7 +55,6 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
           type="checkbox"
           ref={valueRef}
           id="email"
-          checked={Boolean(valueRef?.current?.value)}
         />
       </div>
       <Handle
