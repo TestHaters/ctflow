@@ -28,7 +28,6 @@ export class DataLoader {
     this.yamlData = ""
     this.nodes = []
     this.edges = []
-    // this.subscribe()
   }
 
   // data loader will subscribe to VS Editor
@@ -43,6 +42,7 @@ export class DataLoader {
     this.parseYaml(event.data.text)
   }
 
+  // when flow is updated, push a temporary version to ctflowEditor
   onFlowUpdate(event: any) {
     vscode.postMessage({
       type: 'addEdit',
