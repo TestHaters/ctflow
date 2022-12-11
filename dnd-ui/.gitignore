@@ -7,3 +7,4 @@ webview-ui/dist-ssr
 webview-ui/build
 webview-ui/build-ssr
 webview-ui/*.local
+out/**
