@@ -3,7 +3,7 @@ import { DocumentSymbol } from "vscode";
 import { vscode } from "./utilities/vscode";
 
 export class Router {
-	subscribers: any
+	subscribers: any;
 
 	constructor() {
 		this.subscribers = {
@@ -35,7 +35,7 @@ export class Router {
 	// when a new message come in, dispatch the message to subscribers
 	dispatch(eventType: string, event: any) {
 		this.subscribers[eventType]?.forEach((subscriber: CallableFunction) => {
-			subscriber(event)
+			subscriber(event);
 		});
 	}
 }
