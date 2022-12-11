@@ -6,6 +6,7 @@ import ReactFlow, {
   applyNodeChanges,
   applyEdgeChanges,
   addEdge,
+  Node,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import axios from "axios";
@@ -21,59 +22,61 @@ axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 const initialNodes = [
   {
     id: "1",
-    data: { label: "PUSH_EVENT_HERE" },
+    data: { label: "PUSH_EVENT_HERE", color: "" },
     position: { x: 40, y: 40 },
+    type: 'buttonNode'
   },
   {
     id: "9",
     type: "visitNode",
-    data: { color: "#1A192B" },
+    data: { color: "#1A192B", label: "" },
     style: { border: "1px solid #777", padding: 10 },
     position: { x: 10, y: 100 },
   },
   {
     id: "2",
     type: "textInputType",
-    data: { color: "#1A192B" },
+    data: { color: "#1A192B", label: "" },
     style: { border: "1px solid #777", padding: 10 },
     position: { x: 380, y: 50 },
   },
   {
     id: "3",
     type: "textInputType",
-    data: { color: "#1A192B" },
+    data: { color: "#1A192B", label: "" },
     style: { border: "1px solid #777", padding: 10 },
     position: { x: 680, y: 50 },
   },
   {
     id: "4",
     type: "textInputType",
-    data: { color: "#1A192B" },
+    data: { color: "#1A192B", label: "" },
     style: { border: "1px solid #777", padding: 10 },
     position: { x: 980, y: 50 },
   },
   {
     id: "5",
     type: "checkboxNode",
-    data: { color: "#1A192B" },
+    data: { color: "#1A192B", label: "" },
     style: { border: "1px solid #777", padding: 10 },
     position: { x: 1280, y: 50 },
   },
   {
     id: "6",
     type: "buttonNode",
-    data: { color: "#1A192B" },
+    data: { color: "#1A192B", label: "" },
     style: { border: "1px solid #777", padding: 10 },
     position: { x: 1580, y: 50 },
   },
   {
     id: "8",
-    data: { label: "End" },
+    data: { label: "End", color: "" },
     position: { x: 1880, y: 40 },
+    type: "buttonNode"
   },
   {
     id: "7",
-    data: { label: "Submit" },
+    data: { label: "Submit", color: "" },
     position: { x: 900, y: 300 },
     type: "input",
   },
@@ -93,7 +96,10 @@ const nodeTypes = {
 };
 
 function Flow() {
-  const [nodes, setNodes] = useState(initialNodes);
+  const [nodes, setNodes] = useState<Node<{
+    color: string;
+    label: string;
+  }>[]>(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
   const [router, _] = useStore(store => store.router);
   const [store] = useStore(store => store);
@@ -119,7 +125,7 @@ function Flow() {
     if (node.id === '7') {
       const payload = { nodes: store.nodes, edges: store.edges }
       console.log('submit', payload);
-      
+
     }
     if (node.data.label?.toLowerCase() !== "run") return;
     fetch("http://localhost:33333/", {
