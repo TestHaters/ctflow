@@ -4,104 +4,136 @@ nodes:
     id: '2'
     type: text
     data:
-      color: "#1A192B"
+      sourceHandleId: c
+      targetHandleId: d
+      label: ''
     position:
       x: 380
-      y: 50
+      'y': 50
     inPorts:
-      field: "#email"
+      field: '#user_email'
       email: hungdh131@gmail.com
     outPorts: {}
     description: description
     componentName: compName
     outputQ:
-    - outputQ
+      - outputQ
   '3':
     id: '3'
     type: text
     data:
-      color: "#1A192B"
+      sourceHandleId: e
+      targetHandleId: f
+      label: ''
     position:
       x: 680
-      y: 50
+      'y': 50
     inPorts:
-      field: "#password"
-      email: thisispassword
+      field: '#user_password'
+      email: thisisthepassword
     outPorts: {}
     description: description
     componentName: compName
     outputQ:
-    - outputQ
+      - outputQ
   '4':
     id: '4'
     type: text
     data:
-      color: "#1A192B"
+      sourceHandleId: g
+      targetHandleId: h
+      label: ''
     position:
       x: 980
-      y: 50
+      'y': 50
     inPorts:
-      field: "#password_confirmation"
-      email: thisispassword
+      field: '#user_password_confirmation'
+      email: thisisthepassword
     outPorts: {}
     description: description
     componentName: compName
     outputQ:
-    - outputQ
+      - outputQ
   '5':
     id: '5'
     type: text
     data:
-      color: "#1A192B"
+      sourceHandleId: i
+      targetHandleId: k
+      label: ''
     position:
       x: 1280
-      y: 50
+      'y': 50
     inPorts:
-      field: "#agreement"
+      field: '#tos'
       isChecked: 'on'
     outPorts: {}
     description: description
     componentName: compName
     outputQ:
-    - outputQ
-  '9':
-    id: '9'
+      - outputQ
+  '6':
+    id: '6'
     type: text
     data:
-      color: "#1A192B"
+      sourceHandleId: l
+      targetHandleId: m
+      label: ''
     position:
-      x: 10
-      y: 100
+      x: 1595
+      'y': 50
     inPorts:
-      url: https://auth.planetscale.com/sign-up
+      field: .btn .btn-primary .w-full
     outPorts: {}
     description: description
     componentName: compName
     outputQ:
-    - outputQ
+      - outputQ
+  '9':
+    id: '9'
+    type: text
+    data:
+      sourceHandleId: a
+      targetHandleId: b
+      label: ''
+    position:
+      x: 10
+      'y': 100
+    inPorts:
+      url: 'https://planetscale.com/'
+    outPorts: {}
+    description: description
+    componentName: compName
+    outputQ:
+      - outputQ
 edges:
   '2':
     source: '2'
-    sourceHandle: a
+    sourceHandle: d
     target: '3'
-    targetHandle: w
+    targetHandle: e
   '3':
     source: '3'
-    sourceHandle: a
+    sourceHandle: f
     target: '4'
-    targetHandle: w
+    targetHandle: g
   '4':
     source: '4'
-    sourceHandle: a
+    sourceHandle: h
     target: '5'
-    targetHandle: w
+    targetHandle: i
   '5':
     source: '5'
-    sourceHandle: a
+    sourceHandle: k
     target: '6'
-    targetHandle: w
+    targetHandle: l
+  '6':
+    source: '6'
+    sourceHandle: m
+    target: '8'
+    targetHandle: null
   '9':
     source: '9'
-    sourceHandle: a
+    sourceHandle: b
     target: '2'
-    targetHandle: w
+    targetHandle: c

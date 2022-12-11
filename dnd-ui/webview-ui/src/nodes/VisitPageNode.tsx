@@ -1,11 +1,13 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import { Handle, Position } from "reactflow";
+import { v4 as uuid } from "uuid";
 import { useStore } from "../context/store";
 import { TextInput } from "../models/TextInput";
 
 const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
   const nameRef = useRef<HTMLInputElement>(null);
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
+  const { sourceHandleId, targetHandleId } = data;
   const [edges] = useStore((store) => store.edges);
 
   function commitChange(params: any) {
@@ -17,7 +19,6 @@ const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
       inPorts: { url: nameRef?.current?.value },
       outPorts: {},
     });
-    console.log("inputNode VISIT", inputNode);
     setNodeStore({
       nodes: {
         ...nodesStore,
@@ -36,7 +37,7 @@ const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
         type="target"
         position={Position.Left}
         style={{ background: "#555" }}
-        id="w"
+        id={sourceHandleId || uuid()}
         onConnect={(params) => console.log("handle onConnect", params)}
         isConnectable={isConnectable}
       />
@@ -48,7 +49,7 @@ const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
       <Handle
         type="source"
         position={Position.Right}
-        id="a"
+        id={targetHandleId || uuid()}
         onConnect={commitChange}
         style={{ top: 10, background: "#555" }}
         isConnectable={isConnectable}

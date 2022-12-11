@@ -22,49 +22,48 @@ axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 const initialNodes = [
   {
     id: "1",
-    data: { label: "PUSH_EVENT_HERE", color: "" },
+    data: { label: "PUSH_EVENT_HERE" },
     position: { x: 40, y: 40 },
-    type: 'buttonNode'
   },
   {
     id: "9",
     type: "visitNode",
-    data: { color: "#1A192B", label: "" },
+    data: { sourceHandleId: 'a', targetHandleId: 'b', label: "" },
     style: { border: "1px solid #777", padding: 10 },
     position: { x: 10, y: 100 },
   },
   {
     id: "2",
     type: "textInputType",
-    data: { color: "#1A192B", label: "" },
+    data: { sourceHandleId: 'c', targetHandleId: 'd', label: "" },
     style: { border: "1px solid #777", padding: 10 },
     position: { x: 380, y: 50 },
   },
   {
     id: "3",
     type: "textInputType",
-    data: { color: "#1A192B", label: "" },
+    data: { sourceHandleId: 'e', targetHandleId: 'f', label: "" },
     style: { border: "1px solid #777", padding: 10 },
     position: { x: 680, y: 50 },
   },
   {
     id: "4",
     type: "textInputType",
-    data: { color: "#1A192B", label: "" },
+    data: { sourceHandleId: 'g', targetHandleId: 'h', label: "" },
     style: { border: "1px solid #777", padding: 10 },
     position: { x: 980, y: 50 },
   },
   {
     id: "5",
     type: "checkboxNode",
-    data: { color: "#1A192B", label: "" },
+    data: { sourceHandleId: 'i', targetHandleId: 'k', label: "" },
     style: { border: "1px solid #777", padding: 10 },
     position: { x: 1280, y: 50 },
   },
   {
     id: "6",
     type: "buttonNode",
-    data: { color: "#1A192B", label: "" },
+    data: { sourceHandleId: 'l', targetHandleId: 'm', label: "" },
     style: { border: "1px solid #777", padding: 10 },
     position: { x: 1580, y: 50 },
   },
@@ -72,7 +71,6 @@ const initialNodes = [
     id: "8",
     data: { label: "End", color: "" },
     position: { x: 1880, y: 40 },
-    type: "buttonNode"
   },
   {
     id: "7",

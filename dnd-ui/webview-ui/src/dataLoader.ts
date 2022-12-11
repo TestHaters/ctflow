@@ -1,6 +1,6 @@
 // Data Loader will load YAML string to App Nodes (which located in src/models)
 
-import { stringify } from "querystring";
+// import { stringify } from "querystring";
 import { DocumentSymbol } from "vscode";
 import { vscode } from "./utilities/vscode";
 import { Provider, useStore } from "./context/store"
@@ -53,7 +53,7 @@ export class DataLoader {
   parseYaml(yamlData: string) {
     this.yamlData = yamlData
     const doc = YAML.parse(this.yamlData)
-    console.log("parse data:" + stringify(doc))
+    // console.log("parse data:" + stringify(doc))
 
     for (const [nodeId, node] of Object.entries(doc.nodes)) {
       console.log(nodeId, node);
