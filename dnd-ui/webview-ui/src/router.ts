@@ -6,7 +6,12 @@ export class Router {
 	subscribers: any
 
 	constructor() {
-		this.subscribers = {}
+		this.subscribers = {
+			// Event when .ctflow file is update/load. Origin mostly from ctflowEditor
+			fileUpdate: [],
+			// When global state of nodes/edges are changed because of reactFlow Editting
+			flowUpdate: []
+		}
 		this.register()
 	}
 
