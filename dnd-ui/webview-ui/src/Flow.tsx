@@ -99,7 +99,7 @@ const nodeTypes = {
 function Flow() {
   const [nodes, setNodes] = useState<
     Node<{
-      color: string;
+      color?: string;
       label: string;
     }>[]
   >(initialNodes);
