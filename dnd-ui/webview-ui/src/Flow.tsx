@@ -1,5 +1,7 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { vscode } from "./utilities/vscode";
+import pick from "lodash.pick";
+import YAML from "yaml";
 import ReactFlow, {
   Controls,
   Background,
@@ -7,6 +9,7 @@ import ReactFlow, {
   applyEdgeChanges,
   addEdge,
   Node,
+  Edge,
   Panel,
 } from "reactflow";
 import "reactflow/dist/style.css";
@@ -22,72 +25,68 @@ import { useOnClickOutside } from "./useClickOutside";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
-const initialNodes = [
-  {
-    id: "1",
-    data: { label: "PUSH_EVENT_HERE" },
-    position: { x: 40, y: 40 },
-  },
-  {
-    id: "9",
-    type: "visitNode",
-    data: { sourceHandleId: "a", targetHandleId: "b", label: "" },
-    style: { border: "1px solid #777", padding: 10 },
-    position: { x: 10, y: 100 },
-  },
-  {
-    id: "2",
-    type: "textInputType",
-    data: { sourceHandleId: "c", targetHandleId: "d", label: "" },
-    style: { border: "1px solid #777", padding: 10 },
-    position: { x: 380, y: 50 },
-  },
-  {
-    id: "3",
-    type: "textInputType",
-    data: { sourceHandleId: "e", targetHandleId: "f", label: "" },
-    style: { border: "1px solid #777", padding: 10 },
-    position: { x: 680, y: 50 },
-  },
-  {
-    id: "4",
-    type: "textInputType",
-    data: { sourceHandleId: "g", targetHandleId: "h", label: "" },
-    style: { border: "1px solid #777", padding: 10 },
-    position: { x: 980, y: 50 },
-  },
-  {
-    id: "5",
-    type: "checkboxNode",
-    data: { sourceHandleId: "i", targetHandleId: "k", label: "" },
-    style: { border: "1px solid #777", padding: 10 },
-    position: { x: 1280, y: 50 },
-  },
-  {
-    id: "6",
-    type: "buttonNode",
-    data: { sourceHandleId: "l", targetHandleId: "m", label: "" },
-    style: { border: "1px solid #777", padding: 10 },
-    position: { x: 1580, y: 50 },
-  },
-  {
-    id: "8",
-    data: { label: "End", color: "" },
-    position: { x: 1880, y: 40 },
-  },
-  {
-    id: "7",
-    data: { label: "Submit", color: "" },
-    position: { x: 900, y: 300 },
-    type: "input",
-  },
-];
+// const initialNodes = [
+//   {
+//     id: "1",
+//     data: { label: "PUSH_EVENT_HERE" },
+//     position: { x: 40, y: 40 },
+//   },
+//   {
+//     id: "9",
+//     type: "visitNode",
+//     data: { sourceHandleId: "a", targetHandleId: "b", label: "" },
+//     style: { border: "1px solid #777", padding: 10 },
+//     position: { x: 10, y: 100 },
+//   },
+//   {
+//     id: "2",
+//     type: "textInputType",
+//     data: { sourceHandleId: "c", targetHandleId: "d", label: "" },
+//     style: { border: "1px solid #777", padding: 10 },
+//     position: { x: 380, y: 50 },
+//   },
+//   {
+//     id: "3",
+//     type: "textInputType",
+//     data: { sourceHandleId: "e", targetHandleId: "f", label: "" },
+//     style: { border: "1px solid #777", padding: 10 },
+//     position: { x: 680, y: 50 },
+//   },
+//   {
+//     id: "4",
+//     type: "textInputType",
+//     data: { sourceHandleId: "g", targetHandleId: "h", label: "" },
+//     style: { border: "1px solid #777", padding: 10 },
+//     position: { x: 980, y: 50 },
+//   },
+//   {
+//     id: "5",
+//     type: "checkboxNode",
+//     data: { sourceHandleId: "i", targetHandleId: "k", label: "" },
+//     style: { border: "1px solid #777", padding: 10 },
+//     position: { x: 1280, y: 50 },
+//   },
+//   {
+//     id: "6",
+//     type: "buttonNode",
+//     data: { sourceHandleId: "l", targetHandleId: "m", label: "" },
+//     style: { border: "1px solid #777", padding: 10 },
+//     position: { x: 1580, y: 50 },
+//   },
+//   {
+//     id: "8",
+//     data: { label: "End", color: "" },
+//     position: { x: 1880, y: 40 },
+//   },
+//   {
+//     id: "7",
+//     data: { label: "Submit", color: "" },
+//     position: { x: 900, y: 300 },
+//     type: "input",
+//   },
+// ];
 
-const initialEdges = [
-  // { id: "1-2", source: "1", target: "2", targetHandle: 'w', type: "step" },
-  // { id: "2-3", source: "2", target: "3", sourceHandle: 'a', type: "step" },
-  // { id: "2-4", source: "2", target: "4", sourceHandle: 'b', type: "step" },
-] as any;
+const initialEdges = [] as any;
 
 const nodeTypes = {
   buttonNode: ButtonNode,
@@ -102,11 +101,10 @@ function Flow() {
       color?: string;
       label: string;
     }>[]
-  >(initialNodes);
-  const [showMenu, setShowMenu] = useState(false);
+  >([]);
   const [edges, setEdges] = useState(initialEdges);
-  const [router, _] = useStore((store) => store.router);
   const [store] = useStore((store) => store);
+  const [showMenu, setShowMenu] = useState(false);
   const onNodesChange = useCallback(
     (changes: any) => setNodes((nds) => applyNodeChanges(changes, nds)),
     []
@@ -116,15 +114,34 @@ function Flow() {
     []
   );
 
+  function handleCallback(event: any) {
+    if (event.data.type === "fileUpdate" && event.data.text) {
+      const payload = YAML.parse(event.data.text);
+      const allNodes = Object.values(payload.nodes);
+      const curNodes = allNodes.map((node) => {
+        const cNode = pick(node, ["id", "data", "position", "type"]);
+        cNode.style = cNode.data.style;
+        return cNode;
+      });
+      setNodes(curNodes);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("message", handleCallback);
+
+    () => window.removeEventListener("message", handleCallback);
+  }, []);
+
   const onConnect = useCallback((params: any) => setEdges((eds: any) => addEdge(params, eds)), []);
 
   const runTest = useCallback(
     (_event: any, node: any) => {
       if (node.data.label === "PUSH_EVENT_HERE") {
-        vscode.postMessage({
-          type: "fireEventFromEditor",
-          data: { eventType: "fileUpdate" },
-        });
+        // vscode.postMessage({
+        //   type: "fireEventFromEditor",
+        //   data: { eventType: "fileUpdate" },
+        // });
       }
       if (node.id === "7") {
         const payload = { nodes: store.nodes, edges: store.edges };

@@ -2,110 +2,128 @@
 nodes:
   '2':
     id: '2'
-    type: text
+    type: textInputType
     data:
       sourceHandleId: c
       targetHandleId: d
+      style:
+        border: '1px solid #777'
+        padding: 10
       label: ''
     position:
       x: 380
-      'y': 50
+      y: 50
     inPorts:
-      field: '#user_email'
+      field: "#user_email"
       email: hungdh131@gmail.com
     outPorts: {}
     description: description
     componentName: compName
     outputQ:
-      - outputQ
+    - outputQ
   '3':
     id: '3'
-    type: text
+    type: textInputType
     data:
       sourceHandleId: e
       targetHandleId: f
+      style:
+        border: '1px solid #777'
+        padding: 10
       label: ''
     position:
       x: 680
-      'y': 50
+      y: 50
     inPorts:
-      field: '#user_password'
+      field: "#user_password"
       email: thisisthepassword
     outPorts: {}
     description: description
     componentName: compName
     outputQ:
-      - outputQ
+    - outputQ
   '4':
     id: '4'
-    type: text
+    type: textInputType
     data:
       sourceHandleId: g
       targetHandleId: h
+      style:
+        border: '1px solid #777'
+        padding: 10
       label: ''
     position:
       x: 980
-      'y': 50
+      y: 50
     inPorts:
-      field: '#user_password_confirmation'
+      field: "#user_password_confirmation"
       email: thisisthepassword
     outPorts: {}
     description: description
     componentName: compName
     outputQ:
-      - outputQ
+    - outputQ
   '5':
     id: '5'
-    type: text
+    type: checkboxNode
     data:
       sourceHandleId: i
       targetHandleId: k
+      style:
+        border: '1px solid #777'
+        padding: 10
       label: ''
     position:
       x: 1280
-      'y': 50
+      y: 50
     inPorts:
-      field: '#tos'
+      field: "#tos"
       isChecked: 'on'
     outPorts: {}
     description: description
     componentName: compName
     outputQ:
-      - outputQ
+    - outputQ
   '6':
     id: '6'
-    type: text
+    type: buttonNode
     data:
       sourceHandleId: l
       targetHandleId: m
+      style:
+        border: '1px solid #777'
+        padding: 10
       label: ''
     position:
       x: 1595
-      'y': 50
+      y: 50
     inPorts:
-      field: .btn .btn-primary .w-full
+      field: ".btn .btn-primary .w-full"
     outPorts: {}
     description: description
     componentName: compName
     outputQ:
-      - outputQ
+    - outputQ
   '9':
     id: '9'
-    type: text
+    type: visitNode
     data:
       sourceHandleId: a
       targetHandleId: b
+      style:
+        border: '1px solid #777'
+        padding: 10
       label: ''
     position:
       x: 10
-      'y': 100
+      y: 100
     inPorts:
-      url: 'https://planetscale.com/'
+      url: https://planetscale.com/
     outPorts: {}
     description: description
     componentName: compName
     outputQ:
-      - outputQ
+    - outputQ
 edges:
   '2':
     source: '2'
@@ -131,7 +149,7 @@ edges:
     source: '6'
     sourceHandle: m
     target: '8'
-    targetHandle: null
+    targetHandle:
   '9':
     source: '9'
     sourceHandle: b
