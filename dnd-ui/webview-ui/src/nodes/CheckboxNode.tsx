@@ -16,7 +16,7 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
   function commitChange(params: any) {
     const inputNode = new TextInput({
       id,
-      type: "text",
+      type: "checkboxNode",
       data,
       position: { x: xPos, y: yPos },
       inPorts: { field: nameRef?.current?.value, isChecked: valueRef?.current?.checked },

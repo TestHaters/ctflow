@@ -15,7 +15,7 @@ const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
   function commitChange(params: any) {
     const inputNode = new TextInput({
       id,
-      type: "text",
+      type: "buttonNode",
       data,
       position: { x: xPos, y: yPos },
       inPorts: { field: nameRef?.current?.value },

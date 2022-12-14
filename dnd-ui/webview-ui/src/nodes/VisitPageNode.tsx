@@ -13,7 +13,7 @@ const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
   function commitChange(params: any) {
     const inputNode = new TextInput({
       id,
-      type: "text",
+      type: "visitNode",
       data,
       position: { x: xPos, y: yPos },
       inPorts: { url: nameRef?.current?.value },
