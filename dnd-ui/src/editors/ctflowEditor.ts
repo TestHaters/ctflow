@@ -1,8 +1,7 @@
-import * as vscode from 'vscode';
-import { getNonce } from '../utilities/nonce';
+import * as vscode from "vscode";
+import { getNonce } from "../utilities/nonce";
 import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vscode";
 import { getUri } from "../utilities/getUri";
-
 
 interface CtflowEdit {
 	readonly nodes: ReadonlyArray<any>;
@@ -11,12 +10,12 @@ interface CtflowEdit {
 
 /**
  * Provider for cat scratch editors.
- * 
+ *
  * Cat scratch editors are used for `.cscratch` files, which are just json files.
  * To get started, run this extension and open an empty `.cscratch` file in VS Code.
- * 
+ *
  * This provider demonstrates:
- * 
+ *
  * - Setting up the initial webview for a custom editor.
  * - Loading scripts and styles in a custom editor.
  * - Synchronizing changes between a text document and a custom editor.
@@ -138,11 +137,14 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <link rel="stylesheet" type="text/css" href="${stylesUri}">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
           <title>Hello World</title>
         </head>
         <body>
           <div id="root"></div>
           <script type="module" src="${scriptUri}"></script>
+          <script src="https://cdn.tailwindcss.com"></script>
+          
         </body>
       </html>
     `;
