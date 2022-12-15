@@ -187,8 +187,16 @@ function Flow() {
         onConnect={onConnect}>
         <Background />
         <Controls />
-        <Panel position="top-left" onClick={() => setShowMenu((prev) => !prev)}>
-          Add Node {showMenu ? ">" : "+"}
+        <Panel
+          position="top-left"
+          onClick={() => setShowMenu((prev) => !prev)}
+          className="rounded !text-black font-semibold py-2 px-5">
+          Add Node{" "}
+          {showMenu ? (
+            <i className="fa-solid fa-angles-right"></i>
+          ) : (
+            <i className="fa-solid fa-angle-right"></i>
+          )}
         </Panel>
         {showMenu && <NodeMenuPanel setShowMenu={setShowMenu} setNodes={setNodes} />}
       </ReactFlow>
