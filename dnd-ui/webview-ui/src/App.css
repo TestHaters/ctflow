@@ -4,16 +4,16 @@
 }
 
 .react-flow__panel {
-  padding: 5px 10px;
+  /* padding: 5px 10px; */
   background: white;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   cursor: pointer;
+  border-radius: 4px;
 }
-
 
 .react-flow__panel button {
   background: none;
-  color: inherit;
+  color: black;
   border: none;
   padding: 0;
   font: inherit;

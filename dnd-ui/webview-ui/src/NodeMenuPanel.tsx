@@ -20,26 +20,26 @@ function NodeMenuPanel({ ref, setNodes, setShowMenu }) {
   }
   return (
     <section ref={nodeMenuRef}>
-      <Panel position="top-left" style={{ left: 120 }} >
-        <div>
+      <Panel position="top-left" style={{ left: 120 }}>
+        <div className="hover:bg-slate-200 p-2 rounded">
           <button id="visitNode" onClick={handleClick}>
             Visit node
           </button>
         </div>
-        <br />
-        <div>
+
+        <div className="hover:bg-slate-200 p-2 rounded">
           <button id="textInputType" onClick={handleClick}>
             Typing node
           </button>
         </div>
-        <br />
-        <div>
+
+        <div className="hover:bg-slate-200 p-2 rounded">
           <button id="checkboxNode" onClick={handleClick}>
             Checkbox node
           </button>
         </div>
-        <br />
-        <div>
+
+        <div className="hover:bg-slate-200 p-2 rounded">
           <button id="buttonNode" onClick={handleClick}>
             Button node
           </button>
