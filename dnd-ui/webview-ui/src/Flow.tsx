@@ -21,6 +21,7 @@ import CheckboxNode from "./nodes/CheckboxNode";
 import ButtonNode from "./nodes/ButtonNode";
 import { useStore } from "./context/store";
 import NodeMenuPanel from "./NodeMenuPanel";
+import CompilePanel from "./CompilePanel";
 import { useOnClickOutside } from "./useClickOutside";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -136,6 +137,15 @@ function Flow() {
     }
   }
 
+  function handleCompile(event: any) {
+    vscode.postMessage({
+      type: 'writeCompiledFile',
+      data: { compiledText: "sample text", fileExtension: "js" }
+    })
+
+    return true
+  }
+
   useEffect(() => {
     window.addEventListener("message", handleCallback);
 
@@ -191,6 +201,7 @@ function Flow() {
           Add Node {showMenu ? ">" : "+"}
         </Panel>
         {showMenu && <NodeMenuPanel setShowMenu={setShowMenu} setNodes={setNodes} />}
+        <CompilePanel onClick={handleCompile} />
       </ReactFlow>
     </div>
   );
