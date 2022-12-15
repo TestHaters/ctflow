@@ -4,8 +4,8 @@ import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vsco
 import { getUri } from "../utilities/getUri";
 
 interface CtflowEdit {
-	readonly nodes: ReadonlyArray<any>;
-	readonly edges: ReadonlyArray<any>;
+  readonly nodes: ReadonlyArray<any>;
+  readonly edges: ReadonlyArray<any>;
 }
 
 /**
@@ -21,116 +21,117 @@ interface CtflowEdit {
  * - Synchronizing changes between a text document and a custom editor.
  */
 export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
+  public static register(context: vscode.ExtensionContext): vscode.Disposable {
+    const provider = new CtFlowEditorProvider(context);
+    const providerRegistration = vscode.window.registerCustomEditorProvider(
+      CtFlowEditorProvider.viewType,
+      provider
+    );
 
-	public static register(context: vscode.ExtensionContext): vscode.Disposable {
-		const provider = new CtFlowEditorProvider(context);
-		const providerRegistration = vscode.window.registerCustomEditorProvider(CtFlowEditorProvider.viewType, provider);
+    return providerRegistration;
+  }
 
-		return providerRegistration;
-	}
+  private static readonly viewType = "codelessTesting.ctflow";
 
-	private static readonly viewType = 'codelessTesting.ctflow';
+  constructor(private readonly context: vscode.ExtensionContext) {}
 
-	constructor(
-		private readonly context: vscode.ExtensionContext
-	) { }
+  // this variable will be use in writeCompiledFile
+  private textDocument: vscode.TextDocument | undefined;
+  /**
+   * Called when our custom editor is opened.
+   *
+   *
+   */
+  public async resolveCustomTextEditor(
+    document: vscode.TextDocument,
+    webviewPanel: vscode.WebviewPanel,
+    _token: vscode.CancellationToken
+  ): Promise<void> {
+    // Setup initial content for the webview
+    webviewPanel.webview.options = {
+      enableScripts: true,
+    };
 
+    webviewPanel.webview.html = this.getHtmlForWebview(
+      webviewPanel.webview,
+      this.context.extensionUri
+    );
 
-	// this variable will be use in writeCompiledFile
-	private textDocument: vscode.TextDocument;
-	/**
-	 * Called when our custom editor is opened.
-	 * 
-	 * 
-	 */
-	public async resolveCustomTextEditor(
-		document: vscode.TextDocument,
-		webviewPanel: vscode.WebviewPanel,
-		_token: vscode.CancellationToken
-	): Promise<void> {
-		// Setup initial content for the webview
-		webviewPanel.webview.options = {
-			enableScripts: true,
-		};
+    function updateWebview() {
+      webviewPanel.webview.postMessage({
+        type: "fileUpdate",
+        text: document.getText(),
+      });
+    }
 
-		webviewPanel.webview.html = this.getHtmlForWebview(webviewPanel.webview, this.context.extensionUri);
+    // this variable will be use in writeCompiledFile
+    this.textDocument = document;
+    console.log("HRERERERERE POST MESSGE FILE UPDATE");
 
-		function updateWebview() {
-			webviewPanel.webview.postMessage({
-				type: 'fileUpdate',
-				text: document.getText(),
-			});
-		}
+    // Hook up event handlers so that we can synchronize the webview with the text document.
+    //
+    // The text document acts as our model, so we have to sync change in the document to our
+    // editor and sync changes in the editor back to the document.
+    //
+    // Remember that a single text document can also be shared between multiple custom
+    // editors (this happens for example when you split a custom editor)
 
-		// this variable will be use in writeCompiledFile
-		this.textDocument = document
-		console.log("HRERERERERE POST MESSGE FILE UPDATE")
+    const changeDocumentSubscription = vscode.workspace.onDidChangeTextDocument((e) => {
+      if (e.document.uri.toString() === document.uri.toString()) {
+        updateWebview();
+      }
+    });
 
-		// Hook up event handlers so that we can synchronize the webview with the text document.
-		//
-		// The text document acts as our model, so we have to sync change in the document to our
-		// editor and sync changes in the editor back to the document.
-		// 
-		// Remember that a single text document can also be shared between multiple custom
-		// editors (this happens for example when you split a custom editor)
+    // Make sure we get rid of the listener when our editor is closed.
+    webviewPanel.onDidDispose(() => {
+      changeDocumentSubscription.dispose();
+    });
 
-		const changeDocumentSubscription = vscode.workspace.onDidChangeTextDocument(e => {
-			if (e.document.uri.toString() === document.uri.toString()) {
-				updateWebview();
-			}
-		});
+    // Receive message from the webview.
+    webviewPanel.webview.onDidReceiveMessage((e) => {
+      console.log("CTFLOW.TS:: RECEIVED EVENT FROM VS EDITOR", e);
+      switch (e.type) {
+        case "changed":
+          // this.makeEdit(message as CtflowEdit);
+          return;
 
-		// Make sure we get rid of the listener when our editor is closed.
-		webviewPanel.onDidDispose(() => {
-			changeDocumentSubscription.dispose();
-		});
+        case "fireEventFromEditor":
+          console.log("CTFLOW.TS::Fire Event From Editor --------- ", e);
+          webviewPanel.webview.postMessage({
+            type: e.data.eventType,
+            text: document.getText(),
+          });
+          return;
 
-		// Receive message from the webview.
-		webviewPanel.webview.onDidReceiveMessage(e => {
-			console.log("CTFLOW.TS:: RECEIVED EVENT FROM VS EDITOR", e)
-			switch (e.type) {
-				case 'changed':
-					// this.makeEdit(message as CtflowEdit);
-					return;
+        // Push document text to web app
+        case "fetchDocumentData":
+          updateWebview();
+          return;
 
-				case 'fireEventFromEditor':
-					console.log("CTFLOW.TS::Fire Event From Editor --------- ", e)
-					webviewPanel.webview.postMessage({
-						type: e.data.eventType,
-						text: document.getText(),
-					});
-					return;
+        // When Flow is changed, but not yet saved
+        case "addEdit":
+          console.log("flow Updated");
+          this._savedEdits.push(e.data.yamlData);
+          return;
 
-				// Push document text to web app
-				case 'fetchDocumentData':
-					updateWebview()
-					return;
+        case "writeCompiledFile":
+          console.log("writeCompiledFile");
+          this.writeCompiledFile(e.data.compiledText, e.data.fileExtension);
+          return;
+      }
+    });
 
-				// When Flow is changed, but not yet saved
-				case 'addEdit':
-					console.log("flow Updated")
-					this._savedEdits.push(e.data.yamlData)
-					return
+    updateWebview();
+  }
 
-				case 'writeCompiledFile':
-					console.log("writeCompiledFile")
-					this.writeCompiledFile(e.data.compiledText, e.data.fileExtension)
-					return
+  private getHtmlForWebview(webview: vscode.Webview, extensionUri: Uri): string {
+    // The CSS file from the React build output
+    const stylesUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.css"]);
+    // The JS file from the React build output
+    const scriptUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.js"]);
 
-			}
-		});
-
-		updateWebview();
-	}
-
-	private getHtmlForWebview(webview: vscode.Webview, extensionUri: Uri): string {
-		// The CSS file from the React build output
-		const stylesUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.css"]);
-		// The JS file from the React build output
-		const scriptUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.js"]);
-
-		// Tip: Install the es6-string-html VS Code extension to enable code highlighting below
-		return /*html*/ `
+    // Tip: Install the es6-string-html VS Code extension to enable code highlighting below
+    return /*html*/ `
       <!DOCTYPE html>
       <html lang="en">
         <head>
@@ -148,94 +149,90 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
         </body>
       </html>
     `;
-	}
+  }
 
+  private writeCompiledFile(compiledText: string, fileExtension: string) {
+    const writeData = Buffer.from(compiledText, "utf8");
+    let compiledFilePath = this.textDocument?.uri.fsPath + "." + fileExtension;
+    vscode.workspace.fs.writeFile(vscode.Uri.file(compiledFilePath), writeData);
+  }
 
-	private writeCompiledFile(compiledText: string, fileExtension: string) {
-		const writeData = Buffer.from(compiledText, 'utf8');
-		let compiledFilePath = this.textDocument.uri.fsPath + "." + fileExtension
-		vscode.workspace.fs.writeFile(vscode.Uri.file(compiledFilePath), writeData);
-	}
+  /**
+   * Try to get a current document as json text.
+   */
+  private getDocumentAsJson(document: vscode.TextDocument): any {
+    const text = document.getText();
+    if (text.trim().length === 0) {
+      return {};
+    }
 
+    try {
+      return JSON.parse(text);
+    } catch {
+      throw new Error("Could not get document as json. Content is not valid json");
+    }
+  }
 
-	/**
-	 * Try to get a current document as json text.
-	 */
-	private getDocumentAsJson(document: vscode.TextDocument): any {
-		const text = document.getText();
-		if (text.trim().length === 0) {
-			return {};
-		}
+  /**
+   * Write out the json to a given document.
+   */
+  private updateTextDocument(document: vscode.TextDocument, json: any) {
+    const edit = new vscode.WorkspaceEdit();
 
-		try {
-			return JSON.parse(text);
-		} catch {
-			throw new Error('Could not get document as json. Content is not valid json');
-		}
-	}
+    // Just replace the entire document every time for this example extension.
+    // A more complete extension should compute minimal edits instead.
+    edit.replace(
+      document.uri,
+      new vscode.Range(0, 0, document.lineCount, 0),
+      JSON.stringify(json, null, 2)
+    );
 
-	/**
-	 * Write out the json to a given document.
-	 */
-	private updateTextDocument(document: vscode.TextDocument, json: any) {
-		const edit = new vscode.WorkspaceEdit();
+    return vscode.workspace.applyEdit(edit);
+  }
 
-		// Just replace the entire document every time for this example extension.
-		// A more complete extension should compute minimal edits instead.
-		edit.replace(
-			document.uri,
-			new vscode.Range(0, 0, document.lineCount, 0),
-			JSON.stringify(json, null, 2));
+  private _documentData: Uint8Array | undefined;
+  private _edits: Array<CtflowEdit> = [];
+  private _savedEdits: Array<CtflowEdit> = [];
 
-		return vscode.workspace.applyEdit(edit);
-	}
+  // When flow is changed, we will update the current text_data.
+  private makeEdit(edit: CtflowEdit) {
+    this._edits.push(edit);
 
-	private _documentData: Uint8Array;
-	private _edits: Array<CtflowEdit>;
-	private _savedEdits: Array<CtflowEdit>;
+    // Support redo/undo - later
 
+    // this._onDidChange.fire({
+    // 	label: 'Stroke',
+    // 	undo: async () => {
+    // 		this._edits.pop();
+    // 		this._onDidChangeDocument.fire({
+    // 			edits: this._edits,
+    // 		});
+    // 	},
+    // 	redo: async () => {
+    // 		this._edits.push(edit);
+    // 		this._onDidChangeDocument.fire({
+    // 			edits: this._edits,
+    // 		});
+    // 	}
+    // });
+  }
 
-	// When flow is changed, we will update the current text_data.
-	private makeEdit(edit: CtflowEdit) {
-		this._edits.push(edit);
+  /**
+   * Called by VS Code when the user saves the document.
+   */
+  // async save(cancellation: vscode.CancellationToken): Promise<void> {
+  // 	await this.saveAs(this.uri, cancellation);
+  // 	this._savedEdits = Array.from(this._edits);
+  // }
 
-		// Support redo/undo - later
-
-		// this._onDidChange.fire({
-		// 	label: 'Stroke',
-		// 	undo: async () => {
-		// 		this._edits.pop();
-		// 		this._onDidChangeDocument.fire({
-		// 			edits: this._edits,
-		// 		});
-		// 	},
-		// 	redo: async () => {
-		// 		this._edits.push(edit);
-		// 		this._onDidChangeDocument.fire({
-		// 			edits: this._edits,
-		// 		});
-		// 	}
-		// });
-	}
-
-
-	/**
-	 * Called by VS Code when the user saves the document.
-	 */
-	// async save(cancellation: vscode.CancellationToken): Promise<void> {
-	// 	await this.saveAs(this.uri, cancellation);
-	// 	this._savedEdits = Array.from(this._edits);
-	// }
-
-	/**
-	 * Called by VS Code when the user saves the document to a new location.
-	 */
-	// async saveAs(targetResource: vscode.Uri, cancellation: vscode.CancellationToken): Promise<void> {
-	// 	const fileData = await this._delegate.getFileData();
-	// 	if (cancellation.isCancellationRequested) {
-	// 		return;
-	// 	}
-	// 	await vscode.workspace.fs.writeFile(targetResource, fileData);
-	// }
-
+  /**
+   * Called by VS Code when the user saves the document to a new location.
+   */
+  // async saveAs(targetResource: vscode.Uri, cancellation: vscode.CancellationToken): Promise<void> {
+  // 	const fileData = await this._delegate.getFileData();
+  // 	if (cancellation.isCancellationRequested) {
+  // 		return;
+  // 	}
+  // 	await vscode.workspace.fs.writeFile(targetResource, fileData);
+  // }
 }

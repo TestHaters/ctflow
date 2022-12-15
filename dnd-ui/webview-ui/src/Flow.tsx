@@ -202,11 +202,13 @@ function Flow() {
           onClick={() => setShowMenu((prev) => !prev)}
           className="rounded !text-black font-semibold py-2 px-5">
           Add Node{" "}
-          {showMenu ? (
-            <i className="fa-solid fa-angles-right"></i>
-          ) : (
-            <i className="fa-solid fa-angle-right"></i>
-          )}
+          <span className="ml-1">
+            {showMenu ? (
+              <i className="fa-solid fa-chevron-right"></i>
+            ) : (
+              <i className="fa-solid fa-bars"></i>
+            )}
+          </span>
         </Panel>
         {showMenu && <NodeMenuPanel setShowMenu={setShowMenu} setNodes={setNodes} />}
         <CompilePanel onClick={handleCompile} />
