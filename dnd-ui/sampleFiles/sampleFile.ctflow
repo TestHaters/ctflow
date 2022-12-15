@@ -15,7 +15,7 @@ nodes:
       y: 50
     inPorts:
       field: "#user_email"
-      email: hungdh131@gmail.com
+      value: hungdh131@gmail.com
     outPorts: {}
     description: description
     componentName: compName
@@ -36,7 +36,7 @@ nodes:
       y: 50
     inPorts:
       field: "#user_password"
-      email: thisisthepassword
+      value: thisisthepassword
     outPorts: {}
     description: description
     componentName: compName
@@ -57,7 +57,7 @@ nodes:
       y: 50
     inPorts:
       field: "#user_password_confirmation"
-      email: thisisthepassword
+      value: thisisthepassword
     outPorts: {}
     description: description
     componentName: compName

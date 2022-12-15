@@ -117,6 +117,7 @@ function Flow() {
   function handleCallback(event: any) {
     if (event.data.type === "fileUpdate" && event.data.text) {
       const payload = YAML.parse(event.data.text);
+      console.log("payload", payload)
       const allNodes = Object.values(payload.nodes);
       const allEdges = Object.values(payload.edges);
       const curNodes = allNodes.map((node) => {

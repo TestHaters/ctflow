@@ -20,7 +20,7 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
       type: "textInputType",
       data,
       position: { x: xPos, y: yPos },
-      inPorts: { field: nameRef?.current?.value, email: valueRef?.current?.value },
+      inPorts: { field: nameRef?.current?.value, value: valueRef?.current?.value },
       outPorts: {},
     });
     setNodeStore({
