@@ -32,12 +32,13 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
 
 	private static readonly viewType = 'codelessTesting.ctflow';
 
-	private static readonly scratchCharacters = ['😸', '😹', '😺', '😻', '😼', '😽', '😾', '🙀', '😿', '🐱'];
-
 	constructor(
 		private readonly context: vscode.ExtensionContext
 	) { }
 
+
+	// this variable will be use in writeCompiledFile
+	private textDocument: vscode.TextDocument;
 	/**
 	 * Called when our custom editor is opened.
 	 * 
@@ -62,6 +63,8 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
 			});
 		}
 
+		// this variable will be use in writeCompiledFile
+		this.textDocument = document
 		console.log("HRERERERERE POST MESSGE FILE UPDATE")
 
 		// Hook up event handlers so that we can synchronize the webview with the text document.
@@ -91,14 +94,6 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
 					// this.makeEdit(message as CtflowEdit);
 					return;
 
-				case 'add':
-					this.addNewScratch(document);
-					return;
-
-				case 'delete':
-					this.deleteScratch(document, e.id);
-					return;
-
 				case 'fireEventFromEditor':
 					console.log("CTFLOW.TS::Fire Event From Editor --------- ", e)
 					webviewPanel.webview.postMessage({
@@ -116,6 +111,11 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
 				case 'addEdit':
 					console.log("flow Updated")
 					this._savedEdits.push(e.data.yamlData)
+					return
+
+				case 'writeCompiledFile':
+					console.log("writeCompiledFile")
+					this.writeCompiledFile(e.data.compiledText, e.data.fileExtension)
 					return
 
 			}
@@ -148,37 +148,13 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
     `;
 	}
 
-	/**
-	 * Add a new scratch to the current document.
-	 */
-	private addNewScratch(document: vscode.TextDocument) {
-		const json = this.getDocumentAsJson(document);
-		const character = CtFlowEditorProvider.scratchCharacters[Math.floor(Math.random() * CtFlowEditorProvider.scratchCharacters.length)];
-		json.scratches = [
-			...(Array.isArray(json.scratches) ? json.scratches : []),
-			{
-				id: getNonce(),
-				text: character,
-				created: Date.now(),
-			}
-		];
 
-		return this.updateTextDocument(document, json);
+	private writeCompiledFile(compiledText: string, fileExtension: string) {
+		const writeData = Buffer.from(compiledText, 'utf8');
+		let compiledFilePath = this.textDocument.uri.fsPath + "." + fileExtension
+		vscode.workspace.fs.writeFile(vscode.Uri.file(compiledFilePath), writeData);
 	}
 
-	/**
-	 * Delete an existing scratch from a document.
-	 */
-	private deleteScratch(document: vscode.TextDocument, id: string) {
-		const json = this.getDocumentAsJson(document);
-		if (!Array.isArray(json.scratches)) {
-			return;
-		}
-
-		json.scratches = json.scratches.filter((note: any) => note.id !== id);
-
-		return this.updateTextDocument(document, json);
-	}
 
 	/**
 	 * Try to get a current document as json text.
@@ -259,7 +235,5 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
 	// 	}
 	// 	await vscode.workspace.fs.writeFile(targetResource, fileData);
 	// }
-
-
 
 }
