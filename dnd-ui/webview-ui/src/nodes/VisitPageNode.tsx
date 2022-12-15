@@ -7,7 +7,7 @@ import { TextInput } from "../models/TextInput";
 const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
   const nameRef = useRef<HTMLInputElement>(null);
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
-  const { sourceHandleId, targetHandleId } = data;
+  const { sourceHandleId, targetHandleId, inPorts } = data;
   const [edges] = useStore((store) => store.edges);
 
   function commitChange(params: any) {
@@ -44,7 +44,13 @@ const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
       <div>
         <label htmlFor="page">Visit</label>
         &nbsp; &nbsp;
-        <input id="page" type="text" ref={nameRef} placeholder="Page url" />
+        <input
+          id="page"
+          type="text"
+          ref={nameRef}
+          defaultValue={inPorts?.url || ""}
+          placeholder="Page url"
+        />
       </div>
       <Handle
         type="source"

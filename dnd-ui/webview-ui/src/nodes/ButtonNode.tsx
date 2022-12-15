@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import { Handle, Position } from "reactflow";
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 import { useStore } from "../context/store";
 import { TextInput } from "../models/TextInput";
 
@@ -10,7 +10,7 @@ const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
   const nameRef = useRef<HTMLInputElement>(null);
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const [edges] = useStore((store) => store.edges);
-  const { sourceHandleId, targetHandleId } = data;
+  const { sourceHandleId, targetHandleId, inPorts } = data;
 
   function commitChange(params: any) {
     const inputNode = new TextInput({
@@ -33,7 +33,6 @@ const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
     });
   }
 
-
   return (
     <>
       <Handle
@@ -46,7 +45,7 @@ const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
       />
       <h5>User click</h5>
       <div>
-        <input type="text" ref={nameRef} placeholder="Your selector" />
+        <input type="text" ref={nameRef} defaultValue={inPorts.field} placeholder="Your selector" />
       </div>
       <br />
       <Handle

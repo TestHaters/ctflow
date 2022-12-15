@@ -9,7 +9,7 @@ const noType = { email: false, password: false, text: false };
 const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
   const nameRef = useRef<HTMLInputElement>(null);
   const valueRef = useRef<HTMLInputElement>(null);
-  const { sourceHandleId, targetHandleId } = data;
+  const { sourceHandleId, targetHandleId, inPorts } = data;
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const [edges] = useStore((store) => store.edges);
 
@@ -46,7 +46,12 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
       />
       <h5>User click on check box</h5>
       <div>
-        <input type="text" ref={nameRef} placeholder="Your selector" />
+        <input
+          type="text"
+          ref={nameRef}
+          defaultValue={inPorts?.field || ""}
+          placeholder="Your selector"
+        />
       </div>
       <br />
       <div>
@@ -54,6 +59,7 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
         <input
           type="checkbox"
           ref={valueRef}
+          defaultChecked={inPorts?.isChecked || false}
           id="email"
         />
       </div>

@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { vscode } from "./utilities/vscode";
 import pick from "lodash.pick";
+import get from "lodash.get";
 import YAML from "yaml";
 import ReactFlow, {
   Controls,
@@ -117,16 +118,21 @@ function Flow() {
   function handleCallback(event: any) {
     if (event.data.type === "fileUpdate" && event.data.text) {
       const payload = YAML.parse(event.data.text);
-      console.log("payload", payload)
       const allNodes = Object.values(payload.nodes);
       const allEdges = Object.values(payload.edges);
       const curNodes = allNodes.map((node) => {
-        const cNode = pick(node, ["id", "data", "position", "type"]);
-        cNode.style = cNode.data.style;
+        const cNode = {
+          ...pick(node, ["id", "position", "type"]),
+          style: get(node, "data.style", {}),
+          data: {
+            ...get(node, "data", {}),
+            inPorts: get(node, "inPorts", {}),
+          },
+        };
         return cNode;
       });
       setNodes(curNodes);
-      setEdges(allEdges)
+      setEdges(allEdges);
     }
   }
 
