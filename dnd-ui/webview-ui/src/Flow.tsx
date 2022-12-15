@@ -118,12 +118,14 @@ function Flow() {
     if (event.data.type === "fileUpdate" && event.data.text) {
       const payload = YAML.parse(event.data.text);
       const allNodes = Object.values(payload.nodes);
+      const allEdges = Object.values(payload.edges);
       const curNodes = allNodes.map((node) => {
         const cNode = pick(node, ["id", "data", "position", "type"]);
         cNode.style = cNode.data.style;
         return cNode;
       });
       setNodes(curNodes);
+      setEdges(allEdges)
     }
   }
 
