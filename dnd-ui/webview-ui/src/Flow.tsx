@@ -139,11 +139,11 @@ function Flow() {
 
   function handleCompile(event: any) {
     vscode.postMessage({
-      type: 'writeCompiledFile',
-      data: { compiledText: "sample text", fileExtension: "js" }
-    })
+      type: "writeCompiledFile",
+      data: { compiledText: "sample text", fileExtension: "js" },
+    });
 
-    return true
+    return true;
   }
 
   useEffect(() => {
@@ -197,21 +197,22 @@ function Flow() {
         onConnect={onConnect}>
         <Background />
         <Controls />
+        <CompilePanel onClick={handleCompile} />
         <Panel
           position="top-left"
+          style={{ left: 120 }}
           onClick={() => setShowMenu((prev) => !prev)}
           className="rounded !text-black font-semibold py-2 px-5">
           Add Node{" "}
           <span className="ml-1">
             {showMenu ? (
-              <i className="fa-solid fa-chevron-right"></i>
+              <i className="fa-solid fa-angle-down"></i>
             ) : (
               <i className="fa-solid fa-bars"></i>
             )}
           </span>
         </Panel>
         {showMenu && <NodeMenuPanel setShowMenu={setShowMenu} setNodes={setNodes} />}
-        <CompilePanel onClick={handleCompile} />
       </ReactFlow>
     </div>
   );

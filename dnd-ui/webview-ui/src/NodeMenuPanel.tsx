@@ -20,7 +20,7 @@ function NodeMenuPanel({ ref, setNodes, setShowMenu }) {
   }
   return (
     <section ref={nodeMenuRef}>
-      <Panel position="top-left" style={{ left: 125 }}>
+      <Panel position="top-left" style={{ left: 125, top: 50, width: 119, marginLeft: 10 }}>
         <div className="hover:bg-slate-200 p-2 rounded">
           <button id="visitNode" onClick={handleClick}>
             Visit node
