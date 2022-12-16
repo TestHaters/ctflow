@@ -24,11 +24,8 @@ import { useStore } from "./context/store";
 import NodeMenuPanel from "./NodeMenuPanel";
 import CompilePanel from "./CompilePanel";
 import { useOnClickOutside } from "./useClickOutside";
-<<<<<<< HEAD
 import { Compiler } from "./compiler";
-=======
 import SavePanel from "./SavePanel";
->>>>>>> b001974e56ed5cc5e921c7529ec410409bc8b52f
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
