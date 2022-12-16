@@ -110,7 +110,7 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
 
         // When Flow is changed, but not yet saved
         case "addEdit":
-          console.log("flow Updated");
+          this.writeYamlFile(e.data.yamlData, e.data.fileExtension);
           this._savedEdits.push(e.data.yamlData);
           return;
 
@@ -155,6 +155,14 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
     const writeData = Buffer.from(compiledText, "utf8");
     let compiledFilePath = this.textDocument?.uri.fsPath + "." + fileExtension;
     vscode.workspace.fs.writeFile(vscode.Uri.file(compiledFilePath), writeData);
+  }
+
+  private writeYamlFile(fileText: string, ext: string) {
+    const writeData = Buffer.from(fileText, "utf8");
+    let yamlFilePath = this.textDocument?.uri.fsPath.includes(".")
+      ? this.textDocument?.uri.fsPath
+      : "";
+    vscode.workspace.fs.writeFile(vscode.Uri.file(yamlFilePath), writeData);
   }
 
   /**

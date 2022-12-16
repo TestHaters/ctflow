@@ -23,6 +23,7 @@ import { useStore } from "./context/store";
 import NodeMenuPanel from "./NodeMenuPanel";
 import CompilePanel from "./CompilePanel";
 import { useOnClickOutside } from "./useClickOutside";
+import SavePanel from "./SavePanel";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
@@ -137,6 +138,13 @@ function Flow() {
     }
   }
 
+  function handleSave() {
+    vscode.postMessage({
+      type: "addEdit",
+      data: { yamlData: YAML.stringify({ nodes, edges }) },
+    });
+  }
+
   function handleCompile(event: any) {
     vscode.postMessage({
       type: "writeCompiledFile",
@@ -198,6 +206,7 @@ function Flow() {
         <Background />
         <Controls />
         <CompilePanel onClick={handleCompile} />
+        <SavePanel onClick={handleSave} />
         <Panel
           position="top-left"
           style={{ left: 120 }}
