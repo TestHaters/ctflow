@@ -6,9 +6,6 @@ nodes:
     data:
       sourceHandleId: c
       targetHandleId: d
-      style:
-        border: '1px solid #777'
-        padding: 10
       label: ''
     position:
       x: 380
@@ -27,9 +24,6 @@ nodes:
     data:
       sourceHandleId: e
       targetHandleId: f
-      style:
-        border: '1px solid #777'
-        padding: 10
       label: ''
     position:
       x: 680
@@ -48,9 +42,6 @@ nodes:
     data:
       sourceHandleId: g
       targetHandleId: h
-      style:
-        border: '1px solid #777'
-        padding: 10
       label: ''
     position:
       x: 980
@@ -69,9 +60,6 @@ nodes:
     data:
       sourceHandleId: i
       targetHandleId: k
-      style:
-        border: '1px solid #777'
-        padding: 10
       label: ''
     position:
       x: 1280
@@ -90,9 +78,6 @@ nodes:
     data:
       sourceHandleId: l
       targetHandleId: m
-      style:
-        border: '1px solid #777'
-        padding: 10
       label: ''
     position:
       x: 1595
@@ -110,9 +95,6 @@ nodes:
     data:
       sourceHandleId: a
       targetHandleId: b
-      style:
-        border: '1px solid #777'
-        padding: 10
       label: ''
     position:
       x: 10

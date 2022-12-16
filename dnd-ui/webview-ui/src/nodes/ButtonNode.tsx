@@ -34,7 +34,7 @@ const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
   }
 
   return (
-    <>
+    <div>
       <Handle
         type="target"
         position={Position.Left}
@@ -43,11 +43,23 @@ const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
         onConnect={(params) => console.log("handle onConnect", params)}
         isConnectable={isConnectable}
       />
-      <h5>User click</h5>
+
       <div>
-        <input type="text" ref={nameRef} defaultValue={inPorts.field} placeholder="Your selector" />
+        <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
+          <label>User click</label>
+        </div>
+
+        <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
+          <input
+            type="text"
+            ref={nameRef}
+            defaultValue={inPorts.field}
+            placeholder="Your selector"
+            style={{ color: "black", paddingLeft: "4px" }}
+          />
+        </div>
       </div>
-      <br />
+
       <Handle
         type="source"
         position={Position.Right}
@@ -56,7 +68,7 @@ const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
         style={{ top: 10, background: "#555" }}
         isConnectable={isConnectable}
       />
-    </>
+    </div>
   );
 };
 

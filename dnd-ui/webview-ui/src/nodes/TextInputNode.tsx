@@ -36,7 +36,7 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
   }
 
   return (
-    <>
+    <div>
       <Handle
         type="target"
         position={Position.Left}
@@ -45,26 +45,39 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
         onConnect={(params) => console.log("handle onConnect", params)}
         isConnectable={isConnectable}
       />
-      <h5>User type</h5>
       <div>
-        <input
-          type="text"
-          ref={nameRef}
-          defaultValue={inPorts?.field || ""}
-          placeholder="Your selector"
-        />
+        <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
+          <label>User type</label>
+        </div>
+        <div className="px-2 pb-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
+          <div>
+            <div>
+              <label className="text-[11px]">Selector</label>
+            </div>
+            <input
+              type="text"
+              ref={nameRef}
+              defaultValue={inPorts?.field || ""}
+              placeholder="Your selector"
+              style={{ color: "black", paddingLeft: "4px" }}
+            />
+          </div>
+          <div className="mt-2">
+            <div>
+              <label className="text-[11px]">Value</label>
+            </div>
+            <input
+              className="nodrag"
+              type={textType}
+              ref={valueRef}
+              defaultValue={inPorts?.value || ""}
+              placeholder="Your value"
+              style={{ color: "black", paddingLeft: "4px" }}
+            />
+          </div>
+        </div>
       </div>
-      <br />
-      <div>
-        <input
-          className="nodrag"
-          type={textType}
-          ref={valueRef}
-          defaultValue={inPorts?.value || ""}
-          placeholder="Your value"
-        />
-      </div>
-      <br />
+
       <Handle
         type="source"
         position={Position.Right}
@@ -73,7 +86,7 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
         style={{ top: 10, background: "#555" }}
         isConnectable={isConnectable}
       />
-    </>
+    </div>
   );
 };
 

@@ -32,7 +32,7 @@ const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
   }
 
   return (
-    <>
+    <div>
       <Handle
         type="target"
         position={Position.Left}
@@ -42,15 +42,20 @@ const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
         isConnectable={isConnectable}
       />
       <div>
-        <label htmlFor="page">Visit</label>
-        &nbsp; &nbsp;
-        <input
-          id="page"
-          type="text"
-          ref={nameRef}
-          defaultValue={inPorts?.url || ""}
-          placeholder="Page url"
-        />
+        <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
+          <label htmlFor="page">User visit</label>
+        </div>
+
+        <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
+          <input
+            id="page"
+            type="text"
+            ref={nameRef}
+            defaultValue={inPorts?.url || ""}
+            placeholder="Page url"
+            style={{ color: "black", paddingLeft: "4px" }}
+          />
+        </div>
       </div>
       <Handle
         type="source"
@@ -60,7 +65,7 @@ const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
         style={{ top: 10, background: "#555" }}
         isConnectable={isConnectable}
       />
-    </>
+    </div>
   );
 };
 
