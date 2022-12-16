@@ -1,4 +1,4 @@
-![A screenshot of the sample extension.](./dnd-ui/assets/hello-world-react-flow.png)
+![A screenshot of the sample extension.](./dnd-ui/assets/codeless-testing.png)
 
 ### How to run codeless-testing
 
