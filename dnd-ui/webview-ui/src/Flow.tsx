@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { vscode } from "./utilities/vscode";
 import pick from "lodash.pick";
 import get from "lodash.get";
+import omit from "lodash.omit";
 import YAML from "yaml";
 import ReactFlow, {
   Controls,
@@ -23,73 +24,11 @@ import ContainsNode from "./nodes/ContainsNode";
 import { useStore } from "./context/store";
 import NodeMenuPanel from "./NodeMenuPanel";
 import CompilePanel from "./CompilePanel";
-import { useOnClickOutside } from "./useClickOutside";
 import { Compiler } from "./compiler";
 import SavePanel from "./SavePanel";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
-
-// const initialNodes = [
-//   {
-//     id: "1",
-//     data: { label: "PUSH_EVENT_HERE" },
-//     position: { x: 40, y: 40 },
-//   },
-//   {
-//     id: "9",
-//     type: "visitNode",
-//     data: { sourceHandleId: "a", targetHandleId: "b", label: "" },
-//     style: { border: "1px solid #777", padding: 10 },
-//     position: { x: 10, y: 100 },
-//   },
-//   {
-//     id: "2",
-//     type: "textInputType",
-//     data: { sourceHandleId: "c", targetHandleId: "d", label: "" },
-//     style: { border: "1px solid #777", padding: 10 },
-//     position: { x: 380, y: 50 },
-//   },
-//   {
-//     id: "3",
-//     type: "textInputType",
-//     data: { sourceHandleId: "e", targetHandleId: "f", label: "" },
-//     style: { border: "1px solid #777", padding: 10 },
-//     position: { x: 680, y: 50 },
-//   },
-//   {
-//     id: "4",
-//     type: "textInputType",
-//     data: { sourceHandleId: "g", targetHandleId: "h", label: "" },
-//     style: { border: "1px solid #777", padding: 10 },
-//     position: { x: 980, y: 50 },
-//   },
-//   {
-//     id: "5",
-//     type: "checkboxNode",
-//     data: { sourceHandleId: "i", targetHandleId: "k", label: "" },
-//     style: { border: "1px solid #777", padding: 10 },
-//     position: { x: 1280, y: 50 },
-//   },
-//   {
-//     id: "6",
-//     type: "buttonNode",
-//     data: { sourceHandleId: "l", targetHandleId: "m", label: "" },
-//     style: { border: "1px solid #777", padding: 10 },
-//     position: { x: 1580, y: 50 },
-//   },
-//   {
-//     id: "8",
-//     data: { label: "End", color: "" },
-//     position: { x: 1880, y: 40 },
-//   },
-//   {
-//     id: "7",
-//     data: { label: "Submit", color: "" },
-//     position: { x: 900, y: 300 },
-//     type: "input",
-//   },
-// ];
 
 const initialEdges = [] as any;
 
@@ -108,8 +47,9 @@ function Flow() {
       label: string;
     }>[]
   >([]);
+  console.log("nodes", nodes);
   const [edges, setEdges] = useState(initialEdges);
-  const [store] = useStore((store) => store);
+  const [store, setStore] = useStore((store) => store);
   const [showMenu, setShowMenu] = useState(false);
   const onNodesChange = useCallback(
     (changes: any) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -138,25 +78,43 @@ function Flow() {
       });
       setNodes(curNodes);
       setEdges(allEdges);
+      setStore({ ...payload });
     }
   }
 
   function handleSave() {
-    console.log("saving", { nodes, edges });
-    
+    const inputNodes = nodes.reduce((acc, item) => {
+      acc[item.id] = {
+        ...pick(item, ["id", "position", "type"]),
+        description: "description",
+        componentName: "compName",
+        outputQ: ["outputQ"],
+        inPorts: { ...store.nodes[item.id].inPorts },
+        outPorts: {},
+        data: { ...omit(item.data, ["inPorts"]) },
+      };
+      return acc;
+    }, {});
+    console.log("inputNodes", inputNodes);
+
+    const inputEdges = edges.reduce((acc, item) => {
+      acc[item.source] = { ...item };
+      return acc;
+    }, {});
+
     vscode.postMessage({
       type: "addEdit",
-      data: { yamlData: YAML.stringify({ nodes, edges }) },
+      data: { yamlData: YAML.stringify({ nodes: inputNodes, edges: inputEdges }) },
     });
   }
 
   function handleCompile(event: any) {
-    let compiledText = Compiler.compile(store)
+    let compiledText = Compiler.compile(store);
 
     vscode.postMessage({
-      type: 'writeCompiledFile',
-      data: { compiledText: compiledText, fileExtension: "spec.js" }
-    })
+      type: "writeCompiledFile",
+      data: { compiledText: compiledText, fileExtension: "spec.js" },
+    });
 
     return true;
   }
@@ -169,32 +127,7 @@ function Flow() {
 
   const onConnect = useCallback((params: any) => setEdges((eds: any) => addEdge(params, eds)), []);
 
-  const runTest = useCallback(
-    (_event: any, node: any) => {
-      if (node.data.label === "PUSH_EVENT_HERE") {
-        // vscode.postMessage({
-        //   type: "fireEventFromEditor",
-        //   data: { eventType: "fileUpdate" },
-        // });
-      }
-      if (node.data.label?.toLowerCase() !== "run") return;
-      fetch("http://localhost:33333/", {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
-        // mode: "no-cors", // no-cors, *cors, same-origin
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: "follow", // manual, *follow, error
-        referrerPolicy: "no-referrer",
-        body: JSON.stringify({ a: 1, b: "Textual content" }),
-      })
-        .then((response) => response.json())
-        .then((data) => console.log(data));
-    },
-    [store]
-  );
+  const runTest = useCallback((_event: any, node: any) => {}, [store]);
 
   return (
     <div style={{ height: "100%" }}>

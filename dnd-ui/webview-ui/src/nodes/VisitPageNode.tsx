@@ -1,14 +1,16 @@
 import React, { memo, useEffect, useRef, useState } from "react";
-import { Handle, Position } from "reactflow";
+import { Handle, Position, useReactFlow } from "reactflow";
 import { v4 as uuid } from "uuid";
 import { useStore } from "../context/store";
 import { TextInput } from "../models/TextInput";
 
-const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
-  const nameRef = useRef<HTMLInputElement>(null);
+const VisitPageNode = (props) => {
+  const { id, data, isConnectable, xPos, yPos } = props;
+  const [url, setUrl] = useState<string>(data?.inPorts?.url || "");
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const { sourceHandleId, targetHandleId, inPorts } = data;
   const [edges] = useStore((store) => store.edges);
+  const reactFlowInstance = useReactFlow();
 
   function commitChange(params: any) {
     const inputNode = new TextInput({
@@ -16,7 +18,7 @@ const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
       type: "visitNode",
       data,
       position: { x: xPos, y: yPos },
-      inPorts: { url: nameRef?.current?.value },
+      inPorts: { url },
       outPorts: {},
     });
     setNodeStore({
@@ -30,6 +32,14 @@ const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
       },
     });
   }
+
+  function handleRemoveNode() {
+    reactFlowInstance.setNodes((nds) => nds.filter((node) => node.id !== id));
+  }
+
+  useEffect(() => {
+    setNodeStore({ nodes: { ...nodesStore, [id]: { ...nodesStore[id], inPorts: { url } } } });
+  }, [url]);
 
   return (
     <div>
@@ -49,13 +59,17 @@ const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
             </span>
             User visit
           </label>
+          <span className="float-right" onClick={handleRemoveNode}>
+            <i className="fa-solid fa-xmark"></i>
+          </span>
         </div>
 
         <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
           <input
             id="page"
             type="text"
-            ref={nameRef}
+            value={url}
+            onChange={(event) => setUrl(event.target.value)}
             defaultValue={inPorts?.url || ""}
             placeholder="Page url"
             style={{ color: "black", paddingLeft: "4px" }}

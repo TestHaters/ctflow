@@ -55,7 +55,6 @@ export class DataLoader {
   parseYaml(yamlData: string) {
     this.yamlData = yamlData
     const doc = YAML.parse(this.yamlData)
-    console.log("doc", doc)
     // console.log("parse data:" + stringify(doc))
 
     for (const [nodeId, node] of Object.entries(doc.nodes)) {

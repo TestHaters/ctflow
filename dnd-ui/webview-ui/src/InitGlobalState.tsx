@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import pick from "lodash.pick";
+import omit from "lodash.omit";
 import { useStore } from "./context/store";
 import { Router } from "./router";
 import { DataLoader } from "./dataLoader";
@@ -18,7 +20,7 @@ export default function InitGlobalState({ children }: { children: any }) {
     // After router & dataLoader are loaded, request the document data again
     vscode.postMessage({ type: "fetchDocumentData" });
 
-    setStore({ router, dataLoader, nodes: dataLoader.nodes, edges: dataLoader.edges });
+    setStore({ router, dataLoader });
   }, []);
 
   return <div>{children}</div>;

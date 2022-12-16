@@ -1,18 +1,16 @@
 import React, { memo, useEffect, useRef, useState } from "react";
-import { Handle, Position } from "reactflow";
+import { Handle, Position, useReactFlow } from "reactflow";
 import { v4 as uuid } from "uuid";
 import { useStore } from "../context/store";
 import { TextInput } from "../models/TextInput";
 
-const noType = { email: false, password: false, text: false };
-
 const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
-  const nameRef = useRef<HTMLInputElement>(null);
-  const valueRef = useRef<HTMLInputElement>(null);
+  const [name, setName] = useState(data?.inPorts?.field || '');
+  const [value, setValue] = useState(data?.inPorts?.value || '');
   const { sourceHandleId, targetHandleId, inPorts } = data;
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const [edges] = useStore((store) => store.edges);
-  const [textType, setTextType] = useState("text");
+  const reactFlowInstance = useReactFlow();
 
   function commitChange(params: any) {
     const inputNode = new TextInput({
@@ -20,7 +18,7 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
       type: "textInputType",
       data,
       position: { x: xPos, y: yPos },
-      inPorts: { field: nameRef?.current?.value, value: valueRef?.current?.value },
+      inPorts: { field: name, value },
       outPorts: {},
     });
     setNodeStore({
@@ -34,6 +32,16 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
       },
     });
   }
+
+  function handleRemoveNode() {
+    reactFlowInstance.setNodes((nds) => nds.filter((node) => node.id !== id));
+  }
+
+  useEffect(() => {
+    setNodeStore({
+      nodes: { ...nodesStore, [id]: { ...nodesStore[id], inPorts: { field: name, value } } },
+    });
+  }, [name, value]);
 
   return (
     <div>
@@ -51,6 +59,9 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
             <i className="fa-regular fa-keyboard"></i>
           </span>
           <label>User type</label>
+          <span className="float-right" onClick={handleRemoveNode}>
+            <i className="fa-solid fa-xmark"></i>
+          </span>
         </div>
         <div className="px-2 pb-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
           <div>
@@ -59,8 +70,9 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
             </div>
             <input
               type="text"
-              ref={nameRef}
               defaultValue={inPorts?.field || ""}
+              value={name}
+              onChange={event => setName(event.target.value)}
               placeholder="Your selector"
               style={{ color: "black", paddingLeft: "4px" }}
             />
@@ -71,8 +83,8 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
             </div>
             <input
               className="nodrag"
-              type={textType}
-              ref={valueRef}
+              value={value}
+              onChange={event => setValue(event.target.value)}
               defaultValue={inPorts?.value || ""}
               placeholder="Your value"
               style={{ color: "black", paddingLeft: "4px" }}

@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useRef, useState } from "react";
-import { Handle, Position } from "reactflow";
+import { Handle, Position, useReactFlow } from "reactflow";
 import { v4 as uuid } from "uuid";
 import { useStore } from "../context/store";
 import { TextInput } from "../models/TextInput";
@@ -7,11 +7,12 @@ import { TextInput } from "../models/TextInput";
 const noType = { email: false, password: false, text: false };
 
 const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
-  const nameRef = useRef<HTMLInputElement>(null);
-  const valueRef = useRef<HTMLInputElement>(null);
+  const [name, setName] = useState(data?.inPorts?.field || "");
+  const [checked, setChecked] = useState(Boolean(data?.inPorts?.isChecked));
   const { sourceHandleId, targetHandleId, inPorts } = data;
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const [edges] = useStore((store) => store.edges);
+  const reactFlowInstance = useReactFlow();
 
   function commitChange(params: any) {
     const inputNode = new TextInput({
@@ -19,7 +20,7 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
       type: "checkboxNode",
       data,
       position: { x: xPos, y: yPos },
-      inPorts: { field: nameRef?.current?.value, isChecked: valueRef?.current?.checked },
+      inPorts: { field: name, isChecked: checked },
       outPorts: {},
     });
     setNodeStore({
@@ -33,6 +34,19 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
       },
     });
   }
+
+  function handleRemoveNode() {
+    reactFlowInstance.setNodes((nds) => nds.filter((node) => node.id !== id));
+  }
+
+  useEffect(() => {
+    setNodeStore({
+      nodes: {
+        ...nodesStore,
+        [id]: { ...nodesStore[id], inPorts: { field: name, isChecked: checked } },
+      },
+    });
+  }, [name, checked]);
 
   return (
     <div>
@@ -49,7 +63,10 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
           <span className="mr-1">
             <i className="fa-solid fa-square-check"></i>
           </span>
-          <label>User click on check box</label>
+          <label>Click on check box</label>
+          <span className="float-right" onClick={handleRemoveNode}>
+            <i className="fa-solid fa-xmark"></i>
+          </span>
         </div>
         <div className="px-2 pb-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
           <div>
@@ -58,7 +75,8 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
             </div>
             <input
               type="text"
-              ref={nameRef}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               defaultValue={inPorts?.field || ""}
               placeholder="Your selector"
               style={{ color: "black", paddingLeft: "4px" }}
@@ -70,7 +88,8 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
             </label>
             <input
               type="checkbox"
-              ref={valueRef}
+              checked={checked}
+              onChange={(e) => setChecked(e.target.checked)}
               defaultChecked={inPorts?.isChecked || false}
               id="email"
             />

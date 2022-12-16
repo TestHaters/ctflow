@@ -1,13 +1,16 @@
 import React, { memo, useEffect, useRef, useState } from "react";
-import { Handle, Position } from "reactflow";
+import { Handle, Position, useReactFlow } from "reactflow";
 import { v4 as uuid } from "uuid";
 import { useStore } from "../context/store";
 import { TextInput } from "../models/TextInput";
 
 const noType = { email: false, password: false, text: false };
 
-const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
-  const nameRef = useRef<HTMLInputElement>(null);
+const ButtonNode = (props) => {
+  const { id, data, isConnectable, xPos, yPos } = props;
+  const reactFlowInstance = useReactFlow();
+
+  const [name, setName] = useState(data?.inPorts?.field || "");
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const [edges] = useStore((store) => store.edges);
   const { sourceHandleId, targetHandleId, inPorts } = data;
@@ -18,7 +21,7 @@ const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
       type: "buttonNode",
       data,
       position: { x: xPos, y: yPos },
-      inPorts: { field: nameRef?.current?.value },
+      inPorts: { field: name },
       outPorts: {},
     });
     setNodeStore({
@@ -32,6 +35,19 @@ const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
       },
     });
   }
+
+  function handleRemoveNode() {
+    reactFlowInstance.setNodes((nds) => nds.filter((node) => node.id !== id));
+  }
+
+  useEffect(() => {
+    setNodeStore({
+      nodes: {
+        ...nodesStore,
+        [id]: { ...nodesStore[id], inPorts: { field: name } },
+      },
+    });
+  }, [name]);
 
   return (
     <div>
@@ -50,13 +66,17 @@ const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
             <i className="fa-solid fa-arrow-pointer"></i>
           </span>
           <label>User click</label>
+          <span className="float-right" onClick={handleRemoveNode}>
+            <i className="fa-solid fa-xmark"></i>
+          </span>
         </div>
 
         <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
           <input
             type="text"
-            ref={nameRef}
-            defaultValue={inPorts.field}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            defaultValue={inPorts?.field}
             placeholder="Your selector"
             style={{ color: "black", paddingLeft: "4px" }}
           />

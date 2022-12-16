@@ -9,11 +9,9 @@ function NodeMenuPanel({ ref, setNodes, setShowMenu }) {
 
   function handleClick(event) {
     const newNode = new RFNode({
-      id: uuid(),
-      data: {},
-      position: { x: 20, y: 250 },
       type: event.target.getAttribute("id"),
     });
+    console.log("newNode", newNode);
     setNodes((prev) => [...prev, newNode]);
     setShowMenu(false);
   }
@@ -45,7 +43,7 @@ function NodeMenuPanel({ ref, setNodes, setShowMenu }) {
         </div>
 
         <div className="hover:bg-slate-200 p-2 rounded">
-          <button id="buttonNode" onClick={handleClick}>
+          <button id="containsNode" onClick={handleClick}>
             Contains node
           </button>
         </div>
