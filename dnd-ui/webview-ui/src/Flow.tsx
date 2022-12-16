@@ -141,6 +141,8 @@ function Flow() {
   }
 
   function handleSave() {
+    console.log("saving", { nodes, edges });
+    
     vscode.postMessage({
       type: "addEdit",
       data: { yamlData: YAML.stringify({ nodes, edges }) },
@@ -171,10 +173,6 @@ function Flow() {
         //   type: "fireEventFromEditor",
         //   data: { eventType: "fileUpdate" },
         // });
-      }
-      if (node.id === "7") {
-        const payload = { nodes: store.nodes, edges: store.edges };
-        console.log("submit", payload);
       }
       if (node.data.label?.toLowerCase() !== "run") return;
       fetch("http://localhost:33333/", {
