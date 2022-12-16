@@ -118,7 +118,7 @@ nodes:
       x: 10
       y: 100
     inPorts:
-      url: https://planetscale.com/
+      url: https://auth.planetscale.com/sign-up
     outPorts: {}
     description: description
     componentName: compName

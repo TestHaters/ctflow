@@ -23,6 +23,7 @@ import { useStore } from "./context/store";
 import NodeMenuPanel from "./NodeMenuPanel";
 import CompilePanel from "./CompilePanel";
 import { useOnClickOutside } from "./useClickOutside";
+import { Compiler } from "./compiler";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
@@ -138,9 +139,11 @@ function Flow() {
   }
 
   function handleCompile(event: any) {
+    let compiledText = Compiler.compile(store)
+
     vscode.postMessage({
       type: 'writeCompiledFile',
-      data: { compiledText: "sample text", fileExtension: "js" }
+      data: { compiledText: compiledText, fileExtension: "spec.js" }
     })
 
     return true

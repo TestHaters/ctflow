@@ -1,70 +1,105 @@
-// import React, { useState, useCallback } from "react";
-// import ReactFlow, {
-//   Controls,
-//   Background,
-//   applyNodeChanges,
-//   applyEdgeChanges,
-//   addEdge,
-// } from "reactflow";
-// import "reactflow/dist/style.css";
-// import axios from "axios";
+import { DocumentSymbol } from "vscode";
+import { vscode } from "./utilities/vscode";
+import { useStore } from "./context/store";
+import { ButtonNodeCompiler } from "./compilers/cypress/buttonNodeCompiler"
+import YAML from 'yaml'
+import { VisitPageNodeCompiler } from "./compilers/cypress/VisitPageNode";
+import { TextInputNodeCompiler } from "./compilers/cypress/TextInputNode";
+import { CheckboxNodeCompiler } from "./compilers/cypress/CheckboxNode";
+export class Compiler {
 
-// axios.defaults.headers.post["Content-Type"] = "application/json";
-// axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
+	constructor() {
+
+	}
+
+	static compile(store): string {
+		// let buttonNodeCompiler = new ButtonNodeCompiler()
+		console.log("COMPILER>COMPILE")
+
+		let sampleFile = `\n---\nnodes:\n  '2':\n    id: '2'\n    type: textInputType\n    data:\n      sourceHandleId: c\n      targetHandleId: d\n      style:\n        border: '1px solid #777'\n        padding: 10\n      label: ''\n    position:\n      x: 380\n      y: 50\n    inPorts:\n      field: "#user_email"\n      value: hungdh131@gmail.com\n    outPorts: {}\n    description: description\n    componentName: compName\n    outputQ:\n    - outputQ\n  '3':\n    id: '3'\n    type: textInputType\n    data:\n      sourceHandleId: e\n      targetHandleId: f\n      style:\n        border: '1px solid #777'\n        padding: 10\n      label: ''\n    position:\n      x: 680\n      y: 50\n    inPorts:\n      field: "#user_password"\n      value: thisisthepassword\n    outPorts: {}\n    description: description\n    componentName: compName\n    outputQ:\n    - outputQ\n  '4':\n    id: '4'\n    type: textInputType\n    data:\n      sourceHandleId: g\n      targetHandleId: h\n      style:\n        border: '1px solid #777'\n        padding: 10\n      label: ''\n    position:\n      x: 980\n      y: 50\n    inPorts:\n      field: "#user_password_confirmation"\n      value: thisisthepassword\n    outPorts: {}\n    description: description\n    componentName: compName\n    outputQ:\n    - outputQ\n  '5':\n    id: '5'\n    type: checkboxNode\n    data:\n      sourceHandleId: i\n      targetHandleId: k\n      style:\n        border: '1px solid #777'\n        padding: 10\n      label: ''\n    position:\n      x: 1280\n      y: 50\n    inPorts:\n      field: "#tos"\n      isChecked: 'on'\n    outPorts: {}\n    description: description\n    componentName: compName\n    outputQ:\n    - outputQ\n  '6':\n    id: '6'\n    type: buttonNode\n    data:\n      sourceHandleId: l\n      targetHandleId: m\n      style:\n        border: '1px solid #777'\n        padding: 10\n      label: ''\n    position:\n      x: 1595\n      y: 50\n    inPorts:\n      field: ".btn .btn-primary .w-full"\n    outPorts: {}\n    description: description\n    componentName: compName\n    outputQ:\n    - outputQ\n  '9':\n    id: '9'\n    type: visitNode\n    data:\n      sourceHandleId: a\n      targetHandleId: b\n      style:\n        border: '1px solid #777'\n        padding: 10\n      label: ''\n    position:\n      x: 10\n      y: 100\n    inPorts:\n      url: https://planetscale.com/\n    outPorts: {}\n    description: description\n    componentName: compName\n    outputQ:\n    - outputQ\nedges:\n  '2':\n    source: '2'\n    sourceHandle: d\n    target: '3'\n    targetHandle: e\n  '3':\n    source: '3'\n    sourceHandle: f\n    target: '4'\n    targetHandle: g\n  '4':\n    source: '4'\n    sourceHandle: h\n    target: '5'\n    targetHandle: i\n  '5':\n    source: '5'\n    sourceHandle: k\n    target: '6'\n    targetHandle: l\n  '6':\n    source: '6'\n    sourceHandle: m\n    target: '8'\n    targetHandle:\n  '9':\n    source: '9'\n    sourceHandle: b\n    target: '2'\n    targetHandle: c\n\n`
+		let fakeStore = YAML.parse(sampleFile)
+		console.log(fakeStore)
+
+		// fakeStore.nodes.forEach(element => {
+		// 	ButtonNodeCompiler.compile(element)
+		// });
 
 
-// const initialEdges = [{ id: "1-2", source: "1", target: "2", type: "step" }] as any;
+		let compiledText = ""
+		let orderNodes = this.buildNodeChain(fakeStore)
 
-// function Flow() {
-//   const [nodes, setNodes] = useState(initialNodes);
-//   const [edges, setEdges] = useState(initialEdges);
+		orderNodes.forEach(node => {
+			let compiler = this.findCompiler(node)
+			compiledText += compiler.compile(node) + "\n"
+		})
 
-//   const onNodesChange = useCallback(
-//     (changes: any) => setNodes((nds) => applyNodeChanges(changes, nds)),
-//     []
-//   );
-//   const onEdgesChange = useCallback(
-//     (changes: any) => setEdges((eds: any) => applyEdgeChanges(changes, eds)),
-//     []
-//   );
 
-//   const onConnect = useCallback((params: any) => setEdges((eds: any) => addEdge(params, eds)), []);
+		return this.buildCypressJsFile(compiledText)
+	}
 
-//   const runTest = useCallback((_event: any, node: any) => {
-//     console.log("node", node);
-//     if (node.data.label.toLowerCase() !== "run") return;
-//     fetch("http://localhost:33333/", {
-//       method: "POST", // *GET, POST, PUT, DELETE, etc.
-//       // mode: "no-cors", // no-cors, *cors, same-origin
-//       headers: {
-//         "Accept": "application/json",
-//         "Content-Type": "application/json",
-//         // 'Content-Type': 'application/x-www-form-urlencoded',
-//       },
-//       redirect: "follow", // manual, *follow, error
-//       referrerPolicy: "no-referrer",
-//       body: JSON.stringify({ a: 1, b: "Textual content" }),
-//     })
-//       .then((response) => response.json())
-//       .then((data) => console.log(data));
-//   }, []);
+	static buildCypressJsFile(compiledText: string) {
+		return `
+		/// <reference types="cypress" />
 
-//   return (
-//     <div style={{ height: "100%" }}>
-//       <ReactFlow
-//         nodes={nodes}
-//         onNodeClick={runTest}
-//         onNodesChange={onNodesChange}
-//         edges={edges}
-//         onEdgesChange={onEdgesChange}
-//         onConnect={onConnect}>
-//         <Background />
-//         <Controls />
-//       </ReactFlow>
-//     </div>
-//   );
-// }
+		context('Generated By Ctflow', () => {
+			it('Demo CtFlow', () => {
+				${compiledText}
+			})
+		})
+		`
+	}
 
-// export default Flow;
+	static findCompiler(node: any) {
+		switch (node.type) {
+			case "ButtonNode": {
+				return ButtonNodeCompiler
+			}
+			case "visitNode": {
+				return VisitPageNodeCompiler
+			}
+			case "textInputType": {
+				return TextInputNodeCompiler
+			}
+			case "checkboxNode": {
+				return CheckboxNodeCompiler
+			}
+			default: {
+				return ButtonNodeCompiler
+			}
+		}
+	}
 
-export { }
+	static findRootNode(store: any) {
+		for (var nodeId in store.nodes) {
+			if (store.nodes[nodeId].type === 'visitNode') {
+				return store.nodes[nodeId]
+			}
+		}
+	}
+
+	static findEdgeWithSourceId(sourceId: any, store: any) {
+		for (var edgeId in store.edges) {
+			if (store.edges[edgeId].source === sourceId) {
+				return store.edges[edgeId]
+			}
+		}
+
+		return false
+	}
+
+	// return array of nodes by order
+	static buildNodeChain(store): any[] {
+		let currentNode = this.findRootNode(store)
+		let currentEdge: any;
+		let orderedNodes = [currentNode]
+
+		while (currentEdge = this.findEdgeWithSourceId(currentNode.id, store)) {
+			console.log(currentEdge)
+			currentNode = store.nodes[currentEdge.target]
+			if (!currentNode) { break }
+			orderedNodes.push(currentNode)
+		}
+
+		return orderedNodes;
+	}
+}

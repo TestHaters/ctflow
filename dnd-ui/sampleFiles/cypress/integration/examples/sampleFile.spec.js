@@ -8,6 +8,7 @@ context('Querying', () => {
 		cy.get('#user_password_confirmation').type('th1515D@PassW0rd')
 		cy.get('#tos').click()
 		cy.contains("Sign up")
+		cy.contains("Continue with GitHub")
 
 	})
 })
