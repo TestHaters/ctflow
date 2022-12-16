@@ -5,13 +5,17 @@ import { RFNode } from "./nodeFactory";
 import { useOnClickOutside } from "./useClickOutside";
 
 function CompilePanel({ onClick }) {
+  // TODO: loading state when onClick running
   return (
     <Panel
       className="rounded !text-white font-semibold py-2 px-5 bg-green-500	"
       position="top-left"
       // style={{ top: 50 }}
       onClick={onClick}>
-      Compile <i className="fa-solid fa-play"></i>
+      Compile{" "}
+      <span className="ml-1">
+        <i className="fa-solid fa-play"></i>
+      </span>
     </Panel>
   );
 }
