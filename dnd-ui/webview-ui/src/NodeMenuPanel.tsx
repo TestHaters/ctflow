@@ -13,7 +13,6 @@ function NodeMenuPanel({ ref, setNodes, setShowMenu }) {
       data: {},
       position: { x: 20, y: 250 },
       type: event.target.getAttribute("id"),
-      style: { border: "1px solid #777", padding: 10 },
     });
     setNodes((prev) => [...prev, newNode]);
     setShowMenu(false);
