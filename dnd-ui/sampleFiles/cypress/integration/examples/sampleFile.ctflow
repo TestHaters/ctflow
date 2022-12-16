@@ -6,9 +6,6 @@ nodes:
     data:
       sourceHandleId: c
       targetHandleId: d
-      style:
-        border: '1px solid #777'
-        padding: 10
       label: ''
     position:
       x: 380
@@ -27,9 +24,6 @@ nodes:
     data:
       sourceHandleId: e
       targetHandleId: f
-      style:
-        border: '1px solid #777'
-        padding: 10
       label: ''
     position:
       x: 680
@@ -48,9 +42,6 @@ nodes:
     data:
       sourceHandleId: g
       targetHandleId: h
-      style:
-        border: '1px solid #777'
-        padding: 10
       label: ''
     position:
       x: 980
@@ -69,9 +60,6 @@ nodes:
     data:
       sourceHandleId: i
       targetHandleId: k
-      style:
-        border: '1px solid #777'
-        padding: 10
       label: ''
     position:
       x: 1280
@@ -90,9 +78,6 @@ nodes:
     data:
       sourceHandleId: l
       targetHandleId: m
-      style:
-        border: '1px solid #777'
-        padding: 10
       label: ''
     position:
       x: 1595
@@ -110,15 +95,30 @@ nodes:
     data:
       sourceHandleId: a
       targetHandleId: b
-      style:
-        border: '1px solid #777'
-        padding: 10
       label: ''
     position:
       x: 10
-      y: 100
+      y: 150
     inPorts:
       url: https://auth.planetscale.com/sign-up
+    outPorts: {}
+    description: description
+    componentName: compName
+    outputQ:
+    - outputQ
+  '10':
+    id: '10'
+    type: containsNode
+    data:
+      sourceHandleId: n
+      targetHandleId: o
+      label: ''
+    position:
+      x: 1800
+      y: 50
+    inPorts:
+      field: "#title"
+      value: "Title"
     outPorts: {}
     description: description
     componentName: compName
@@ -148,10 +148,15 @@ edges:
   '6':
     source: '6'
     sourceHandle: m
-    target: '8'
+    target: '10'
     targetHandle:
   '9':
     source: '9'
     sourceHandle: b
     target: '2'
     targetHandle: c
+  '10':
+    source: '10'
+    sourceHandle: n
+    target: '11'
+    targetHandle: o

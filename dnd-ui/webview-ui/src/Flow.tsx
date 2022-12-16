@@ -19,11 +19,16 @@ import TextInputNode from "./nodes/TextInputNode";
 import VisitPageNode from "./nodes/VisitPageNode";
 import CheckboxNode from "./nodes/CheckboxNode";
 import ButtonNode from "./nodes/ButtonNode";
+import ContainsNode from "./nodes/ContainsNode";
 import { useStore } from "./context/store";
 import NodeMenuPanel from "./NodeMenuPanel";
 import CompilePanel from "./CompilePanel";
 import { useOnClickOutside } from "./useClickOutside";
+<<<<<<< HEAD
 import { Compiler } from "./compiler";
+=======
+import SavePanel from "./SavePanel";
+>>>>>>> b001974e56ed5cc5e921c7529ec410409bc8b52f
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
@@ -96,6 +101,7 @@ const nodeTypes = {
   textInputType: TextInputNode,
   visitNode: VisitPageNode,
   checkboxNode: CheckboxNode,
+  containsNode: ContainsNode,
 };
 
 function Flow() {
@@ -138,6 +144,13 @@ function Flow() {
     }
   }
 
+  function handleSave() {
+    vscode.postMessage({
+      type: "addEdit",
+      data: { yamlData: YAML.stringify({ nodes, edges }) },
+    });
+  }
+
   function handleCompile(event: any) {
     let compiledText = Compiler.compile(store)
 
@@ -146,7 +159,7 @@ function Flow() {
       data: { compiledText: compiledText, fileExtension: "spec.js" }
     })
 
-    return true
+    return true;
   }
 
   useEffect(() => {
@@ -200,19 +213,23 @@ function Flow() {
         onConnect={onConnect}>
         <Background />
         <Controls />
+        <CompilePanel onClick={handleCompile} />
+        <SavePanel onClick={handleSave} />
         <Panel
           position="top-left"
+          style={{ left: 120 }}
           onClick={() => setShowMenu((prev) => !prev)}
           className="rounded !text-black font-semibold py-2 px-5">
-          Add Node{" "}
-          {showMenu ? (
-            <i className="fa-solid fa-angles-right"></i>
-          ) : (
-            <i className="fa-solid fa-angle-right"></i>
-          )}
+          Add Node
+          <span className="ml-1">
+            {showMenu ? (
+              <i className="fa-solid fa-angle-down"></i>
+            ) : (
+              <i className="fa-solid fa-bars"></i>
+            )}
+          </span>
         </Panel>
         {showMenu && <NodeMenuPanel setShowMenu={setShowMenu} setNodes={setNodes} />}
-        <CompilePanel onClick={handleCompile} />
       </ReactFlow>
     </div>
   );

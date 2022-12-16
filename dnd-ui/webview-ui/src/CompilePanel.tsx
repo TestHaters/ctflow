@@ -5,12 +5,19 @@ import { RFNode } from "./nodeFactory";
 import { useOnClickOutside } from "./useClickOutside";
 
 function CompilePanel({ onClick }) {
-
-	return (
-		<Panel position="top-left" style={{ top: 100 }} onClick={onClick}>
-			Compile
-		</Panel>
-	);
+  // TODO: loading state when onClick running
+  return (
+    <Panel
+      className="rounded !text-white font-semibold py-2 px-5 bg-blue-500"
+      position="top-left"
+      // style={{ top: 50 }}
+      onClick={onClick}>
+      Compile
+      <span className="ml-1">
+        <i className="fa-solid fa-play"></i>
+      </span>
+    </Panel>
+  );
 }
 
 export default memo(CompilePanel);

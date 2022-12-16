@@ -6,19 +6,21 @@ import { TextInput } from "../models/TextInput";
 
 const noType = { email: false, password: false, text: false };
 
-const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
+const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
   const nameRef = useRef<HTMLInputElement>(null);
+  const valueRef = useRef<HTMLInputElement>(null);
+  const { sourceHandleId, targetHandleId, inPorts } = data;
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const [edges] = useStore((store) => store.edges);
-  const { sourceHandleId, targetHandleId, inPorts } = data;
+  const [textType, setTextType] = useState("text");
 
   function commitChange(params: any) {
     const inputNode = new TextInput({
       id,
-      type: "buttonNode",
+      type: "textInputType",
       data,
       position: { x: xPos, y: yPos },
-      inPorts: { field: nameRef?.current?.value },
+      inPorts: { field: nameRef?.current?.value, value: valueRef?.current?.value },
       outPorts: {},
     });
     setNodeStore({
@@ -43,23 +45,39 @@ const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
         onConnect={(params) => console.log("handle onConnect", params)}
         isConnectable={isConnectable}
       />
-
       <div>
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
           <span className="mr-1">
-            <i className="fa-solid fa-arrow-pointer"></i>
+            <i className="fa-solid fa-box"></i>
           </span>
-          <label>User click</label>
+          <label>Check contains</label>
         </div>
-
-        <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
-          <input
-            type="text"
-            ref={nameRef}
-            defaultValue={inPorts.field}
-            placeholder="Your selector"
-            style={{ color: "black", paddingLeft: "4px" }}
-          />
+        <div className="px-2 pb-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
+          <div>
+            <div>
+              <label className="text-[11px]">Selector</label>
+            </div>
+            <input
+              type="text"
+              ref={nameRef}
+              defaultValue={inPorts?.field || ""}
+              placeholder="Your selector"
+              style={{ color: "black", paddingLeft: "4px" }}
+            />
+          </div>
+          <div className="mt-2">
+            <div>
+              <label className="text-[11px]">Contains</label>
+            </div>
+            <input
+              className="nodrag"
+              type={textType}
+              ref={valueRef}
+              defaultValue={inPorts?.value || ""}
+              placeholder="Your value"
+              style={{ color: "black", paddingLeft: "4px" }}
+            />
+          </div>
         </div>
       </div>
 
@@ -75,4 +93,4 @@ const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
   );
 };
 
-export default memo(ButtonNode);
+export default memo(TextInputNode);

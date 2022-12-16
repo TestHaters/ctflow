@@ -35,7 +35,7 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
   }
 
   return (
-    <>
+    <div>
       <Handle
         type="target"
         position={Position.Left}
@@ -44,24 +44,38 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
         onConnect={(params) => console.log("handle onConnect", params)}
         isConnectable={isConnectable}
       />
-      <h5>User click on check box</h5>
       <div>
-        <input
-          type="text"
-          ref={nameRef}
-          defaultValue={inPorts?.field || ""}
-          placeholder="Your selector"
-        />
-      </div>
-      <br />
-      <div>
-        <label htmlFor="email">status</label>
-        <input
-          type="checkbox"
-          ref={valueRef}
-          defaultChecked={inPorts?.isChecked || false}
-          id="email"
-        />
+        <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
+          <span className="mr-1">
+            <i className="fa-solid fa-square-check"></i>
+          </span>
+          <label>User click on check box</label>
+        </div>
+        <div className="px-2 pb-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
+          <div>
+            <div>
+              <label className="text-[11px]">Selector</label>
+            </div>
+            <input
+              type="text"
+              ref={nameRef}
+              defaultValue={inPorts?.field || ""}
+              placeholder="Your selector"
+              style={{ color: "black", paddingLeft: "4px" }}
+            />
+          </div>
+          <div className="mt-2">
+            <label htmlFor="email" className="text-[11px] mr-1">
+              Status
+            </label>
+            <input
+              type="checkbox"
+              ref={valueRef}
+              defaultChecked={inPorts?.isChecked || false}
+              id="email"
+            />
+          </div>
+        </div>
       </div>
       <Handle
         type="source"
@@ -71,7 +85,7 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
         style={{ top: 10, background: "#555" }}
         isConnectable={isConnectable}
       />
-    </>
+    </div>
   );
 };
 

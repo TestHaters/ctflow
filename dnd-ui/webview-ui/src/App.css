@@ -20,3 +20,7 @@
   cursor: pointer;
   outline: inherit;
 }
+
+.react-flow__node {
+  border-radius: 4px;
+}
