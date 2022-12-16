@@ -43,7 +43,12 @@ const VisitPageNode = ({ id, data, isConnectable, xPos, yPos }) => {
       />
       <div>
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
-          <label htmlFor="page">User visit</label>
+          <label htmlFor="page">
+            <span className="mr-1">
+              <i className="fa-solid fa-door-open"></i>
+            </span>
+            User visit
+          </label>
         </div>
 
         <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">

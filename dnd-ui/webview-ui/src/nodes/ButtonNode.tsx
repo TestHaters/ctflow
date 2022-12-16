@@ -46,6 +46,9 @@ const ButtonNode = ({ id, data, isConnectable, xPos, yPos }) => {
 
       <div>
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
+          <span className="mr-1">
+            <i className="fa-solid fa-arrow-pointer"></i>
+          </span>
           <label>User click</label>
         </div>
 

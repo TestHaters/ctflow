@@ -47,6 +47,9 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
       />
       <div>
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
+          <span className="mr-1">
+            <i className="fa-regular fa-keyboard"></i>
+          </span>
           <label>User type</label>
         </div>
         <div className="px-2 pb-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
