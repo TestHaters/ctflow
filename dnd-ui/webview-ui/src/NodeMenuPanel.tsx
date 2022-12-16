@@ -44,6 +44,12 @@ function NodeMenuPanel({ ref, setNodes, setShowMenu }) {
             Button node
           </button>
         </div>
+
+        <div className="hover:bg-slate-200 p-2 rounded">
+          <button id="buttonNode" onClick={handleClick}>
+            Contains node
+          </button>
+        </div>
       </Panel>
     </section>
   );

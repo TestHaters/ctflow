@@ -106,6 +106,24 @@ nodes:
     componentName: compName
     outputQ:
     - outputQ
+  '10':
+    id: '10'
+    type: containsNode
+    data:
+      sourceHandleId: n
+      targetHandleId: o
+      label: ''
+    position:
+      x: 1800
+      y: 50
+    inPorts:
+      field: "#title"
+      value: "Title"
+    outPorts: {}
+    description: description
+    componentName: compName
+    outputQ:
+    - outputQ
 edges:
   '2':
     source: '2'
@@ -130,10 +148,15 @@ edges:
   '6':
     source: '6'
     sourceHandle: m
-    target: '8'
+    target: '10'
     targetHandle:
   '9':
     source: '9'
     sourceHandle: b
     target: '2'
     targetHandle: c
+  '10':
+    source: '10'
+    sourceHandle: n
+    target: '11'
+    targetHandle: o

@@ -19,6 +19,7 @@ import TextInputNode from "./nodes/TextInputNode";
 import VisitPageNode from "./nodes/VisitPageNode";
 import CheckboxNode from "./nodes/CheckboxNode";
 import ButtonNode from "./nodes/ButtonNode";
+import ContainsNode from "./nodes/ContainsNode";
 import { useStore } from "./context/store";
 import NodeMenuPanel from "./NodeMenuPanel";
 import CompilePanel from "./CompilePanel";
@@ -96,6 +97,7 @@ const nodeTypes = {
   textInputType: TextInputNode,
   visitNode: VisitPageNode,
   checkboxNode: CheckboxNode,
+  containsNode: ContainsNode,
 };
 
 function Flow() {
@@ -212,7 +214,7 @@ function Flow() {
           style={{ left: 120 }}
           onClick={() => setShowMenu((prev) => !prev)}
           className="rounded !text-black font-semibold py-2 px-5">
-          Add Node{" "}
+          Add Node
           <span className="ml-1">
             {showMenu ? (
               <i className="fa-solid fa-angle-down"></i>
