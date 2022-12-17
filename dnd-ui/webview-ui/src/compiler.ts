@@ -3,10 +3,12 @@ import { vscode } from "./utilities/vscode";
 import { useStore } from "./context/store";
 import { ButtonNodeCompiler } from "./compilers/cypress/buttonNodeCompiler"
 import YAML from 'yaml'
-import { VisitPageNodeCompiler } from "./compilers/cypress/VisitPageNode";
-import { TextInputNodeCompiler } from "./compilers/cypress/TextInputNode";
-import { CheckboxNodeCompiler } from "./compilers/cypress/CheckboxNode";
+import { VisitPageNodeCompiler } from "./compilers/cypress/VisitPageNodeCompiler";
+import { TextInputNodeCompiler } from "./compilers/cypress/TextInputNodeCompiler";
+import { CheckboxNodeCompiler } from "./compilers/cypress/CheckboxNodeCompiler";
 import { ContainsNodeCompiler } from "./compilers/cypress/ContainsNodeCompiler";
+import WaitNode from "./nodes/WaitNode";
+import { WaitNodeCompiler } from "./compilers/cypress/WaitNodeCompiler";
 export class Compiler {
 
 	constructor() {
@@ -63,6 +65,9 @@ export class Compiler {
 			}
 			case "containsNode": {
 				return ContainsNodeCompiler
+			}
+			case "waitNode": {
+				return WaitNodeCompiler
 			}
 			default: {
 				return ButtonNodeCompiler

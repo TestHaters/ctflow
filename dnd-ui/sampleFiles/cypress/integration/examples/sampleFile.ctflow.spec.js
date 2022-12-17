@@ -16,15 +16,19 @@
     cy.get('#user_password_confirmation').type('thisIS##@123thepassword')
     
 
-      cy.wait(500)
       cy.get('#tos').click()
     
 
-      cy.wait(500)
+      cy.wait(1500)
+    
+
       cy.get(':nth-child(7) > .btn').click()
     
 
       cy.get('body').contains("Email is invalid or has already been taken")
+    
+
+      cy.get('.text-xl').contains("Sign up")
     
 
 			})

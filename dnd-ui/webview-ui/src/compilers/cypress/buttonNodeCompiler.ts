@@ -11,8 +11,8 @@ export class ButtonNodeCompiler {
   static compile(nodeData: any): string {
     console.log("HEllo from button node compiler", nodeData)
     // cy.contains("${nodeData.inPorts.field}").click()
+    // cy.wait(500)
     return `
-      cy.wait(500)
       cy.get('${nodeData.inPorts.field}').click()
     `
   }

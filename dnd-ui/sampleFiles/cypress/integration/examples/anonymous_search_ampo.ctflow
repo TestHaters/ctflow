@@ -1,0 +1,173 @@
+nodes:
+  "9":
+    id: "9"
+    position:
+      x: 152.6746751524385
+      y: 54.876637496686115
+    type: visitNode
+    description: description
+    componentName: compName
+    outputQ:
+      - outputQ
+    inPorts:
+      url: https://ampo.vn
+    outPorts: {}
+    data:
+      sourceHandleId: a
+      targetHandleId: b
+      label: ""
+  81422a45-b22f-4b43-aa1e-e65d34da8d50:
+    id: 81422a45-b22f-4b43-aa1e-e65d34da8d50
+    position:
+      x: 376.23142129914316
+      y: 47.07215055347321
+    type: buttonNode
+    description: description
+    componentName: compName
+    outputQ:
+      - outputQ
+    inPorts:
+      field: "[data-test=search-bar]"
+    outPorts: {}
+    data: {}
+  d738cb2d-1767-4429-bbba-57e56bd8904d:
+    id: d738cb2d-1767-4429-bbba-57e56bd8904d
+    position:
+      x: 588.0207488874397
+      y: 57.7059243235969
+    type: waitNode
+    description: description
+    componentName: compName
+    outputQ:
+      - outputQ
+    inPorts:
+      field: "500"
+    outPorts: {}
+    data: {}
+  b5ca18e9-182d-48f8-873e-ba52854714aa:
+    id: b5ca18e9-182d-48f8-873e-ba52854714aa
+    position:
+      x: 800.6249964698158
+      y: 44.57236935004844
+    type: textInputType
+    description: description
+    componentName: compName
+    outputQ:
+      - outputQ
+    inPorts:
+      field: "[data-test=search-bar]"
+      value: Den led nanoco
+    outPorts: {}
+    data: {}
+  b73c3ef4-2fb3-42a2-8ea6-708699e12441:
+    id: b73c3ef4-2fb3-42a2-8ea6-708699e12441
+    position:
+      x: 1036
+      y: 40
+    type: containsNode
+    description: description
+    componentName: compName
+    outputQ:
+      - outputQ
+    inPorts:
+      field: body
+      value: NLF1506
+    outPorts: {}
+    data: {}
+edges:
+  "2":
+    source: "2"
+    sourceHandle: d
+    target: "3"
+    targetHandle: e
+    selected: false
+  "3":
+    source: "3"
+    sourceHandle: f
+    target: "4"
+    targetHandle: g
+    selected: false
+  "4":
+    source: "4"
+    sourceHandle: h
+    target: 9d52c432-95db-49f4-98eb-dfa6b4429aab
+    targetHandle: 680b823c-f32f-4257-83a8-a230d8bcf56d
+    id: reactflow__edge-4h-9d52c432-95db-49f4-98eb-dfa6b4429aab680b823c-f32f-4257-83a8-a230d8bcf56d
+  "5":
+    source: "5"
+    sourceHandle: k
+    target: 9d52c432-95db-49f4-98eb-dfa6b4429aab
+    targetHandle: 9fe6385e-8ca4-4c6c-9619-bd19fe6ce3bb
+    id: reactflow__edge-5k-9d52c432-95db-49f4-98eb-dfa6b4429aab9fe6385e-8ca4-4c6c-9619-bd19fe6ce3bb
+  "6":
+    source: "6"
+    sourceHandle: m
+    target: "10"
+    targetHandle: null
+    selected: false
+  "9":
+    source: "9"
+    sourceHandle: b
+    target: 81422a45-b22f-4b43-aa1e-e65d34da8d50
+    targetHandle: 000f1f16-0043-4918-8ffd-fe203ecc4231
+    id: reactflow__edge-9b-81422a45-b22f-4b43-aa1e-e65d34da8d50000f1f16-0043-4918-8ffd-fe203ecc4231
+  "10":
+    source: "10"
+    sourceHandle: o
+    target: af1d88b9-9a37-48d9-a26b-da9bc84c084c
+    targetHandle: bd2c419b-c633-4dac-88c7-1bac442494ea
+    id: reactflow__edge-10o-af1d88b9-9a37-48d9-a26b-da9bc84c084cbd2c419b-c633-4dac-88c7-1bac442494ea
+  584e2ca2-ba8f-4dfd-bfaf-3e5d95537908:
+    source: 584e2ca2-ba8f-4dfd-bfaf-3e5d95537908
+    sourceHandle: fc7e067c-0871-43b1-8d02-78be32565402
+    target: "10"
+    targetHandle: n
+    id: reactflow__edge-584e2ca2-ba8f-4dfd-bfaf-3e5d95537908fc7e067c-0871-43b1-8d02-78be32565402-10n
+  9d52c432-95db-49f4-98eb-dfa6b4429aab:
+    source: 9d52c432-95db-49f4-98eb-dfa6b4429aab
+    sourceHandle: f4c375df-3107-499e-bfb6-d00fe0e75a8d
+    target: e8e97d68-edb9-49f2-b376-25ae233b12b4
+    targetHandle: f77aada4-110a-4d1e-a59c-1a9d51b760d8
+    id: reactflow__edge-9d52c432-95db-49f4-98eb-dfa6b4429aabf4c375df-3107-499e-bfb6-d00fe0e75a8d-e8e97d68-edb9-49f2-b376-25ae233b12b4f77aada4-110a-4d1e-a59c-1a9d51b760d8
+  e8e97d68-edb9-49f2-b376-25ae233b12b4:
+    source: e8e97d68-edb9-49f2-b376-25ae233b12b4
+    sourceHandle: 89e34930-e069-4d49-93f0-67246c657dd1
+    target: 584e2ca2-ba8f-4dfd-bfaf-3e5d95537908
+    targetHandle: d5ec14d2-0587-412d-a011-bd7c115c102e
+    id: reactflow__edge-e8e97d68-edb9-49f2-b376-25ae233b12b489e34930-e069-4d49-93f0-67246c657dd1-584e2ca2-ba8f-4dfd-bfaf-3e5d95537908d5ec14d2-0587-412d-a011-bd7c115c102e
+  c2ee1a75-1f35-4bf9-b7b7-82058b0f82dc:
+    source: c2ee1a75-1f35-4bf9-b7b7-82058b0f82dc
+    sourceHandle: 9951f38b-7df1-40bc-9246-30d5f6ece943
+    target: 64b7f511-1d46-496b-8b03-ac8d54ea2316
+    targetHandle: 6f8eca47-f17c-485b-9312-f37768860793
+    id: reactflow__edge-c2ee1a75-1f35-4bf9-b7b7-82058b0f82dc9951f38b-7df1-40bc-9246-30d5f6ece943-64b7f511-1d46-496b-8b03-ac8d54ea23166f8eca47-f17c-485b-9312-f37768860793
+  64b7f511-1d46-496b-8b03-ac8d54ea2316:
+    source: 64b7f511-1d46-496b-8b03-ac8d54ea2316
+    sourceHandle: d017aa9a-2510-46ef-85bf-58d720f23f61
+    target: 91a23c78-78bf-4f89-bde4-aceab9f97da4
+    targetHandle: c5f97b54-b2c5-4610-a1ca-c0c824fc7e80
+    id: reactflow__edge-64b7f511-1d46-496b-8b03-ac8d54ea2316d017aa9a-2510-46ef-85bf-58d720f23f61-91a23c78-78bf-4f89-bde4-aceab9f97da4c5f97b54-b2c5-4610-a1ca-c0c824fc7e80
+  91a23c78-78bf-4f89-bde4-aceab9f97da4:
+    source: 91a23c78-78bf-4f89-bde4-aceab9f97da4
+    sourceHandle: 53043e4f-274c-4c04-ae65-4870f7dd7d39
+    target: d606ca49-1031-4514-98b7-1f71784235ef
+    targetHandle: ff05b412-c6da-4c64-8713-6433e4c005c7
+    id: reactflow__edge-91a23c78-78bf-4f89-bde4-aceab9f97da453043e4f-274c-4c04-ae65-4870f7dd7d39-d606ca49-1031-4514-98b7-1f71784235efff05b412-c6da-4c64-8713-6433e4c005c7
+  81422a45-b22f-4b43-aa1e-e65d34da8d50:
+    source: 81422a45-b22f-4b43-aa1e-e65d34da8d50
+    sourceHandle: 3b4a8d76-2d5c-4fda-a46d-5111fa97e5c7
+    target: d738cb2d-1767-4429-bbba-57e56bd8904d
+    targetHandle: 7ddbf6bc-2cf7-42ad-b4b8-a105ad5fe844
+    id: reactflow__edge-81422a45-b22f-4b43-aa1e-e65d34da8d503b4a8d76-2d5c-4fda-a46d-5111fa97e5c7-d738cb2d-1767-4429-bbba-57e56bd8904d7ddbf6bc-2cf7-42ad-b4b8-a105ad5fe844
+  d738cb2d-1767-4429-bbba-57e56bd8904d:
+    source: d738cb2d-1767-4429-bbba-57e56bd8904d
+    sourceHandle: e6bb0ce2-433b-4fe3-867b-8de3ce39fd02
+    target: b5ca18e9-182d-48f8-873e-ba52854714aa
+    targetHandle: 3886d744-5773-4803-bef8-83180c95082d
+    id: reactflow__edge-d738cb2d-1767-4429-bbba-57e56bd8904de6bb0ce2-433b-4fe3-867b-8de3ce39fd02-b5ca18e9-182d-48f8-873e-ba52854714aa3886d744-5773-4803-bef8-83180c95082d
+  b5ca18e9-182d-48f8-873e-ba52854714aa:
+    source: b5ca18e9-182d-48f8-873e-ba52854714aa
+    sourceHandle: bc707553-ec6e-4f74-b774-b51a011fe717
+    target: b73c3ef4-2fb3-42a2-8ea6-708699e12441
+    targetHandle: 945ca3ac-5b9b-4299-9d59-576c3b002791
+    id: reactflow__edge-b5ca18e9-182d-48f8-873e-ba52854714aabc707553-ec6e-4f74-b774-b51a011fe717-b73c3ef4-2fb3-42a2-8ea6-708699e12441945ca3ac-5b9b-4299-9d59-576c3b002791
