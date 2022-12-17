@@ -1,9 +1,11 @@
 # Architecture
 The **Webview UI** is built by **React** and **Vite** as an UI component for VSCode extension. All testers interaction on the Webview UI will be recorded and translated into **cypress** test cases(`javascript` code) by our **compiler**. The test cases then are run by **cypress** on top of the user's app.
+
 ![Architect](./assets/architect.png)
 # Tech stack (Vscode + React + Vite)
 
-The project ultilize fast bundling speed of [Vite](https://vitejs.dev/) and familiarity of [React](https://reactjs.org/) to quickly bring about our intuitive UI for the user. 
+The project ultilize fast bundling speed of [Vite](https://vitejs.dev/) and familiarity of [React](https://reactjs.org/) to quickly bring about the intuitive UI for the user. 
+
 ![A screenshot of the sample extension.](./assets/codeless-testing.png)
 
 ## Documentation
