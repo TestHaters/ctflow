@@ -47,6 +47,12 @@ function NodeMenuPanel({ ref, setNodes, setShowMenu }) {
             Contains node
           </button>
         </div>
+
+        <div className="hover:bg-slate-200 p-2 rounded">
+          <button id="waitNode" onClick={handleClick}>
+            Wait node
+          </button>
+        </div>
       </Panel>
     </section>
   );

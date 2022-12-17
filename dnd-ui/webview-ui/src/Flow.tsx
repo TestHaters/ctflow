@@ -26,6 +26,7 @@ import NodeMenuPanel from "./NodeMenuPanel";
 import CompilePanel from "./CompilePanel";
 import { Compiler } from "./compiler";
 import SavePanel from "./SavePanel";
+import WaitNode from "./nodes/WaitNode";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
@@ -38,6 +39,7 @@ const nodeTypes = {
   visitNode: VisitPageNode,
   checkboxNode: CheckboxNode,
   containsNode: ContainsNode,
+  waitNode: WaitNode,
 };
 
 function Flow() {
