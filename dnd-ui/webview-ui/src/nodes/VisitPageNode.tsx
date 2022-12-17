@@ -46,7 +46,7 @@ const VisitPageNode = (props) => {
       <Handle
         type="target"
         position={Position.Left}
-        style={{ background: "#555" }}
+        style={{ background: "#555", width: 10, height: 10 }}
         id={sourceHandleId || uuid()}
         onConnect={(params) => console.log("handle onConnect", params)}
         isConnectable={isConnectable}
@@ -81,7 +81,7 @@ const VisitPageNode = (props) => {
         position={Position.Right}
         id={targetHandleId || uuid()}
         onConnect={commitChange}
-        style={{ top: 10, background: "#555" }}
+        style={{ top: 10, background: "#555", width: 10, height: 10 }}
         isConnectable={isConnectable}
       />
     </div>

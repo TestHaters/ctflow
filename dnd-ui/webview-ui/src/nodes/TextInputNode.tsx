@@ -5,8 +5,8 @@ import { useStore } from "../context/store";
 import { TextInput } from "../models/TextInput";
 
 const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
-  const [name, setName] = useState(data?.inPorts?.field || '');
-  const [value, setValue] = useState(data?.inPorts?.value || '');
+  const [name, setName] = useState(data?.inPorts?.field || "");
+  const [value, setValue] = useState(data?.inPorts?.value || "");
   const { sourceHandleId, targetHandleId, inPorts } = data;
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const [edges] = useStore((store) => store.edges);
@@ -48,7 +48,7 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
       <Handle
         type="target"
         position={Position.Left}
-        style={{ background: "#555" }}
+        style={{ background: "#555", width: 10, height: 10 }}
         id={sourceHandleId || uuid()}
         onConnect={(params) => console.log("handle onConnect", params)}
         isConnectable={isConnectable}
@@ -72,7 +72,7 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
               type="text"
               defaultValue={inPorts?.field || ""}
               value={name}
-              onChange={event => setName(event.target.value)}
+              onChange={(event) => setName(event.target.value)}
               placeholder="Your selector"
               style={{ color: "black", paddingLeft: "4px" }}
             />
@@ -84,7 +84,7 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
             <input
               className="nodrag"
               value={value}
-              onChange={event => setValue(event.target.value)}
+              onChange={(event) => setValue(event.target.value)}
               defaultValue={inPorts?.value || ""}
               placeholder="Your value"
               style={{ color: "black", paddingLeft: "4px" }}
@@ -98,7 +98,7 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
         position={Position.Right}
         id={targetHandleId || uuid()}
         onConnect={commitChange}
-        style={{ top: 10, background: "#555" }}
+        style={{ top: 10, background: "#555", width: 10, height: 10 }}
         isConnectable={isConnectable}
       />
     </div>
