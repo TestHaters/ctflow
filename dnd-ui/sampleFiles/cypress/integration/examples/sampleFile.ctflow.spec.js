@@ -10,19 +10,21 @@
     cy.get('#user_email').type('hungdh131@gmail.com')
     
 
-    cy.get('#user_password').type('thisisthepassword')
+    cy.get('#user_password').type('thisIS##@123thepassword')
     
 
-    cy.get('#user_password_confirmation').type('thisisthepassword')
+    cy.get('#user_password_confirmation').type('thisIS##@123thepassword')
     
 
-    cy.get('#tos').click()
+      cy.wait(500)
+      cy.get('#tos').click()
     
 
-    cy.get('.btn .btn-primary .w-full').click()
+      cy.wait(500)
+      cy.get(':nth-child(7) > .btn').click()
     
 
-    cy.get('#title').click()
+      cy.get('body').contains("Email is invalid or has already been taken")
     
 
 			})

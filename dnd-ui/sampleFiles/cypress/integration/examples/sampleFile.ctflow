@@ -1,162 +1,167 @@
----
 nodes:
-  '2':
-    id: '2'
-    type: textInputType
-    data:
-      sourceHandleId: c
-      targetHandleId: d
-      label: ''
+  "2":
+    id: "2"
     position:
       x: 380
       y: 50
+    type: textInputType
+    description: description
+    componentName: compName
+    outputQ:
+      - outputQ
     inPorts:
       field: "#user_email"
       value: hungdh131@gmail.com
     outPorts: {}
-    description: description
-    componentName: compName
-    outputQ:
-    - outputQ
-  '3':
-    id: '3'
-    type: textInputType
     data:
-      sourceHandleId: e
-      targetHandleId: f
-      label: ''
+      sourceHandleId: c
+      targetHandleId: d
+      label: ""
+  "3":
+    id: "3"
     position:
       x: 680
       y: 50
-    inPorts:
-      field: "#user_password"
-      value: thisisthepassword
-    outPorts: {}
+    type: textInputType
     description: description
     componentName: compName
     outputQ:
-    - outputQ
-  '4':
-    id: '4'
-    type: textInputType
+      - outputQ
+    inPorts:
+      field: "#user_password"
+      value: thisIS##@123thepassword
+    outPorts: {}
     data:
-      sourceHandleId: g
-      targetHandleId: h
-      label: ''
+      sourceHandleId: e
+      targetHandleId: f
+      label: ""
+  "4":
+    id: "4"
     position:
       x: 980
       y: 50
+    type: textInputType
+    description: description
+    componentName: compName
+    outputQ:
+      - outputQ
     inPorts:
       field: "#user_password_confirmation"
-      value: thisisthepassword
+      value: thisIS##@123thepassword
     outPorts: {}
-    description: description
-    componentName: compName
-    outputQ:
-    - outputQ
-  '5':
-    id: '5'
-    type: checkboxNode
     data:
-      sourceHandleId: i
-      targetHandleId: k
-      label: ''
-    position:
-      x: 1280
-      y: 50
-    inPorts:
-      field: "#tos"
-      isChecked: 'on'
-    outPorts: {}
-    description: description
-    componentName: compName
-    outputQ:
-    - outputQ
-  '6':
-    id: '6'
-    type: buttonNode
-    data:
-      sourceHandleId: l
-      targetHandleId: m
-      label: ''
-    position:
-      x: 1595
-      y: 50
-    inPorts:
-      field: ".btn .btn-primary .w-full"
-    outPorts: {}
-    description: description
-    componentName: compName
-    outputQ:
-    - outputQ
-  '9':
-    id: '9'
-    type: visitNode
-    data:
-      sourceHandleId: a
-      targetHandleId: b
-      label: ''
+      sourceHandleId: g
+      targetHandleId: h
+      label: ""
+  "9":
+    id: "9"
     position:
       x: 10
       y: 150
+    type: visitNode
+    description: description
+    componentName: compName
+    outputQ:
+      - outputQ
     inPorts:
       url: https://auth.planetscale.com/sign-up
     outPorts: {}
+    data:
+      sourceHandleId: a
+      targetHandleId: b
+      label: ""
+  "10":
+    id: "10"
+    position:
+      x: 1749.98798447391
+      y: 45.959250052428445
+    type: containsNode
     description: description
     componentName: compName
     outputQ:
-    - outputQ
-  '10':
-    id: '10'
-    type: containsNode
+      - outputQ
+    inPorts:
+      field: body
+      value: Email is invalid or has already been taken
+    outPorts: {}
     data:
       sourceHandleId: n
       targetHandleId: o
-      label: ''
+      label: ""
+  9d52c432-95db-49f4-98eb-dfa6b4429aab:
+    id: 9d52c432-95db-49f4-98eb-dfa6b4429aab
     position:
-      x: 1800
-      y: 50
-    inPorts:
-      field: "#title"
-      value: "Title"
-    outPorts: {}
+      x: 1242.4321459732748
+      y: 60.148443979812185
+    type: buttonNode
     description: description
     componentName: compName
     outputQ:
-    - outputQ
+      - outputQ
+    inPorts:
+      field: "#tos"
+    outPorts: {}
+    data: {}
+  584e2ca2-ba8f-4dfd-bfaf-3e5d95537908:
+    id: 584e2ca2-ba8f-4dfd-bfaf-3e5d95537908
+    position:
+      x: 1496.8508369478639
+      y: 55.97042300349659
+    type: buttonNode
+    description: description
+    componentName: compName
+    outputQ:
+      - outputQ
+    inPorts:
+      field: :nth-child(7) > .btn
+    outPorts: {}
+    data: {}
 edges:
-  '2':
-    source: '2'
+  "2":
+    source: "2"
     sourceHandle: d
-    target: '3'
+    target: "3"
     targetHandle: e
-  '3':
-    source: '3'
+    selected: false
+  "3":
+    source: "3"
     sourceHandle: f
-    target: '4'
+    target: "4"
     targetHandle: g
-  '4':
-    source: '4'
+    selected: false
+  "4":
+    source: "4"
     sourceHandle: h
-    target: '5'
-    targetHandle: i
-  '5':
-    source: '5'
+    target: 9d52c432-95db-49f4-98eb-dfa6b4429aab
+    targetHandle: 680b823c-f32f-4257-83a8-a230d8bcf56d
+    id: reactflow__edge-4h-9d52c432-95db-49f4-98eb-dfa6b4429aab680b823c-f32f-4257-83a8-a230d8bcf56d
+  "5":
+    source: "5"
     sourceHandle: k
-    target: '6'
-    targetHandle: l
-  '6':
-    source: '6'
+    target: 9d52c432-95db-49f4-98eb-dfa6b4429aab
+    targetHandle: 9fe6385e-8ca4-4c6c-9619-bd19fe6ce3bb
+    id: reactflow__edge-5k-9d52c432-95db-49f4-98eb-dfa6b4429aab9fe6385e-8ca4-4c6c-9619-bd19fe6ce3bb
+  "6":
+    source: "6"
     sourceHandle: m
-    target: '10'
-    targetHandle:
-  '9':
-    source: '9'
+    target: "10"
+    targetHandle: null
+    selected: false
+  "9":
+    source: "9"
     sourceHandle: b
-    target: '2'
+    target: "2"
     targetHandle: c
-  '10':
-    source: '10'
-    sourceHandle: n
-    target: '11'
-    targetHandle: o
+    selected: false
+  9d52c432-95db-49f4-98eb-dfa6b4429aab:
+    source: 9d52c432-95db-49f4-98eb-dfa6b4429aab
+    sourceHandle: c6f07c3c-da23-4161-ba73-58516a45400e
+    target: 584e2ca2-ba8f-4dfd-bfaf-3e5d95537908
+    targetHandle: d69790eb-f1e9-4a3d-81c6-8b672e94ff96
+    id: reactflow__edge-9d52c432-95db-49f4-98eb-dfa6b4429aabc6f07c3c-da23-4161-ba73-58516a45400e-584e2ca2-ba8f-4dfd-bfaf-3e5d95537908d69790eb-f1e9-4a3d-81c6-8b672e94ff96
+  584e2ca2-ba8f-4dfd-bfaf-3e5d95537908:
+    source: 584e2ca2-ba8f-4dfd-bfaf-3e5d95537908
+    sourceHandle: fc7e067c-0871-43b1-8d02-78be32565402
+    target: "10"
+    targetHandle: n
+    id: reactflow__edge-584e2ca2-ba8f-4dfd-bfaf-3e5d95537908fc7e067c-0871-43b1-8d02-78be32565402-10n
