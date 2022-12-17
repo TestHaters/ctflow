@@ -74,7 +74,7 @@ const WaitNode = ({ id, data, isConnectable, xPos, yPos }) => {
             value={time}
             onChange={(e) => setTime(e.target.value)}
             defaultValue={inPorts?.field}
-            placeholder="Your selector"
+            placeholder="Wait time"
             style={{ color: "black", paddingLeft: "4px" }}
           />
         </div>
