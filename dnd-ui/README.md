@@ -1,6 +1,9 @@
-# Hello World (React + Vite)
+# Architecture
 
-This is an implementation of the default [Hello World](https://github.com/microsoft/vscode-webview-ui-toolkit-samples/tree/main/default/hello-world) sample extension that demonstrates how to set up and use a [React](https://reactjs.org/) + [Vite](https://vitejs.dev/) + [Webview UI Toolkit](https://github.com/microsoft/vscode-webview-ui-toolkit) webview extension.
+![Architect](./architect.png)
+# Tech stack (Vscode + React + Vite)
+
+This is built on top of of the default [Hello World](https://github.com/microsoft/vscode-webview-ui-toolkit-samples/tree/main/default/hello-world) sample extension that demonstrates how to set up and use a [React](https://reactjs.org/) + [Vite](https://vitejs.dev/) + [Webview UI Toolkit](https://github.com/microsoft/vscode-webview-ui-toolkit) webview extension.
 
 ![A screenshot of the sample extension.](./assets/hello-world-screenshot.png)
 
@@ -12,14 +15,11 @@ For a deeper dive into how this sample works, read the guides below.
 - [Extension commands](./docs/extension-commands.md)
 - [Extension development cycle](./docs/extension-development-cycle.md)
 
-## Run The Sample
+## Run The Code
 
 ```bash
-# Copy sample extension locally
-npx degit microsoft/vscode-webview-ui-toolkit-samples/frameworks/hello-world-react-vite hello-world
-
 # Navigate into sample directory
-cd hello-world
+cd dnd-ui
 
 # Install dependencies for both the extension and webview UI source code
 npm run install:all
