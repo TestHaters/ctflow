@@ -115,7 +115,7 @@ function Flow() {
 
     vscode.postMessage({
       type: "writeCompiledFile",
-      data: { compiledText: compiledText, fileExtension: "spec.js" },
+      data: { compiledText: compiledText, fileExtension: "cy.js" },
     });
 
     return true;
