@@ -1,5 +1,16 @@
 ![A screenshot of the UI](./assets/codeless-testing.png)
 
+# User guide
+- Please install [vscode](https://code.visualstudio.com/docs/setup/setup-overview) or sign up and use a [codespace](https://github.com/features/codespaces) account
+- Install [Codeless Testing Flow](https://marketplace.visualstudio.com/items?itemName=ctflow.ctflow) extension for your local vscode or codespace
+- Install [Cypress](https://docs.cypress.io/guides/getting-started/installing-cypress) because we use **cypress** testing engine
+- Run command `yarn cypress open` (or `npm` if you're using npm) to have `cypress` folder at your project
+- Add a `.ctflow` file in `cypress/e2e` folder
+- Select the `.ctflow` file to see the drag and drop UI
+
+[How to run at your local](./assets/install_and_run.gif)
+
+
 # Architecture
 This is the architecture 
 
