@@ -66,8 +66,6 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
 
     // this variable will be use in writeCompiledFile
     this.textDocument = document;
-    console.log("HRERERERERE POST MESSGE FILE UPDATE");
-
     // Hook up event handlers so that we can synchronize the webview with the text document.
     //
     // The text document acts as our model, so we have to sync change in the document to our
