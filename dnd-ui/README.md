@@ -8,7 +8,7 @@
 - Add a `.ctflow` file in `cypress/e2e` folder
 - Select the `.ctflow` file to see the drag and drop UI
 
-[How to run at your local](./assets/install_and_run.gif)
+![How to run at your local](./assets/install_and_run.gif)
 
 
 # Architecture

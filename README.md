@@ -1,4 +1,4 @@
-![A screenshot of the UI](./assets/codeless-testing.png)
+![A screenshot of the UI](./dnd-ui/assets/codeless-testing.png)
 
 # User guide
 - Please install [vscode](https://code.visualstudio.com/docs/setup/setup-overview) or sign up and use a [codespace](https://github.com/features/codespaces) account
@@ -8,15 +8,14 @@
 - Add a `.ctflow` file in `cypress/e2e` folder
 - Select the `.ctflow` file to see the drag and drop UI
 
-[How to run at your local](https://raw.githubusercontent.com/TestHaters/ctflow/master/dnd-ui/assets/install_and_run.gif)
-
+![How to run at your local](./dnd-ui/assets/install_and_run.gif)
 
 # Architecture
 This is the architecture 
 
 The **Webview UI** is built by **React** and **Vite** as an UI component for VSCode extension. All testers interaction on the Webview UI will be recorded and translated into **cypress** test cases(`javascript` code) by our **compiler**. The test cases then are run by **cypress** on top of the user's app.
 
-![Architect](./assets/architect.png)
+![Architect](./dnd-ui/assets/architect.png)
 # Tech stack (Vscode + React + Vite)
 
 The project ultilize fast bundling speed of [Vite](https://vitejs.dev/) and familiarity of [React](https://reactjs.org/) to quickly bring about the intuitive UI for the user. 
@@ -25,9 +24,9 @@ The project ultilize fast bundling speed of [Vite](https://vitejs.dev/) and fami
 
 For a deeper dive into project and its foundation example, read the guides below.
 
-- [Extension structure](./docs/extension-structure.md)
-- [Extension commands](./docs/extension-commands.md)
-- [Extension development cycle](./docs/extension-development-cycle.md)
+- [Extension structure](./dnd-ui/docs/extension-structure.md)
+- [Extension commands](./dnd-ui/docs/extension-commands.md)
+- [Extension development cycle](./dnd-ui/docs/extension-development-cycle.md)
 
 ## Run The Code
 
