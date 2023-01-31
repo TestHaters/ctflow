@@ -87,14 +87,12 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
 
     // Receive message from the webview.
     webviewPanel.webview.onDidReceiveMessage((e) => {
-      console.log("CTFLOW.TS:: RECEIVED EVENT FROM VS EDITOR", e);
       switch (e.type) {
         case "changed":
           // this.makeEdit(message as CtflowEdit);
           return;
 
         case "fireEventFromEditor":
-          console.log("CTFLOW.TS::Fire Event From Editor --------- ", e);
           webviewPanel.webview.postMessage({
             type: e.data.eventType,
             text: document.getText(),
@@ -115,7 +113,6 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
           return;
 
         case "writeCompiledFile":
-          console.log("writeCompiledFile");
           this.writeCompiledFile(e.data.compiledText, e.data.fileExtension);
           return;
       }

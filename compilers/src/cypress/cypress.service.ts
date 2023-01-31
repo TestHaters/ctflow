@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { CompileCypressDto, CreateCypressDto } from './dto/create-cypress.dto';
-import { UpdateCypressDto } from './dto/update-cypress.dto';
+import { Compiler } from './compiler';
+import { CompileCypressDto } from './dto/compile-cypress.dto';
 
 @Injectable()
 export class CypressService {
   compile(compileCypressDto: CompileCypressDto) {
-    console.log('compileCypressDto', compileCypressDto);
-
-    return 'This action adds a new cypress';
+    return Compiler.compile(compileCypressDto);
   }
 
   findAll() {
@@ -18,11 +16,11 @@ export class CypressService {
     return `This action returns a #${id} cypress`;
   }
 
-  update(id: number, updateCypressDto: UpdateCypressDto) {
-    return `This action updates a #${id} cypress`;
-  }
+  // update(id: number, updateCypressDto: UpdateCypressDto) {
+  //   return `This action updates a #${id} cypress`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} cypress`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} cypress`;
+  // }
 }

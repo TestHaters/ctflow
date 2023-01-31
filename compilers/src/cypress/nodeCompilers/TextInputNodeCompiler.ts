@@ -1,7 +1,6 @@
-import { useStore } from "../../context/store";
-import { NodeData } from "./type";
+import { NodeData } from './type';
 
-export class WaitNodeCompiler {
+export class TextInputNodeCompiler {
   nodeData: NodeData;
 
   constructor(nodeData: NodeData) {
@@ -10,7 +9,7 @@ export class WaitNodeCompiler {
 
   static compile(nodeData: NodeData): string {
     return `
-      cy.wait(${nodeData.inPorts.field})
+    cy.get('${nodeData.inPorts.field}').type('${nodeData.inPorts.value}')
     `;
   }
 }

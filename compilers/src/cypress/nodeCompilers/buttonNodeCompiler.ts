@@ -1,5 +1,4 @@
-import { useStore } from "../../context/store";
-import { NodeData } from "./type";
+import { NodeData } from './type';
 
 export class ButtonNodeCompiler {
   nodeData: NodeData;
@@ -9,7 +8,6 @@ export class ButtonNodeCompiler {
   }
 
   static compile(nodeData: NodeData): string {
-    console.log("HEllo from button node compiler", nodeData);
     // cy.contains("${nodeData.inPorts.field}").click()
     // cy.wait(500)
     return `

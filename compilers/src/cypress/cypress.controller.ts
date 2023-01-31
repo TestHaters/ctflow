@@ -8,7 +8,7 @@ import {
   // Delete,
 } from '@nestjs/common';
 import { CypressService } from './cypress.service';
-import { CompileCypressDto, CreateCypressDto } from './dto/create-cypress.dto';
+import { CompileCypressDto } from './dto/compile-cypress.dto';
 // import { UpdateCypressDto } from './dto/update-cypress.dto';
 
 @Controller('cypress')
@@ -17,7 +17,6 @@ export class CypressController {
 
   @Post()
   compile(@Body() compileCypress: CompileCypressDto) {
-    console.log('compileCypress', compileCypress);
     return this.cypressService.compile(compileCypress);
   }
 

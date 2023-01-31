@@ -1,5 +1,4 @@
-import { useStore } from "../../context/store";
-import { NodeData } from "./type";
+import { NodeData } from './type';
 
 export class ContainsNodeCompiler {
   nodeData: NodeData;

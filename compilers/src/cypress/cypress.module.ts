@@ -4,6 +4,6 @@ import { CypressController } from './cypress.controller';
 
 @Module({
   controllers: [CypressController],
-  providers: [CypressService]
+  providers: [CypressService],
 })
 export class CypressModule {}

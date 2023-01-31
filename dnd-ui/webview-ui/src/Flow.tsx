@@ -15,7 +15,6 @@ import ReactFlow, {
   Panel,
 } from "reactflow";
 import "reactflow/dist/style.css";
-import axios from "axios";
 import TextInputNode from "./nodes/TextInputNode";
 import VisitPageNode from "./nodes/VisitPageNode";
 import CheckboxNode from "./nodes/CheckboxNode";
@@ -24,12 +23,8 @@ import ContainsNode from "./nodes/ContainsNode";
 import { useStore } from "./context/store";
 import NodeMenuPanel from "./NodeMenuPanel";
 import CompilePanel from "./CompilePanel";
-import { Compiler } from "./compiler";
 import SavePanel from "./SavePanel";
 import WaitNode from "./nodes/WaitNode";
-
-axios.defaults.headers.post["Content-Type"] = "application/json";
-axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
 const initialEdges = [] as any;
 
@@ -110,8 +105,15 @@ function Flow() {
     });
   }
 
-  function handleCompile(event: any) {
-    const compiledText = Compiler.compile(pick(store, ["nodes", "edges"]));
+  async function handleCompile(event: any) {
+    const response = await fetch("http://localhost:3000/cypress", {
+      method: "POST",
+      body: JSON.stringify(pick(store, ["nodes", "edges"])),
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+    const compiledText = await response.text();
 
     vscode.postMessage({
       type: "writeCompiledFile",
