@@ -111,7 +111,7 @@ function Flow() {
   }
 
   function handleCompile(event: any) {
-    let compiledText = Compiler.compile(store);
+    const compiledText = Compiler.compile(pick(store, ["nodes", "edges"]));
 
     vscode.postMessage({
       type: "writeCompiledFile",

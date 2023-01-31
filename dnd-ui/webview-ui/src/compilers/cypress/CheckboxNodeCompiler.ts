@@ -1,18 +1,16 @@
 import { useStore } from "../../context/store";
-
+import { NodeData } from "./type";
 
 export class CheckboxNodeCompiler {
-  nodeData: any;
+  nodeData: NodeData;
 
-  constructor(nodeData: any) {
-    this.nodeData = nodeData
+  constructor(nodeData: NodeData) {
+    this.nodeData = nodeData;
   }
 
-  static compile(nodeData: any): string {
+  static compile(nodeData: NodeData): string {
     return `
     cy.get('${nodeData.inPorts.field}').click()
-    `
+    `;
   }
 }
-
-

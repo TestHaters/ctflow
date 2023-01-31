@@ -1,14 +1,15 @@
 import { useStore } from "../../context/store";
+import { NodeData } from "./type";
 
 
 export class TextInputNodeCompiler {
-  nodeData: any;
+  nodeData: NodeData;
 
-  constructor(nodeData: any) {
+  constructor(nodeData: NodeData) {
     this.nodeData = nodeData
   }
 
-  static compile(nodeData: any): string {
+  static compile(nodeData: NodeData): string {
     return `
     cy.get('${nodeData.inPorts.field}').type('${nodeData.inPorts.value}')
     `
