@@ -11,7 +11,6 @@ function NodeMenuPanel({ ref, setNodes, setShowMenu }) {
     const newNode = new RFNode({
       type: event.target.getAttribute("id"),
     });
-    console.log("newNode", newNode);
     setNodes((prev) => [...prev, newNode]);
     setShowMenu(false);
   }
