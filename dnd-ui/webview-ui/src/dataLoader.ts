@@ -38,7 +38,6 @@ export class DataLoader {
   }
 
   onFileUpdate(event: any) {
-    console.log("FILE UPDATE", event)
     this.parseYaml(event.data.text)
     const [_, setGlobalStore] = useStore((store) => store.nodes);
     setGlobalStore({ nodes: this.nodes, edges: this.edges });

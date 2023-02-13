@@ -17,11 +17,8 @@ export class Router {
 
 	// register all events that we listen from VS editor
 	register() {
-		console.log("ROUTER REGISTER: WINDOW EVENT")
-		console.log(window)
 		window.addEventListener('message', event => {
 			if (!this.subscribers[event.data.type]) { return true }
-			console.log("REACTAPP::ROUTER.TS NOT_READY_YET::EVENT", event)
 			this.dispatch(event.data.type, event);
 		});
 	}

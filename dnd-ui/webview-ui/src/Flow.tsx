@@ -15,7 +15,6 @@ import ReactFlow, {
   Panel,
 } from "reactflow";
 import "reactflow/dist/style.css";
-import axios from "axios";
 import TextInputNode from "./nodes/TextInputNode";
 import VisitPageNode from "./nodes/VisitPageNode";
 import CheckboxNode from "./nodes/CheckboxNode";
@@ -27,9 +26,6 @@ import CompilePanel from "./CompilePanel";
 import { Compiler } from "./compiler";
 import SavePanel from "./SavePanel";
 import WaitNode from "./nodes/WaitNode";
-
-axios.defaults.headers.post["Content-Type"] = "application/json";
-axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
 const initialEdges = [] as any;
 
@@ -49,7 +45,6 @@ function Flow() {
       label: string;
     }>[]
   >([]);
-  console.log("nodes", nodes);
   const [edges, setEdges] = useState(initialEdges);
   const [store, setStore] = useStore((store) => store);
   const [showMenu, setShowMenu] = useState(false);
@@ -97,7 +92,6 @@ function Flow() {
       };
       return acc;
     }, {});
-    console.log("inputNodes", inputNodes);
 
     const inputEdges = edges.reduce((acc, item) => {
       acc[item.source] = { ...item };
