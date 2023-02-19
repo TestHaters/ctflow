@@ -30,6 +30,7 @@ import ButtonNode from '../nodes/ButtonNode';
 import ContainsNode from '../nodes/ContainsNode';
 import WaitNode from '../nodes/WaitNode';
 import { vscode } from '../utilities/vscode';
+import { toast } from 'react-toastify';
 
 const fitViewOptions: FitViewOptions = {
   padding: 0.2,
@@ -142,9 +143,15 @@ const Editor = () => {
         yamlData: YAML.stringify({ nodes: inputNodes, edges: inputEdges }),
       },
     });
+    toast('Saved successfully !', {
+      position: toast.POSITION.TOP_CENTER,
+    });
   }
 
   function handleCompile() {
+    toast('Compiled successfully !', {
+      position: toast.POSITION.TOP_CENTER,
+    });
     const compiledText = Compiler.compile(store);
     vscode.postMessage({
       type: 'writeCompiledFile',
@@ -176,7 +183,7 @@ const Editor = () => {
           position="top-left"
           style={{ left: 120 }}
           onClick={() => setShowMenu((prev) => !prev)}
-          className="rounded !text-black font-semibold py-2 px-5"
+          className="rounded !text-black font-semibold py-2 px-5 cursor-pointer"
         >
           Add Node
           <span className="ml-1">

@@ -1,7 +1,9 @@
 import './index.css';
-import Editor from './pages/Flow';
+import 'react-toastify/dist/ReactToastify.css';
+import Flow from './pages/Flow';
 import { Provider } from './context/store';
 import InitGlobalState from './InitGlobalState';
+import { ToastContainer } from 'react-toastify';
 
 declare global {
   interface Window {
@@ -15,7 +17,8 @@ function App() {
   return (
     <Provider>
       <InitGlobalState>
-        <Editor />
+        <Flow />
+        <ToastContainer />
       </InitGlobalState>
     </Provider>
   );
