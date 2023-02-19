@@ -1,12 +1,13 @@
-import React, { memo, useEffect, useRef, useState } from "react";
-import { Handle, Position, useReactFlow } from "reactflow";
-import { v4 as uuid } from "uuid";
-import { useStore } from "../context/store";
-import { TextInput } from "../models/TextInput";
+// @ts-nocheck
+import React, { memo, useEffect, useRef, useState } from 'react';
+import { Handle, Position, useReactFlow } from 'reactflow';
+import { v4 as uuid } from 'uuid';
+import { useStore } from '../context/store';
+import { TextInput } from '../models/TextInput';
 
 const VisitPageNode = (props) => {
   const { id, data, isConnectable, xPos, yPos } = props;
-  const [url, setUrl] = useState<string>(data?.inPorts?.url || "");
+  const [url, setUrl] = useState<string>(data?.inPorts?.url || '');
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const { sourceHandleId, targetHandleId, inPorts } = data;
   const [edges] = useStore((store) => store.edges);
@@ -15,7 +16,7 @@ const VisitPageNode = (props) => {
   function commitChange(params: any) {
     const inputNode = new TextInput({
       id,
-      type: "visitNode",
+      type: 'visitNode',
       data,
       position: { x: xPos, y: yPos },
       inPorts: { url },
@@ -38,7 +39,9 @@ const VisitPageNode = (props) => {
   }
 
   useEffect(() => {
-    setNodeStore({ nodes: { ...nodesStore, [id]: { ...nodesStore[id], inPorts: { url } } } });
+    setNodeStore({
+      nodes: { ...nodesStore, [id]: { ...nodesStore[id], inPorts: { url } } },
+    });
   }, [url]);
 
   return (
@@ -46,9 +49,9 @@ const VisitPageNode = (props) => {
       <Handle
         type="target"
         position={Position.Left}
-        style={{ background: "#555", width: 10, height: 10 }}
-        id={sourceHandleId || uuid()}
-        onConnect={(params) => console.log("handle onConnect", params)}
+        style={{ background: '#555', width: 10, height: 10 }}
+        id={sourceHandleId}
+        onConnect={(params) => console.log('handle onConnect', params)}
         isConnectable={isConnectable}
       />
       <div>
@@ -70,18 +73,18 @@ const VisitPageNode = (props) => {
             type="text"
             value={url}
             onChange={(event) => setUrl(event.target.value)}
-            defaultValue={inPorts?.url || ""}
+            defaultValue={inPorts?.url || ''}
             placeholder="Page url"
-            style={{ color: "black", paddingLeft: "4px" }}
+            style={{ color: 'black', paddingLeft: '4px' }}
           />
         </div>
       </div>
       <Handle
         type="source"
         position={Position.Right}
-        id={targetHandleId || uuid()}
+        id={targetHandleId}
         onConnect={commitChange}
-        style={{ top: 10, background: "#555", width: 10, height: 10 }}
+        style={{ top: 10, background: '#555', width: 10, height: 10 }}
         isConnectable={isConnectable}
       />
     </div>
