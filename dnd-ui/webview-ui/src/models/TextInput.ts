@@ -1,3 +1,3 @@
-import { AppModel } from "./AppModel";
+import { AppModel } from './AppModel';
 
 export class TextInput extends AppModel {}
