@@ -1,22 +1,25 @@
-import { memo, useRef } from "react";
-import { Panel } from "reactflow";
-import { v4 as uuid } from "uuid";
-import { RFNode } from "./nodeFactory";
-import { useOnClickOutside } from "./useClickOutside";
+// @ts-nocheck
+import { memo, useRef } from 'react';
+import { Panel } from 'reactflow';
+import { v4 as uuid } from 'uuid';
+import { RFNode } from '../models/nodeFactory';
 
 function NodeMenuPanel({ ref, setNodes, setShowMenu }) {
   const nodeMenuRef = useRef(null);
 
   function handleClick(event) {
     const newNode = new RFNode({
-      type: event.target.getAttribute("id"),
+      type: event.target.getAttribute('id'),
     });
     setNodes((prev) => [...prev, newNode]);
     setShowMenu(false);
   }
   return (
     <section ref={nodeMenuRef}>
-      <Panel position="top-left" style={{ left: 125, top: 50, width: 119, marginLeft: 10 }}>
+      <Panel
+        position="top-left"
+        style={{ left: 125, top: 50, width: 119, marginLeft: 10 }}
+      >
         <div className="hover:bg-slate-200 p-2 rounded">
           <button id="visitNode" onClick={handleClick}>
             Visit node
