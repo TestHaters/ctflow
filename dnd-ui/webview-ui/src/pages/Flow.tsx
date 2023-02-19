@@ -63,8 +63,6 @@ const Editor = () => {
   const [store, setStore] = useStore((store) => store);
   const [showMenu, setShowMenu] = useState(false);
 
-  console.log(nodes);
-
   useEffect(() => {
     window.addEventListener('message', handleCallback);
     () => window.removeEventListener('message', handleCallback);
@@ -72,8 +70,6 @@ const Editor = () => {
 
   const onConnect = useCallback(
     (connection: Connection) => {
-      console.log('FUCK');
-      console.log(connection);
       setEdges((eds) => addEdge(connection, eds));
     },
     [setEdges]
