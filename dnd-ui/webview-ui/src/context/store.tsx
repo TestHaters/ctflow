@@ -1,6 +1,4 @@
-import { DataLoader } from "../dataLoader";
-import { Router } from "../router";
-import createFastContext from "./createFastContext";
+import createFastContext from './createFastContext';
 
 const { Provider, useStore } = createFastContext({
   nodes: {},
@@ -9,4 +7,4 @@ const { Provider, useStore } = createFastContext({
   dataLoader: {},
 });
 
-export { Provider, useStore }
+export { Provider, useStore };

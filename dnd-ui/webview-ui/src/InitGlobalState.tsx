@@ -1,10 +1,8 @@
-import { useEffect } from "react";
-import pick from "lodash.pick";
-import omit from "lodash.omit";
-import { useStore } from "./context/store";
-import { Router } from "./router";
-import { DataLoader } from "./dataLoader";
-import { vscode } from "./utilities/vscode";
+import { useEffect } from 'react';
+import { useStore } from './context/store';
+import { Router } from './router';
+import { DataLoader } from './dataLoader';
+import { vscode } from './utilities/vscode';
 
 export default function InitGlobalState({ children }: { children: any }) {
   const [store, setStore] = useStore((store) => store);
@@ -18,7 +16,7 @@ export default function InitGlobalState({ children }: { children: any }) {
 
     // TODO: Fix this hack
     // After router & dataLoader are loaded, request the document data again
-    vscode.postMessage({ type: "fetchDocumentData" });
+    vscode.postMessage({ type: 'fetchDocumentData' });
 
     setStore({ router, dataLoader });
   }, []);
