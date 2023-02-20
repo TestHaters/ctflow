@@ -1,31 +1,27 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
-import { vscode } from "./utilities/vscode";
-import pick from "lodash.pick";
-import get from "lodash.get";
-import omit from "lodash.omit";
-import YAML from "yaml";
+import 'reactflow/dist/style.css';
+
+import get from 'lodash.get';
+import omit from 'lodash.omit';
+import pick from 'lodash.pick';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactFlow, {
-  Controls,
-  Background,
-  applyNodeChanges,
-  applyEdgeChanges,
-  addEdge,
-  Node,
-  Edge,
-  Panel,
-} from "reactflow";
-import "reactflow/dist/style.css";
-import TextInputNode from "./nodes/TextInputNode";
-import VisitPageNode from "./nodes/VisitPageNode";
-import CheckboxNode from "./nodes/CheckboxNode";
-import ButtonNode from "./nodes/ButtonNode";
-import ContainsNode from "./nodes/ContainsNode";
-import { useStore } from "./context/store";
-import NodeMenuPanel from "./NodeMenuPanel";
-import CompilePanel from "./CompilePanel";
-import { Compiler } from "./compiler";
-import SavePanel from "./SavePanel";
-import WaitNode from "./nodes/WaitNode";
+    addEdge, applyEdgeChanges, applyNodeChanges, Background, Controls, Edge, Node, Panel
+} from 'reactflow';
+import YAML from 'yaml';
+
+import { Compiler } from '@testhaters/cypress-compiler';
+
+import CompilePanel from './CompilePanel';
+import { useStore } from './context/store';
+import NodeMenuPanel from './NodeMenuPanel';
+import ButtonNode from './nodes/ButtonNode';
+import CheckboxNode from './nodes/CheckboxNode';
+import ContainsNode from './nodes/ContainsNode';
+import TextInputNode from './nodes/TextInputNode';
+import VisitPageNode from './nodes/VisitPageNode';
+import WaitNode from './nodes/WaitNode';
+import SavePanel from './SavePanel';
+import { vscode } from './utilities/vscode';
 
 const initialEdges = [] as any;
 
