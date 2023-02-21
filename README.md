@@ -48,3 +48,10 @@ Once the sample is open inside VS Code you can run the extension by doing the fo
 
 1. Press `F5` to open a new Extension Development Host window
 2. Inside the host window, open the command palette (`Ctrl+Shift+P` or `Cmd+Shift+P` on Mac) and select `.ctflow` files to see the UI
+
+
+## Backed & Supported by
+<div>
+<img alt="coderpush.com" width=120 src="https://user-images.githubusercontent.com/2922275/220246351-a2513d3e-e0d4-44b3-8ecd-1af04509a907.png"/>
+<img alt="coderpush.com" width=120 src="https://user-images.githubusercontent.com/2922275/220246586-f5a78210-f6d0-45af-836d-706bdc6e42a1.png"/>
+</div>
