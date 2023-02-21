@@ -1,4 +1,4 @@
-import createFastContext from "./createFastContext";
+import createFastContext from './createFastContext';
 
 const { Provider, useStore } = createFastContext({
   nodes: {},

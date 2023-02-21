@@ -1,4 +1,10 @@
-import React, { useRef, createContext, useContext, useCallback, useSyncExternalStore } from "react";
+import React, {
+  useRef,
+  createContext,
+  useContext,
+  useCallback,
+  useSyncExternalStore,
+} from 'react';
 
 export default function createFastContext<Store>(initialState: Store) {
   function useStoreData(): {
@@ -34,7 +40,11 @@ export default function createFastContext<Store>(initialState: Store) {
   const StoreContext = createContext<UseStoreDataReturnType | null>(null);
 
   function Provider({ children }: { children: React.ReactNode }) {
-    return <StoreContext.Provider value={useStoreData()}>{children}</StoreContext.Provider>;
+    return (
+      <StoreContext.Provider value={useStoreData()}>
+        {children}
+      </StoreContext.Provider>
+    );
   }
 
   function useStore<SelectorOutput>(
@@ -42,7 +52,7 @@ export default function createFastContext<Store>(initialState: Store) {
   ): [SelectorOutput, (value: Partial<Store>) => void] {
     const store = useContext(StoreContext);
     if (!store) {
-      throw new Error("Store not found");
+      throw new Error('Store not found');
     }
 
     const state = useSyncExternalStore(

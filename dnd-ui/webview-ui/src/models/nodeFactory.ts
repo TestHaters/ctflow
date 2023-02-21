@@ -1,4 +1,4 @@
-import { v4 as uuid } from "uuid";
+import { v4 as uuid } from 'uuid';
 interface IRFNode {
   id?: string | number;
   data?: { color?: string; label?: string };

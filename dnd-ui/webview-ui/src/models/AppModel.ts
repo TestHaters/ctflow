@@ -26,7 +26,7 @@ export class AppModel {
     this.id = options.id || 'string';
     this.type = options.type || 'notype';
     this.data = options.data;
-    this.position = options.position || { x: 0, y: 0};
+    this.position = options.position || { x: 0, y: 0 };
     this.inPorts = options.inPorts;
     this.outPorts = options.outPorts;
     this.icon = options.icon;

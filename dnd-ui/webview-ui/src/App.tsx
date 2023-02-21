@@ -1,17 +1,24 @@
-import Flow from "./Flow";
-import "./App.css";
-import { Provider } from "./context/store";
-import InitGlobalState from "./InitGlobalState";
+import './index.css';
+import 'react-toastify/dist/ReactToastify.css';
+import Flow from './pages/Flow';
+import { Provider } from './context/store';
+import InitGlobalState from './InitGlobalState';
+import { ToastContainer } from 'react-toastify';
+
+declare global {
+  interface Window {
+    example: string;
+    router: any;
+    dataLoader: any;
+  }
+}
 
 function App() {
   return (
     <Provider>
       <InitGlobalState>
-        <main>
-          <div className="App">
-            <Flow />
-          </div>
-        </main>
+        <Flow />
+        <ToastContainer />
       </InitGlobalState>
     </Provider>
   );

@@ -1,13 +1,14 @@
-import React, { memo, useEffect, useRef, useState } from "react";
-import { Handle, Position, useReactFlow } from "reactflow";
-import { v4 as uuid } from "uuid";
-import { useStore } from "../context/store";
-import { TextInput } from "../models/TextInput";
+// @ts-nocheck
+import React, { memo, useEffect, useRef, useState } from 'react';
+import { Handle, Position, useReactFlow } from 'reactflow';
+import { v4 as uuid } from 'uuid';
+import { useStore } from '../context/store';
+import { TextInput } from '../models/TextInput';
 
 const noType = { email: false, password: false, text: false };
 
 const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
-  const [name, setName] = useState(data?.inPorts?.field || "");
+  const [name, setName] = useState(data?.inPorts?.field || '');
   const [checked, setChecked] = useState(Boolean(data?.inPorts?.isChecked));
   const { sourceHandleId, targetHandleId, inPorts } = data;
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
@@ -17,7 +18,7 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
   function commitChange(params: any) {
     const inputNode = new TextInput({
       id,
-      type: "checkboxNode",
+      type: 'checkboxNode',
       data,
       position: { x: xPos, y: yPos },
       inPorts: { field: name, isChecked: checked },
@@ -43,7 +44,10 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
     setNodeStore({
       nodes: {
         ...nodesStore,
-        [id]: { ...nodesStore[id], inPorts: { field: name, isChecked: checked } },
+        [id]: {
+          ...nodesStore[id],
+          inPorts: { field: name, isChecked: checked },
+        },
       },
     });
   }, [name, checked]);
@@ -53,9 +57,9 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
       <Handle
         type="target"
         position={Position.Left}
-        style={{ background: "#555", width: 10, height: 10  }}
-        id={sourceHandleId || uuid()}
-        onConnect={(params) => console.log("handle onConnect", params)}
+        style={{ background: '#555', width: 10, height: 10 }}
+        id={sourceHandleId}
+        onConnect={(params) => console.log('handle onConnect', params)}
         isConnectable={isConnectable}
       />
       <div>
@@ -77,9 +81,9 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              defaultValue={inPorts?.field || ""}
+              defaultValue={inPorts?.field || ''}
               placeholder="Your selector"
-              style={{ color: "black", paddingLeft: "4px" }}
+              style={{ color: 'black', paddingLeft: '4px' }}
             />
           </div>
           <div className="mt-2">
@@ -99,9 +103,9 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
       <Handle
         type="source"
         position={Position.Right}
-        id={targetHandleId || uuid()}
+        id={targetHandleId}
         onConnect={commitChange}
-        style={{ top: 10, background: "#555", width: 10, height: 10  }}
+        style={{ top: 10, background: '#555', width: 10, height: 10 }}
         isConnectable={isConnectable}
       />
     </div>
