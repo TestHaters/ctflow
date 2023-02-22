@@ -1,4 +1,25 @@
+
+
+<p align="center">
+  <a href="#">
+    <h1 align="center">CTFLOW</h1>
+  </a>
+</p>
+
+<p align="center">
+  <a aria-label="CodeClimate Maintainability" href="https://codeclimate.com/github/TestHaters/ctflow/maintainability">
+    <img src="https://api.codeclimate.com/v1/badges/667c87494bbeba02ec3f/maintainability" />
+  </a>
+  <a aria-label="CodeClimate Test Coverage" href="https://codeclimate.com/github/TestHaters/ctflow/test_coverage">
+    <img src="https://api.codeclimate.com/v1/badges/667c87494bbeba02ec3f/test_coverage" />
+  </a>
+</p>
+
+
+<br/><br/><br/><br/>
+
 ![A screenshot of the UI](./dnd-ui/assets/codeless-testing.png)
+
 
 # User guide
 - Please install [vscode](https://code.visualstudio.com/docs/setup/setup-overview) or sign up and use a [codespace](https://github.com/features/codespaces) account
