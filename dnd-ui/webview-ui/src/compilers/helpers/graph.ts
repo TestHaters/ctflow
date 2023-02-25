@@ -1,6 +1,7 @@
 // This is a helper class
 // input is a list of nodes and edges
 
+import * as _ from 'lodash';
 export class Graph {
 
   nodes: {
@@ -27,9 +28,14 @@ export class Graph {
     }
   }
 
-  constructor(nodes: any, edges: any) {
+  constructor(nodes: any, edges: { [id: string]: any; }) {
     this.nodes = nodes;
-    this.edges = edges;
+    // set edges to empty array if null
+    console.log("EDGES:", edges)
+    // edges can be not uniq by source_id and target_id because of sourceHandle and targetHandle
+    // so we need to filter out edges with sourceHandle and targetHandle
+    this.edges = _.pickBy(edges, (edge: any) => edge.sourceHandle === null && edge.targetHandle === null);
+
   }
 
 
@@ -57,13 +63,7 @@ export class Graph {
   // each node has multiple edges
   // return all edges with source id
   findEdgesWithSourceId(sourceId: string, allEdges: any = Object.values(this.edges)) {
-    const matchedEdges = [];
-    for (const currentEdge of allEdges) {
-    if (currentEdge.source === sourceId) {
-        matchedEdges.push(currentEdge);
-      }
-    }
-    return matchedEdges;
+    return allEdges.filter((edge: any) => edge.source === sourceId);
   }
 
 
@@ -97,7 +97,7 @@ export class Graph {
     // return [[currentNode]] if there is no edge
     if (sourceEdges.length === 0) { return [[currentNode]]; }
     // processingPaths = [[1, 2], [1, 4]]
-    processingPaths = sourceEdges.map(edge => [edge.source, edge.target]);
+    processingPaths = sourceEdges.map((edge: any) => [edge.source, edge.target]);
 
     // remove edges from clone edges with source = root node
     // edgesClone = [[2, 3], [4, 5]]
@@ -126,9 +126,11 @@ export class Graph {
           paths.push(path);
         }
         else {
-          edges.forEach(edge => {
+          edges.forEach((edge: any) => {
             let newPath = [...path, edge.target];
             nextProcessingPaths.push(newPath);
+            // remove edge from edgesClone
+            edgesClone = edgesClone.filter((e: any) => e.id !== edge.id);
           });
         }
       })
@@ -199,11 +201,5 @@ export class Graph {
     const paths = graph.buildPaths();
     console.log(paths);
   }
-
-
-
 }
 
-// make Graph class available in window object for testing
-(window as any).Graph = Graph;
-console.log(" HELLO HERE")

@@ -106,7 +106,7 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
 
         // When Flow is changed, but not yet saved
         case "addEdit":
-          // TODO: rewrite all file, perhaps only append to file 
+          // TODO: rewrite all file, perhaps only append to file
           // and then create a separate event for deletion
           this.writeYamlFile(e.data.yamlData, e.data.fileExtension);
           this._savedEdits.push(e.data.yamlData);
@@ -142,7 +142,7 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
           <div id="root"></div>
           <script type="module" src="${scriptUri}"></script>
           <script src="https://cdn.tailwindcss.com"></script>
-          
+
         </body>
       </html>
     `;
