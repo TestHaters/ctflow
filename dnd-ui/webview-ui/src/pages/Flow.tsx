@@ -31,6 +31,7 @@ import ContainsNode from '../nodes/ContainsNode';
 import WaitNode from '../nodes/WaitNode';
 import { vscode } from '../utilities/vscode';
 import { toast } from 'react-toastify';
+import MenuPanel from '../components/MenuPanel';
 
 const fitViewOptions: FitViewOptions = {
   padding: 0.2,
@@ -179,24 +180,12 @@ const Editor = () => {
         <MiniMap />
         <CompilePanel onClick={handleCompile} />
         <SavePanel onClick={handleSave} />
-        <Panel
-          position="top-left"
-          style={{ left: 120 }}
-          onClick={() => setShowMenu((prev) => !prev)}
-          className="rounded !text-black font-semibold py-2 px-5 cursor-pointer"
-        >
-          Add Node
-          <span className="ml-1">
-            {showMenu ? (
-              <i className="fa-solid fa-angle-down"></i>
-            ) : (
-              <i className="fa-solid fa-bars"></i>
-            )}
-          </span>
-        </Panel>
-        {showMenu && (
-          <NodeMenuPanel setShowMenu={setShowMenu} setNodes={setNodes} />
-        )}
+        <NodeMenuPanel
+          setShowMenu={setShowMenu}
+          setNodes={setNodes}
+          showMenu={showMenu}
+        />
+        <MenuPanel />
       </ReactFlow>
     </div>
   );
