@@ -3,33 +3,32 @@ import React, { memo, useEffect, useRef, useState } from 'react';
 import { Handle, Position, useReactFlow } from 'reactflow';
 import { v4 as uuid } from 'uuid';
 import { useStore } from '../context/store';
-import { TextInput } from '../models/TextInput';
+import { TextArea } from '../models/TextArea';
 
 const noType = { email: false, password: false, text: false };
 
-const ButtonNode = (props) => {
+const CodeInjectionNode = (props) => {
   const { id, data, isConnectable, xPos, yPos } = props;
   const reactFlowInstance = useReactFlow();
 
-  const [name, setName] = useState(data?.inPorts?.field || '');
+  const [code, setCode] = useState(data?.inPorts?.code || '');
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const [edges] = useStore((store) => store.edges);
   const { sourceHandleId, targetHandleId, inPorts } = data;
 
   function commitChange(params: any) {
-    console.log("CHANGE ON BUTTON NODE")
-    const inputNode = new TextInput({
+    const textAreaNode = new TextArea({
       id,
-      type: 'buttonNode',
+      type: 'codeInjectionNode',
       data,
       position: { x: xPos, y: yPos },
-      inPorts: { field: name },
-      outPorts: {},
+      inPorts: { code: code },
+      outPorts: { initFuckme: uuid() },
     });
     setNodeStore({
       nodes: {
         ...nodesStore,
-        [id]: { ...inputNode },
+        [id]: { ...textAreaNode },
       },
       edges: {
         ...edges,
@@ -43,13 +42,22 @@ const ButtonNode = (props) => {
   }
 
   useEffect(() => {
+    const textAreaNode = new TextArea({
+      id,
+      type: 'codeInjectionNode',
+      data,
+      position: { x: xPos, y: yPos },
+      inPorts: { code: code },
+      outPorts: { initFuckme: uuid() },
+    });
+    console.log('textAreaNode', textAreaNode);
     setNodeStore({
       nodes: {
         ...nodesStore,
-        [id]: { ...nodesStore[id], inPorts: { field: name } },
+        [id]: { ...nodesStore[id], ...textAreaNode },
       },
     });
-  }, [name]);
+  }, [code]);
 
   return (
     <div>
@@ -58,7 +66,7 @@ const ButtonNode = (props) => {
         position={Position.Left}
         style={{ background: '#555', width: 10, height: 10 }}
         id={sourceHandleId}
-        onConnect={(params) => console.log('handle onConnect', params)}
+        onConnect={(params) => commitChange(params)}
         isConnectable={isConnectable}
       />
 
@@ -67,21 +75,27 @@ const ButtonNode = (props) => {
           <span className="mr-1">
             <i className="fa-solid fa-arrow-pointer"></i>
           </span>
-          <label>User click</label>
+          <label>Injection Code</label>
           <span className="float-right" onClick={handleRemoveNode}>
             <i className="fa-solid fa-xmark"></i>
           </span>
         </div>
 
         <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            defaultValue={inPorts?.field}
-            placeholder="Your selector"
-            style={{ color: 'black', paddingLeft: '4px' }}
-          />
+
+
+          <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
+
+          <textarea
+            onChange={(e) => setCode(e.target.value)}
+            defaultValue={inPorts?.code}
+            value={code}
+            style={{ color: 'black', paddingLeft: '4px', width: "250px", height: "300px" }}
+          >
+          </textarea>
+
+
+        </div>
         </div>
       </div>
 
@@ -97,4 +111,4 @@ const ButtonNode = (props) => {
   );
 };
 
-export default memo(ButtonNode);
+export default memo(CodeInjectionNode);

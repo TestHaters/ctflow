@@ -55,6 +55,12 @@ function NodeMenuPanel({ ref, setNodes, setShowMenu }) {
             Wait node
           </button>
         </div>
+
+        <div className="hover:bg-slate-200 p-2 rounded">
+          <button id="codeInjectionNode" onClick={handleClick}>
+            Code injection node
+          </button>
+        </div>
       </Panel>
     </section>
   );

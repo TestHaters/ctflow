@@ -29,6 +29,7 @@ import CheckboxNode from '../nodes/CheckboxNode';
 import ButtonNode from '../nodes/ButtonNode';
 import ContainsNode from '../nodes/ContainsNode';
 import WaitNode from '../nodes/WaitNode';
+import codeInjectionNode from '../nodes/CodeInjectionNode';
 import { vscode } from '../utilities/vscode';
 import { toast } from 'react-toastify';
 
@@ -54,6 +55,7 @@ const nodeTypes = {
   checkboxNode: CheckboxNode,
   containsNode: ContainsNode,
   waitNode: WaitNode,
+  codeInjectionNode: codeInjectionNode
 };
 
 const Editor = () => {
@@ -168,14 +170,6 @@ const Editor = () => {
       acc[item.id] = { ...item };
       return acc;
     }, {});
-
-
-    console.log("edges", edges)
-    console.log("edges", edges)
-    console.log("edges", edges)
-    console.log("inputEdges", inputEdges)
-    console.log("nodes", nodes)
-    console.log("inputNodes", inputNodes)
 
     let payload = { nodes: inputNodes, edges: inputEdges }
     setStore({ ...payload });

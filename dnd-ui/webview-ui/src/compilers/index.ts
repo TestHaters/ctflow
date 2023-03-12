@@ -5,6 +5,7 @@ import { CheckboxNodeCompiler } from './cypress/CheckboxNodeCompiler';
 import { ContainsNodeCompiler } from './cypress/ContainsNodeCompiler';
 import { WaitNodeCompiler } from './cypress/WaitNodeCompiler';
 import { Graph } from './helpers/graph';
+import { CodeInjectionNodeCompiler } from './cypress/codeInjectionNodeCompiler';
 
 export class Compiler {
 
@@ -50,6 +51,7 @@ export class Compiler {
   }
 
   static findCompiler(node: any): typeof ButtonNodeCompiler {
+    console.log("Node: ", node)
     switch (node.type) {
       case 'ButtonNode': {
         return ButtonNodeCompiler;
@@ -69,7 +71,11 @@ export class Compiler {
       case 'waitNode': {
         return WaitNodeCompiler;
       }
+      case 'codeInjectionNode': {
+        return CodeInjectionNodeCompiler
+      }
       default: {
+        console.log(node, node.type)
         return ButtonNodeCompiler;
       }
     }
