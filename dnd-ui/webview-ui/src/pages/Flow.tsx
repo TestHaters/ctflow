@@ -91,31 +91,63 @@ const Editor = () => {
     []
   );
 
+  function reloadPageByFileData(fileData: any) {
+    console.log("reload page by file data")
+    const payload = YAML.parse(fileData.text);
+    const allNodes = Object.values(payload.nodes);
+    const allEdges = Object.values(payload.edges);
+    const curNodes = allNodes.map((node) => {
+      const cNode = {
+        ...pick(node, ['id', 'position', 'type']),
+        style: get(node, 'data.style', {}),
+        data: {
+          ...get(node, 'data', {}),
+          inPorts: get(node, 'inPorts', {}),
+        },
+      };
+      return cNode;
+    });
+    // @ts-ignore
+    setNodes(curNodes);
+    // @ts-ignore
+    setEdges(allEdges);
+    setStore({ ...payload });
+  }
+
   function handleCallback(event: any) {
-    if (event.data.type === 'fileUpdate' && event.data.text) {
-      const payload = YAML.parse(event.data.text);
-      const allNodes = Object.values(payload.nodes);
-      const allEdges = Object.values(payload.edges);
-      const curNodes = allNodes.map((node) => {
-        const cNode = {
-          ...pick(node, ['id', 'position', 'type']),
-          style: get(node, 'data.style', {}),
-          data: {
-            ...get(node, 'data', {}),
-            inPorts: get(node, 'inPorts', {}),
-          },
-        };
-        return cNode;
-      });
-      // @ts-ignore
-      setNodes(curNodes);
-      // @ts-ignore
-      setEdges(allEdges);
-      setStore({ ...payload });
+    console.log('event', event)
+    if (event.detail && event.detail.type === 'fileUpdate' && event.detail.text) {
+      reloadPageByFileData(event.detail);
+      handleCompile();
+    }
+
+    if (event.data && event.data.type === 'fileUpdate' && event.data.text) {
+      reloadPageByFileData(event.data);
+      // const payload = YAML.parse(event.data.text);
+      // const allNodes = Object.values(payload.nodes);
+      // const allEdges = Object.values(payload.edges);
+      // const curNodes = allNodes.map((node) => {
+      //   const cNode = {
+      //     ...pick(node, ['id', 'position', 'type']),
+      //     style: get(node, 'data.style', {}),
+      //     data: {
+      //       ...get(node, 'data', {}),
+      //       inPorts: get(node, 'inPorts', {}),
+      //     },
+      //   };
+      //   return cNode;
+      // });
+      // // @ts-ignore
+      // setNodes(curNodes);
+      // // @ts-ignore
+      // setEdges(allEdges);
+      // setStore({ ...payload });
     }
   }
 
   function handleSave() {
+    console.log("handle save")
+
     const inputNodes = nodes.reduce((acc, item) => {
       // @ts-ignore
       acc[item.id] = {
@@ -133,16 +165,45 @@ const Editor = () => {
 
     const inputEdges = edges.reduce((acc, item) => {
       // @ts-ignore
-      acc[item.source] = { ...item };
+      acc[item.id] = { ...item };
       return acc;
     }, {});
+
+
+    console.log("edges", edges)
+    console.log("edges", edges)
+    console.log("edges", edges)
+    console.log("inputEdges", inputEdges)
+    console.log("nodes", nodes)
+    console.log("inputNodes", inputNodes)
+
+    let payload = { nodes: inputNodes, edges: inputEdges }
+    setStore({ ...payload });
+    let yamlData = YAML.stringify(payload)
+
+
+
+    // When testing on browser, the vscode.postMessage won't work
+    // we will manually emit fileUpdate event
+    // if (window) {
+    //   const simulateFileUpdateTriggerOnBrowser = new CustomEvent("message", {
+    //     detail: {
+    //       "type": 'fileUpdate',
+    //       "text": yamlData,
+    //     },
+    //   });
+
+    //   //  window.dispatchEvent(simulateFileUpdateTriggerOnBrowser)
+    // }
+
 
     vscode.postMessage({
       type: 'addEdit',
       data: {
-        yamlData: YAML.stringify({ nodes: inputNodes, edges: inputEdges }),
+        yamlData: yamlData,
       },
     });
+
     toast('Saved successfully !', {
       position: toast.POSITION.TOP_CENTER,
     });
@@ -157,7 +218,7 @@ const Editor = () => {
       type: 'writeCompiledFile',
       data: { compiledText, fileExtension: 'cy.js' },
     });
-    return true;
+    return compiledText;
   }
 
   return (
