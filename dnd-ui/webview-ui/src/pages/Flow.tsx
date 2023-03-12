@@ -1,4 +1,8 @@
+import 'reactflow/dist/style.css';
+
+import { get, omit, pick } from 'lodash';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 import ReactFlow, {
   addEdge,
   Background,
@@ -16,22 +20,21 @@ import ReactFlow, {
   Viewport,
 } from 'reactflow';
 import YAML from 'yaml';
-import { useGetWindowSize } from '../hooks/useGetWindowSize';
-import VisitPageNode from '../nodes/VisitPageNode';
-import 'reactflow/dist/style.css';
-import CompilePanel from '../components/CompilePanel';
-import { useStore } from '../context/store';
-import { get, omit, pick } from 'lodash';
+
 import { Compiler } from '../compilers';
-import SavePanel from '../components/SavePanel';
+import CompilePanel from '../components/CompilePanel';
 import NodeMenuPanel from '../components/NodeMenuPanel';
-import TextInputNode from '../nodes/TextInputNode';
-import CheckboxNode from '../nodes/CheckboxNode';
+import SavePanel from '../components/SavePanel';
+import { useStore } from '../context/store';
+import { useGetWindowSize } from '../hooks/useGetWindowSize';
 import ButtonNode from '../nodes/ButtonNode';
+import CheckboxNode from '../nodes/CheckboxNode';
 import ContainsNode from '../nodes/ContainsNode';
+import TextInputNode from '../nodes/TextInputNode';
+import VisitPageNode from '../nodes/VisitPageNode';
 import WaitNode from '../nodes/WaitNode';
 import { vscode } from '../utilities/vscode';
-import { toast } from 'react-toastify';
+import CustomEdge from '../components/CustomEdge';
 
 const fitViewOptions: FitViewOptions = {
   padding: 0.2,
@@ -57,10 +60,13 @@ const nodeTypes = {
   waitNode: WaitNode,
 };
 
+const edgeTypes = {
+  customEdge: CustomEdge,
+};
+
 const Editor = () => {
   const { height: windowHeight, width: windowWidth } = useGetWindowSize();
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  console.log('nodes', nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [, setSelectedNode] = useState<Node | null>(null);
   const [store, setStore] = useStore((store) => store);
@@ -74,7 +80,7 @@ const Editor = () => {
 
   const onConnect = useCallback(
     (connection: Connection) => {
-      setEdges((eds) => addEdge(connection, eds));
+      setEdges((eds) => addEdge({ ...connection, type: 'customEdge' }, eds));
     },
     [setEdges]
   );
@@ -178,6 +184,7 @@ const Editor = () => {
         onConnect={onConnect}
         onEdgeUpdate={onEdgeUpdate}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         onSelectionChange={onSelectionChange}
         fitViewOptions={fitViewOptions}
         defaultViewport={defaultViewport}
