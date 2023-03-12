@@ -7,6 +7,7 @@ interface IRFNode {
   type?: string;
   width?: number;
   height?: number;
+  strokeWidth?: number;
 }
 
 export class RFNode {
@@ -17,7 +18,17 @@ export class RFNode {
   type?: string;
   width?: number;
   height?: number;
-  constructor({ id, data, position, style, type, width, height }: IRFNode) {
+  strokeWidth?: number;
+  constructor({
+    id,
+    data,
+    position,
+    style,
+    type,
+    width,
+    height,
+    strokeWidth,
+  }: IRFNode) {
     this.id = id || uuid();
     this.data = data || {};
     this.position = position || { x: 20, y: 250 };
@@ -25,5 +36,6 @@ export class RFNode {
     this.type = type;
     this.width = width || 168;
     this.height = height || 125;
+    this.strokeWidth = strokeWidth || 10;
   }
 }
