@@ -150,7 +150,7 @@ const Editor = () => {
   function handleSave() {
     console.log("handle save")
 
-    const inputNodes = nodes.reduce((acc, item) => {
+    const inputNodes : any = nodes.reduce((acc, item) => {
       // @ts-ignore
       acc[item.id] = {
         ...pick(item, ['id', 'position', 'type']),
@@ -165,7 +165,13 @@ const Editor = () => {
       return acc;
     }, {});
 
-    const inputEdges = edges.reduce((acc, item) => {
+    // verify that nodes of edge are exist
+    const validEdges = edges.filter((edge: any) => {
+      return inputNodes[edge.source] && inputNodes[edge.target];
+    });
+    console.log("VALID EDGES", edges, validEdges)
+
+    const inputEdges = validEdges.reduce((acc, item) => {
       // @ts-ignore
       acc[item.id] = { ...item };
       return acc;
