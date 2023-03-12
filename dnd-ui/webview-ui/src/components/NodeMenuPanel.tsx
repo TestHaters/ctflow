@@ -1,22 +1,31 @@
 // @ts-nocheck
-import { memo, SetStateAction, useRef } from 'react';
+import { Dispatch, memo, SetStateAction, useRef } from 'react';
 import { Panel } from 'reactflow';
 import { RFNode } from '../models/nodeFactory';
+import { NodeDataType } from '../pages/Flow';
+
+interface INodeMenuPanel {
+  setNodes: Dispatch<SetStateAction<Node<NodeDataType>[]>>;
+  setShowMenu: Dispatch<SetStateAction<boolean>>;
+  showMenu: boolean;
+  viewport: Viewport;
+}
 
 function NodeMenuPanel({
   setNodes,
   setShowMenu,
+  viewport,
   showMenu,
-}: {
-  setNodes: SetStateAction<Dispatch<unknown>>;
-  setShowMenu: SetStateAction<Dispatch<unknown>>;
-  showMenu: boolean;
-}) {
+}: INodeMenuPanel) {
   const nodeMenuRef = useRef(null);
 
   function handleClick(event) {
+    const { x, y, zoom } = viewport;
+    const curX = x / zoom;
+    const curY = y / zoom;
     const newNode = new RFNode({
       type: event.target.getAttribute('id'),
+      position: { x: event.clientX - curX + 20, y: event.clientY - curY + 20 },
     });
     setNodes((prev) => [...prev, newNode]);
     setShowMenu(false);
@@ -78,6 +87,11 @@ function NodeMenuPanel({
             <div className="hover:bg-slate-200 p-2 rounded">
               <button id="waitNode" onClick={handleClick}>
                 Wait node
+              </button>
+            </div>
+            <div className="hover:bg-slate-200 p-2 rounded">
+              <button id="codeInjectionNode" onClick={handleClick}>
+                Code injection node
               </button>
             </div>
           </Panel>

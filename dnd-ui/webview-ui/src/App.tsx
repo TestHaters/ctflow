@@ -4,6 +4,7 @@ import Flow from './pages/Flow';
 import { Provider } from './context/store';
 import InitGlobalState from './InitGlobalState';
 import { ToastContainer } from 'react-toastify';
+import 'vite/modulepreload-polyfill'
 
 declare global {
   interface Window {
