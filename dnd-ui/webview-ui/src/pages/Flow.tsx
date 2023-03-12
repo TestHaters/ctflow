@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactFlow, {
   addEdge,
   Background,
@@ -13,6 +13,7 @@ import ReactFlow, {
   updateEdge,
   useEdgesState,
   useNodesState,
+  Viewport,
 } from 'reactflow';
 import YAML from 'yaml';
 import { useGetWindowSize } from '../hooks/useGetWindowSize';
@@ -45,7 +46,7 @@ export type NodeDataType = {
 const initialNodes: Node<NodeDataType>[] = [];
 
 const initialEdges: Edge[] = [];
-const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
+const defaultViewport: Viewport = { x: 0, y: 0, zoom: 1.5 };
 
 const nodeTypes = {
   buttonNode: ButtonNode,
@@ -59,10 +60,12 @@ const nodeTypes = {
 const Editor = () => {
   const { height: windowHeight, width: windowWidth } = useGetWindowSize();
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  console.log('nodes', nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [, setSelectedNode] = useState<Node | null>(null);
   const [store, setStore] = useStore((store) => store);
   const [showMenu, setShowMenu] = useState(false);
+  const viewport = useRef<Viewport>(defaultViewport);
 
   useEffect(() => {
     window.addEventListener('message', handleCallback);
@@ -160,6 +163,10 @@ const Editor = () => {
     return true;
   }
 
+  function handleMoveEnd(_: unknown, curViewport: Viewport) {
+    viewport.current = curViewport;
+  }
+
   return (
     <div style={{ height: windowHeight, width: windowWidth }}>
       <ReactFlow
@@ -167,6 +174,7 @@ const Editor = () => {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        onMoveEnd={handleMoveEnd}
         onConnect={onConnect}
         onEdgeUpdate={onEdgeUpdate}
         nodeTypes={nodeTypes}
@@ -195,7 +203,11 @@ const Editor = () => {
           </span>
         </Panel>
         {showMenu && (
-          <NodeMenuPanel setShowMenu={setShowMenu} setNodes={setNodes} />
+          <NodeMenuPanel
+            setShowMenu={setShowMenu}
+            setNodes={setNodes}
+            viewport={viewport.current}
+          />
         )}
       </ReactFlow>
     </div>
