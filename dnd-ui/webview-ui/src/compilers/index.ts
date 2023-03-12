@@ -5,7 +5,7 @@ import { CheckboxNodeCompiler } from './cypress/CheckboxNodeCompiler';
 import { ContainsNodeCompiler } from './cypress/ContainsNodeCompiler';
 import { WaitNodeCompiler } from './cypress/WaitNodeCompiler';
 import { Graph } from './helpers/graph';
-import { CodeInjectionNodeCompiler } from './cypress/codeInjectionNodeCompiler';
+import { CodeInjectionNodeCompiler } from './cypress/CodeInjectionNodeCompiler';
 
 export class Compiler {
 
