@@ -17,7 +17,6 @@ const ButtonNode = (props) => {
   const { sourceHandleId, targetHandleId, inPorts } = data;
 
   function commitChange(params: any) {
-    console.log("CHANGE ON BUTTON NODE")
     const inputNode = new TextInput({
       id,
       type: 'buttonNode',

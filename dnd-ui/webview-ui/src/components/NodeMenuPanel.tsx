@@ -1,14 +1,13 @@
 // @ts-nocheck
 import { Dispatch, memo, SetStateAction, useRef } from 'react';
 import { Panel } from 'reactflow';
-import { RFNode } from '../models/nodeFactory';
-import { NodeDataType } from '../pages/Flow';
+import { RFNode } from '../models/NodeFactory';
 
 interface INodeMenuPanel {
-  setNodes: Dispatch<SetStateAction<Node<NodeDataType>[]>>;
   setShowMenu: Dispatch<SetStateAction<boolean>>;
   showMenu: boolean;
   viewport: Viewport;
+  setNodes: Dispatch<SetStateAction<Node<RFNode, string | undefined>[]>>;
 }
 
 function NodeMenuPanel({

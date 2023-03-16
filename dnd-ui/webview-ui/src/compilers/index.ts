@@ -15,10 +15,8 @@ export class Compiler {
 
     let graph = new Graph(store.nodes, store.edges);
     let paths = graph.buildPaths();
-    console.log("PATHS:", paths)
 
     let compiledFlows = paths.map((path) => {
-      console.log(path);
       let compiledText = '';
 
       // path is a list of node ids

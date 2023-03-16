@@ -1,4 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
+import { v4 as uuid } from 'uuid';
+import { vscode } from '../utilities/vscode';
 
 export default function CustomNodeForm({
   setModal,
@@ -7,13 +9,31 @@ export default function CustomNodeForm({
 }) {
   const [stringVals, setStringVals] = useState<Record<string, string>>({});
   const [compiledText, setCompiledText] = useState('');
+  const [desc, setDesc] = useState('');
   const [title, setTitle] = useState('');
 
-  function handleCreate() {}
+  function handleCreate() {
+    vscode.postMessage({
+      type: 'createCustomNode',
+      data: {
+        compiler: 'cypress',
+        payload: {
+          id: uuid(),
+          name: title,
+          params: {
+            ...stringVals,
+          },
+          compiledCode: compiledText,
+          description: desc,
+        },
+      },
+    });
+    setModal(0);
+  }
 
   return (
     <section className="bg-white w-[300px] h-[583px]">
-      <div className="p-4">
+      <div className="pt-2 pb-4">
         <div className="flex p-2 justify-between items-center">
           <div className="font-bold text-lg flex items-center mx-auto text-black">
             Custom Node
@@ -41,7 +61,7 @@ export default function CustomNodeForm({
 
         <br />
 
-        <div>Input string values: </div>
+        <div>Add string values: </div>
         <div className="mt-2">
           <button
             className="border p-2 rounded dashed border-gray-600 border-dotted block w-full"
@@ -55,7 +75,7 @@ export default function CustomNodeForm({
             <i className="fa-solid fa-plus"></i>
           </button>
         </div>
-        <div>
+        <div className="max-h-28 overflow-scroll">
           {Object.keys(stringVals).map((str: string, index) => {
             return (
               <div
@@ -90,7 +110,19 @@ export default function CustomNodeForm({
               onChange={(e) => setCompiledText(e.target.value)}
               placeholder='E.g: cy.get("$1").find("$2").first().as("$3")'
               style={{ color: 'black', paddingLeft: '4px' }}
-              className="w-full h-[100px]"
+              className="w-full h-16"
+            />
+          </div>
+        </div>
+        <div>
+          <div>Description: </div>
+          <div>
+            <textarea
+              value={desc}
+              onChange={(e) => setDesc(e.target.value)}
+              placeholder="How to use this node"
+              style={{ color: 'black', paddingLeft: '4px' }}
+              className="w-full h-16"
             />
           </div>
         </div>

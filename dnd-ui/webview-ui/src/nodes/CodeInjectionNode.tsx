@@ -50,7 +50,6 @@ const CodeInjectionNode = (props) => {
       inPorts: { code: code },
       outPorts: { initFuckme: uuid() },
     });
-    console.log('textAreaNode', textAreaNode);
     setNodeStore({
       nodes: {
         ...nodesStore,
@@ -73,7 +72,7 @@ const CodeInjectionNode = (props) => {
       <div>
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
           <span className="mr-1">
-            <i className="fa-solid fa-arrow-pointer"></i>
+            <i className="fa-solid fa-syringe"></i>
           </span>
           <label>Injection Code</label>
           <span className="float-right" onClick={handleRemoveNode}>
@@ -82,20 +81,19 @@ const CodeInjectionNode = (props) => {
         </div>
 
         <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
-
-
           <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
-
-          <textarea
-            onChange={(e) => setCode(e.target.value)}
-            defaultValue={inPorts?.code}
-            value={code}
-            style={{ color: 'black', paddingLeft: '4px', width: "250px", height: "300px" }}
-          >
-          </textarea>
-
-
-        </div>
+            <textarea
+              onChange={(e) => setCode(e.target.value)}
+              defaultValue={inPorts?.code}
+              value={code}
+              style={{
+                color: 'black',
+                paddingLeft: '4px',
+                width: '250px',
+                height: '300px',
+              }}
+            ></textarea>
+          </div>
         </div>
       </div>
 

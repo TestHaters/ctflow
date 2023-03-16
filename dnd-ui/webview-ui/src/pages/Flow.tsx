@@ -12,7 +12,6 @@ import ReactFlow, {
   MiniMap,
   Node,
   OnSelectionChangeParams,
-  Panel,
   updateEdge,
   useEdgesState,
   useNodesState,
@@ -32,17 +31,19 @@ import ContainsNode from '../nodes/ContainsNode';
 import TextInputNode from '../nodes/TextInputNode';
 import VisitPageNode from '../nodes/VisitPageNode';
 import WaitNode from '../nodes/WaitNode';
-import codeInjectionNode from '../nodes/CodeInjectionNode';
+import CodeInjectionNode from '../nodes/CodeInjectionNode';
 import { vscode } from '../utilities/vscode';
 import { toast } from 'react-toastify';
 import MenuPanel from '../components/MenuPanel';
 import CustomEdge from '../components/CustomEdge';
+import CustomNodeRender from '../nodes/CustomNodeRender';
 
 const fitViewOptions: FitViewOptions = {
   padding: 0.2,
 };
 
 export type NodeDataType = {
+  id?: string | number;
   label: string;
   name: string;
   color: string;
@@ -60,7 +61,8 @@ const nodeTypes = {
   checkboxNode: CheckboxNode,
   containsNode: ContainsNode,
   waitNode: WaitNode,
-  codeInjectionNode: codeInjectionNode,
+  codeInjectionNode: CodeInjectionNode,
+  customNode: CustomNodeRender,
 };
 
 const edgeTypes = {
@@ -104,7 +106,6 @@ const Editor = () => {
   );
 
   function reloadPageByFileData(fileData: any) {
-    console.log('reload page by file data');
     const payload = YAML.parse(fileData.text);
     const allNodes = Object.values(payload.nodes);
     const allEdges = Object.values(payload.edges);
@@ -127,7 +128,6 @@ const Editor = () => {
   }
 
   function handleCallback(event: any) {
-    console.log('event', event);
     if (
       event.detail &&
       event.detail.type === 'fileUpdate' &&
@@ -162,8 +162,6 @@ const Editor = () => {
   }
 
   function handleSave() {
-    console.log('handle save');
-
     const inputNodes: any = nodes.reduce((acc, item) => {
       // @ts-ignore
       acc[item.id] = {
@@ -178,12 +176,12 @@ const Editor = () => {
       };
       return acc;
     }, {});
+    console.log('inputNodes', inputNodes);
 
     // verify that nodes of edge are exist
     const validEdges = edges.filter((edge: any) => {
       return inputNodes[edge.source] && inputNodes[edge.target];
     });
-    console.log('VALID EDGES', edges, validEdges);
 
     const inputEdges = validEdges.reduce((acc, item) => {
       // @ts-ignore
@@ -263,7 +261,7 @@ const Editor = () => {
           showMenu={showMenu}
           viewport={viewport.current}
         />
-        <MenuPanel />
+        <MenuPanel viewport={viewport.current} setNodes={setNodes} />
       </ReactFlow>
     </div>
   );
