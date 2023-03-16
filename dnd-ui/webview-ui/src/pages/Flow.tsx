@@ -157,7 +157,6 @@ const Editor = () => {
   }
 
   function handleSave() {
-    console.log("handle save")
 
     const inputNodes : any = nodes.reduce((acc, item) => {
       // @ts-ignore
