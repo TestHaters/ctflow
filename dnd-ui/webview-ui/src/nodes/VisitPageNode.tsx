@@ -40,10 +40,11 @@ const VisitPageNode = (props) => {
   }
 
   useEffect(() => {
+    console.log('url', url)
     setNodeStore({
       nodes: { ...nodesStore, [id]: { ...nodesStore[id], inPorts: { url, description } } },
     });
-  }, [url]);
+  }, [url, description]);
 
   return (
     <div className="w-48" >

@@ -50,7 +50,7 @@ const ButtonNode = (props) => {
         [id]: { ...nodesStore[id], inPorts: { field: name, description } },
       },
     });
-  }, [name]);
+  }, [name, description]);
 
   return (
 

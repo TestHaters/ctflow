@@ -46,7 +46,7 @@ const WaitNode = ({ id, data, isConnectable, xPos, yPos }) => {
         [id]: { ...nodesStore[id], inPorts: { field: time, description } },
       },
     });
-  }, [time]);
+  }, [time, description]);
 
   return (
     <div className="w-48" >

@@ -46,7 +46,7 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
         [id]: { ...nodesStore[id], inPorts: { field: name, value, description } },
       },
     });
-  }, [name, value]);
+  }, [name, value, description]);
 
   return (
     <div className="w-48" >

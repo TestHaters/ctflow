@@ -51,7 +51,7 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
         },
       },
     });
-  }, [name, checked]);
+  }, [name, checked, description]);
 
   return (
     <div className="w-48" >

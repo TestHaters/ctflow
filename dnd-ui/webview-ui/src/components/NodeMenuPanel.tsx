@@ -72,6 +72,12 @@ function NodeMenuPanel({ setNodes, setShowMenu, viewport }: INodeMenuPanel) {
             Code injection node
           </button>
         </div>
+
+        <div className="hover:bg-slate-200 p-2 rounded">
+          <button id="CTFlowRecorderNode" onClick={handleClick}>
+            CTFlow Recorder
+          </button>
+        </div>
       </Panel>
     </section>
   );

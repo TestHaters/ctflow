@@ -6,6 +6,8 @@ import { ContainsNodeCompiler } from './cypress/ContainsNodeCompiler';
 import { WaitNodeCompiler } from './cypress/WaitNodeCompiler';
 import { Graph } from './helpers/graph';
 import { CodeInjectionNodeCompiler } from './cypress/CodeInjectionNodeCompiler';
+import CTFlowRecorderNode from '../nodes/CTFlowRecorderNode';
+import { CTFlowRecorderCompiler } from './cypress/CTFlowRecorderCompiler';
 
 export class Compiler {
 
@@ -73,6 +75,9 @@ export class Compiler {
       }
       case 'codeInjectionNode': {
         return CodeInjectionNodeCompiler
+      }
+      case 'CTFlowRecorderNode': {
+        return CTFlowRecorderCompiler
       }
       default: {
         console.log(node, node.type)
