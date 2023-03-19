@@ -33,7 +33,7 @@ export default function CustomNodeForm({
 
   return (
     <section className="bg-white w-[300px] h-[583px]">
-      <div className="pt-2 pb-4">
+      <div className="pt-4">
         <div className="flex p-2 justify-between items-center">
           <div className="font-bold text-lg flex items-center mx-auto text-black">
             Custom Node
