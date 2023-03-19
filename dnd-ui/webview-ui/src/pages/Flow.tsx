@@ -63,7 +63,7 @@ const nodeTypes = {
   checkboxNode: CheckboxNode,
   containsNode: ContainsNode,
   waitNode: WaitNode,
-  CTFlowRecorderNode: CTFlowRecorderNode
+  CTFlowRecorderNode: CTFlowRecorderNode,
   codeInjectionNode: CodeInjectionNode,
   customNode: CustomNodeRender,
 };
