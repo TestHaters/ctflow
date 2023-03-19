@@ -9,6 +9,7 @@ const WaitNode = ({ id, data, isConnectable, xPos, yPos }) => {
   const reactFlowInstance = useReactFlow();
 
   const [time, setTime] = useState(data?.inPorts?.field || '');
+  const [description, setDescription] = useState(data?.inPorts?.description || '')
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const [edges] = useStore((store) => store.edges);
   const { sourceHandleId, targetHandleId, inPorts } = data;
@@ -19,7 +20,7 @@ const WaitNode = ({ id, data, isConnectable, xPos, yPos }) => {
       type: 'waitNode',
       data,
       position: { x: xPos, y: yPos },
-      inPorts: { field: time },
+      inPorts: { field: time, description },
       outPorts: {},
     });
     setNodeStore({
@@ -42,13 +43,28 @@ const WaitNode = ({ id, data, isConnectable, xPos, yPos }) => {
     setNodeStore({
       nodes: {
         ...nodesStore,
-        [id]: { ...nodesStore[id], inPorts: { field: time } },
+        [id]: { ...nodesStore[id], inPorts: { field: time, description } },
       },
     });
   }, [time]);
 
   return (
-    <div>
+    <div className="w-48" >
+      <div role="tooltip" className=" z-10 block inline-block px-3 py-2 w-full
+      text-xs font-xs text-white bg-gray-500 rounded-lg shadow-sm
+      tooltip resize" style={{}}>
+          <textarea
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="What is this node about?"
+            className="w-full text-xs font-xs italic bg-gray-500 text-white resize-none"
+            style={{  paddingLeft: '4px', fontSize: "70%"  }}
+          />
+      </div>
+      <div className="mt-2 pt-0 text-center w-full text-gray-500" style={{marginTop: "-8px"}}> ▼ </div>
+
+
       <Handle
         type="target"
         position={Position.Left}
@@ -74,7 +90,6 @@ const WaitNode = ({ id, data, isConnectable, xPos, yPos }) => {
             type="text"
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            defaultValue={inPorts?.field}
             placeholder="Wait time"
             style={{ color: 'black', paddingLeft: '4px' }}
           />
@@ -86,7 +101,7 @@ const WaitNode = ({ id, data, isConnectable, xPos, yPos }) => {
         position={Position.Right}
         id={targetHandleId}
         onConnect={commitChange}
-        style={{ top: 10, background: '#555', width: 10, height: 10 }}
+        style={{ top: 120, background: '#555', width: 10, height: 10 }}
         isConnectable={isConnectable}
       />
     </div>
