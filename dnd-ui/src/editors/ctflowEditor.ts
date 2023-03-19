@@ -2,6 +2,16 @@ import * as vscode from "vscode";
 import { getNonce } from "../utilities/nonce";
 import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vscode";
 import { getUri } from "../utilities/getUri";
+import flow from "lodash.flow";
+import { ICustomNodePayload } from "../types";
+import {
+  addCustomNodeCollection,
+  convertUint8ArrayToString,
+  createCustomNodeCollection,
+  fetchCustomNodeList,
+  parseJSON,
+  writeDataToCustomNodesCollection,
+} from "../utilities/customNodes";
 
 interface CtflowEdit {
   readonly nodes: ReadonlyArray<any>;
@@ -112,6 +122,14 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
           this._savedEdits.push(e.data.yamlData);
           return;
 
+        case "createCustomNode":
+          this.writeCustomNodeFile(e.data);
+          return;
+
+        case "fetchCustomNodes":
+          fetchCustomNodeList(webviewPanel);
+          return;
+
         case "writeCompiledFile":
           this.writeCompiledFile(e.data.compiledText, e.data.fileExtension);
           return;
@@ -159,7 +177,28 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
     let yamlFilePath = this.textDocument?.uri.fsPath.includes(".")
       ? this.textDocument?.uri.fsPath
       : "";
+    console.log("vscode.Uri.file(yamlFilePath)", vscode.Uri.file(yamlFilePath));
     vscode.workspace.fs.writeFile(vscode.Uri.file(yamlFilePath), writeData);
+  }
+
+  private async writeCustomNodeFile({ payload, compiler }: ICustomNodePayload) {
+    const path = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
+
+    const customNodeJsonFile = await vscode.workspace.findFiles(
+      ".customNodes.json",
+      "**/node_modules/**",
+      1
+    );
+    let fileText = createCustomNodeCollection(payload, compiler);
+
+    if (customNodeJsonFile.length !== 0) {
+      const fileData = await vscode.workspace.fs.readFile(
+        vscode.Uri.file(path + "/.customNodes.json")
+      );
+      const curNodes = flow([convertUint8ArrayToString, parseJSON])(fileData);
+      fileText = addCustomNodeCollection(curNodes, payload, compiler);
+    }
+    writeDataToCustomNodesCollection(fileText, path);
   }
 
   /**

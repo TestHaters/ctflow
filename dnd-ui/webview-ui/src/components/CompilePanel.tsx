@@ -11,7 +11,7 @@ function CompilePanel({ onClick }) {
       // style={{ top: 50 }}
       onClick={onClick}
     >
-      Compile
+      Run
       <span className="ml-1">
         <i className="fa-solid fa-play"></i>
       </span>
