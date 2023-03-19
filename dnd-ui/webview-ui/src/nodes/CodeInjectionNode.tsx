@@ -12,6 +12,7 @@ const CodeInjectionNode = (props) => {
   const reactFlowInstance = useReactFlow();
 
   const [code, setCode] = useState(data?.inPorts?.code || '');
+  const [description, setDescription] = useState(data?.inPorts?.description || '')
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const [edges] = useStore((store) => store.edges);
   const { sourceHandleId, targetHandleId, inPorts } = data;
@@ -22,8 +23,8 @@ const CodeInjectionNode = (props) => {
       type: 'codeInjectionNode',
       data,
       position: { x: xPos, y: yPos },
-      inPorts: { code: code },
-      outPorts: { initFuckme: uuid() },
+      inPorts: { code: code, description },
+      outPorts: {  },
     });
     setNodeStore({
       nodes: {
@@ -48,19 +49,34 @@ const CodeInjectionNode = (props) => {
       data,
       position: { x: xPos, y: yPos },
       inPorts: { code: code },
-      outPorts: { initFuckme: uuid() },
+      outPorts: {  },
     });
     console.log('textAreaNode', textAreaNode);
     setNodeStore({
       nodes: {
         ...nodesStore,
-        [id]: { ...nodesStore[id], ...textAreaNode },
+        [id]: { ...nodesStore[id], ...textAreaNode, description },
       },
     });
   }, [code]);
 
   return (
-    <div>
+
+    <div className="w-72" >
+      <div role="tooltip" className=" z-10 block inline-block px-3 py-2 w-full
+      text-xs font-xs text-white bg-gray-500 rounded-lg shadow-sm
+      tooltip resize" style={{}}>
+          <textarea
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="What is this node about?"
+            className="w-full text-xs font-xs italic bg-gray-500 text-white resize-none"
+            style={{  paddingLeft: '4px', fontSize: "70%"  }}
+          />
+      </div>
+      <div className="mt-2 pt-0 text-center w-full text-gray-500" style={{marginTop: "-8px"}}> ▼ </div>
+
       <Handle
         type="target"
         position={Position.Left}
@@ -88,7 +104,6 @@ const CodeInjectionNode = (props) => {
 
           <textarea
             onChange={(e) => setCode(e.target.value)}
-            defaultValue={inPorts?.code}
             value={code}
             style={{ color: 'black', paddingLeft: '4px', width: "250px", height: "300px" }}
           >
@@ -104,7 +119,7 @@ const CodeInjectionNode = (props) => {
         position={Position.Right}
         id={targetHandleId}
         onConnect={commitChange}
-        style={{ top: 10, background: '#555', width: 10, height: 10 }}
+        style={{ top: 120, background: '#555', width: 10, height: 10 }}
         isConnectable={isConnectable}
       />
     </div>
