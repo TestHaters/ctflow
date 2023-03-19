@@ -15,7 +15,7 @@ const CustomNodeRender = (props) => {
     (acc, key) => ({ ...acc, [key]: '' }),
     {}
   );
-  const emptyVals = Object.keys(inPorts.values).every(
+  const emptyVals = Object.keys(inPorts?.values || {}).every(
     (key) => inPorts.values[key] === ''
   );
   const [values, setValues] = useState(
