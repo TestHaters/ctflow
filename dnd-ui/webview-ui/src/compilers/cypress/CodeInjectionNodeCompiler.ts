@@ -8,9 +8,6 @@ export class CodeInjectionNodeCompiler {
   }
 
   static compile(nodeData: any): string {
-
-    console.log("NODE DATA:", nodeData)
-
     return `
       ${nodeData.inPorts.code}
     `;

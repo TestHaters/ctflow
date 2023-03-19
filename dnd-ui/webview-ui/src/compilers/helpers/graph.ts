@@ -3,7 +3,6 @@
 
 import * as _ from 'lodash';
 export class Graph {
-
   nodes: {
     [id: string]: {
       id: string;
@@ -15,7 +14,7 @@ export class Graph {
       // description?: any;
       // componentNames?: any;
       // outputQ?: any;
-    }
+    };
   };
 
   // edges is an dictionary of objects with id is key and value is object with sourceHandle, target, targetHandle
@@ -25,21 +24,19 @@ export class Graph {
       sourceHandle: string;
       target: string;
       targetHandle: string;
-    }
-  }
+    };
+  };
 
-  constructor(nodes: any, edges: { [id: string]: any; }) {
+  constructor(nodes: any, edges: { [id: string]: any }) {
     this.nodes = nodes;
     // set edges to empty array if null
-    console.log("EDGES:", edges)
     // edges can be not uniq by source_id and target_id because of sourceHandle and targetHandle
     // so we need to filter out edges with sourceHandle and targetHandle
-    this.edges = _.pickBy(edges, (edge: any) => edge.sourceHandle === null && edge.targetHandle === null);
-
+    this.edges = _.pickBy(
+      edges,
+      (edge: any) => edge.sourceHandle === null && edge.targetHandle === null
+    );
   }
-
-
-
 
   // get root node of the graph
   // by default, the root node is the first node with type = 'visitNode'
@@ -62,11 +59,12 @@ export class Graph {
   // find edges with source id
   // each node has multiple edges
   // return all edges with source id
-  findEdgesWithSourceId(sourceId: string, allEdges: any = Object.values(this.edges)) {
+  findEdgesWithSourceId(
+    sourceId: string,
+    allEdges: any = Object.values(this.edges)
+  ) {
     return allEdges.filter((edge: any) => edge.source === sourceId);
   }
-
-
 
   // build paths from root node to leaf node
   // return an array of paths
@@ -80,7 +78,7 @@ export class Graph {
   //   [1, 4, 5],
   // ]
 
-  buildPaths() : any[][] {
+  buildPaths(): any[][] {
     // start with current node = root node
     let currentNode = this.getRootNode();
     let paths: any[][] = [];
@@ -93,15 +91,20 @@ export class Graph {
     let edgesClone = Object.values(this.edges);
 
     // init processingPaths with edges with source = root node
-    let sourceEdges = this.findEdgesWithSourceId(currentNode.id)
+    let sourceEdges = this.findEdgesWithSourceId(currentNode.id);
     // return [[currentNode]] if there is no edge
-    if (sourceEdges.length === 0) { return [[currentNode]]; }
+    if (sourceEdges.length === 0) {
+      return [[currentNode]];
+    }
     // processingPaths = [[1, 2], [1, 4]]
-    processingPaths = sourceEdges.map((edge: any) => [edge.source, edge.target]);
+    processingPaths = sourceEdges.map((edge: any) => [
+      edge.source,
+      edge.target,
+    ]);
 
     // remove edges from clone edges with source = root node
     // edgesClone = [[2, 3], [4, 5]]
-    edgesClone = edgesClone.filter(edge => edge.source !== currentNode.id);
+    edgesClone = edgesClone.filter((edge) => edge.source !== currentNode.id);
 
     // init nextProcessingPaths = []
     let nextProcessingPaths: any[][] = [];
@@ -124,8 +127,7 @@ export class Graph {
 
         if (edges.length === 0) {
           paths.push(path);
-        }
-        else {
+        } else {
           edges.forEach((edge: any) => {
             let newPath = [...path, edge.target];
             nextProcessingPaths.push(newPath);
@@ -133,11 +135,10 @@ export class Graph {
             edgesClone = edgesClone.filter((e: any) => e.id !== edge.id);
           });
         }
-      })
+      });
 
       processingPaths = nextProcessingPaths;
-    }
-    while(nextProcessingPaths.length > 0)
+    } while (nextProcessingPaths.length > 0);
 
     return paths;
   }
@@ -196,10 +197,7 @@ export class Graph {
       },
     };
 
-
     const graph = new Graph(nodes, edges);
     const paths = graph.buildPaths();
-    console.log(paths);
   }
 }
-

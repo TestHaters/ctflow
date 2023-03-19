@@ -2,7 +2,6 @@ import 'reactflow/dist/style.css';
 
 import { get, omit, pick } from 'lodash';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { toast } from 'react-toastify';
 import ReactFlow, {
   addEdge,
   Background,
@@ -13,7 +12,6 @@ import ReactFlow, {
   MiniMap,
   Node,
   OnSelectionChangeParams,
-  Panel,
   updateEdge,
   useEdgesState,
   useNodesState,
@@ -35,14 +33,19 @@ import VisitPageNode from '../nodes/VisitPageNode';
 import WaitNode from '../nodes/WaitNode';
 import codeInjectionNode from '../nodes/CodeInjectionNode';
 import CTFlowRecorderNode from '../nodes/CTFlowRecorderNode';
+import CodeInjectionNode from '../nodes/CodeInjectionNode';
 import { vscode } from '../utilities/vscode';
+import { toast } from 'react-toastify';
+import MenuPanel from '../components/MenuPanel';
 import CustomEdge from '../components/CustomEdge';
+import CustomNodeRender from '../nodes/CustomNodeRender';
 
 const fitViewOptions: FitViewOptions = {
   padding: 0.2,
 };
 
 export type NodeDataType = {
+  id?: string | number;
   label: string;
   name: string;
   color: string;
@@ -60,8 +63,9 @@ const nodeTypes = {
   checkboxNode: CheckboxNode,
   containsNode: ContainsNode,
   waitNode: WaitNode,
-  codeInjectionNode: codeInjectionNode,
   CTFlowRecorderNode: CTFlowRecorderNode
+  codeInjectionNode: CodeInjectionNode,
+  customNode: CustomNodeRender,
 };
 
 const edgeTypes = {
@@ -107,7 +111,6 @@ const Editor = () => {
   );
 
   function reloadPageByFileData(fileData: any) {
-    console.log("reload page by file data")
     const payload = YAML.parse(fileData.text);
     const allNodes = Object.values(payload.nodes);
     const allEdges = Object.values(payload.edges);
@@ -150,8 +153,11 @@ const Editor = () => {
   }
 
   function handleCallback(event: any) {
-    console.log('event', event)
-    if (event.detail && event.detail.type === 'fileUpdate' && event.detail.text) {
+    if (
+      event.detail &&
+      event.detail.type === 'fileUpdate' &&
+      event.detail.text
+    ) {
       reloadPageByFileData(event.detail);
       handleCompile();
     }
@@ -166,8 +172,7 @@ const Editor = () => {
   }
 
   function handleSave() {
-
-    const inputNodes : any = nodes.reduce((acc, item) => {
+    const inputNodes: any = nodes.reduce((acc, item) => {
       // @ts-ignore
       acc[item.id] = {
         ...pick(item, ['id', 'position', 'type']),
@@ -181,12 +186,12 @@ const Editor = () => {
       };
       return acc;
     }, {});
+    console.log('inputNodes', inputNodes);
 
     // verify that nodes of edge are exist
     const validEdges = edges.filter((edge: any) => {
       return inputNodes[edge.source] && inputNodes[edge.target];
     });
-    console.log("VALID EDGES", edges, validEdges)
 
     const inputEdges = validEdges.reduce((acc, item) => {
       // @ts-ignore
@@ -194,11 +199,9 @@ const Editor = () => {
       return acc;
     }, {});
 
-    let payload = { nodes: inputNodes, edges: inputEdges }
+    let payload = { nodes: inputNodes, edges: inputEdges };
     setStore({ ...payload });
-    let yamlData = YAML.stringify(payload)
-
-
+    let yamlData = YAML.stringify(payload);
 
     // When testing on browser, the vscode.postMessage won't work
     // we will manually emit fileUpdate event
@@ -212,7 +215,6 @@ const Editor = () => {
 
     //   //  window.dispatchEvent(simulateFileUpdateTriggerOnBrowser)
     // }
-
 
     vscode.postMessage({
       type: 'addEdit',
@@ -263,28 +265,13 @@ const Editor = () => {
         <MiniMap />
         <CompilePanel onClick={handleCompile} />
         <SavePanel onClick={handleSave} />
-        <Panel
-          position="top-left"
-          style={{ left: 120 }}
-          onClick={() => setShowMenu((prev) => !prev)}
-          className="rounded !text-black font-semibold py-2 px-5 cursor-pointer"
-        >
-          Add Node
-          <span className="ml-1">
-            {showMenu ? (
-              <i className="fa-solid fa-angle-down"></i>
-            ) : (
-              <i className="fa-solid fa-bars"></i>
-            )}
-          </span>
-        </Panel>
-        {showMenu && (
-          <NodeMenuPanel
-            setShowMenu={setShowMenu}
-            setNodes={setNodes}
-            viewport={viewport.current}
-          />
-        )}
+        <NodeMenuPanel
+          setShowMenu={setShowMenu}
+          setNodes={setNodes}
+          showMenu={showMenu}
+          viewport={viewport.current}
+        />
+        <MenuPanel viewport={viewport.current} setNodes={setNodes} />
       </ReactFlow>
     </div>
   );
