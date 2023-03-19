@@ -31,6 +31,8 @@ import ContainsNode from '../nodes/ContainsNode';
 import TextInputNode from '../nodes/TextInputNode';
 import VisitPageNode from '../nodes/VisitPageNode';
 import WaitNode from '../nodes/WaitNode';
+import codeInjectionNode from '../nodes/CodeInjectionNode';
+import CTFlowRecorderNode from '../nodes/CTFlowRecorderNode';
 import CodeInjectionNode from '../nodes/CodeInjectionNode';
 import { vscode } from '../utilities/vscode';
 import { toast } from 'react-toastify';
@@ -61,6 +63,7 @@ const nodeTypes = {
   checkboxNode: CheckboxNode,
   containsNode: ContainsNode,
   waitNode: WaitNode,
+  CTFlowRecorderNode: CTFlowRecorderNode
   codeInjectionNode: CodeInjectionNode,
   customNode: CustomNodeRender,
 };
@@ -75,6 +78,8 @@ const Editor = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [, setSelectedNode] = useState<Node | null>(null);
   const [store, setStore] = useStore((store) => store);
+  const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
+  const [edgeStore, setEdgeStore] = useStore((store) => store.edges);
   const [showMenu, setShowMenu] = useState(false);
   const viewport = useRef<Viewport>(defaultViewport);
 
@@ -127,6 +132,26 @@ const Editor = () => {
     setStore({ ...payload });
   }
 
+  // Reload UI (reactflow) by store
+  function reloadReactFlow(storeState: any){
+    console.log("reload react flow")
+    // can not use nodeStore because not in UseEffect
+    // @ts-ignore
+    setNodes(Object.values(storeState.nodes).map((node) => {
+      const cNode = {
+        ...pick(node, ['id', 'position', 'type']),
+        style: get(node, 'data.style', {}),
+        data: {
+          ...get(node, 'data', {}),
+          inPorts: get(node, 'inPorts', {}),
+        },
+      };
+      return cNode;
+    }));
+    // // @ts-ignore
+    setEdges(Object.values(storeState.edges));
+  }
+
   function handleCallback(event: any) {
     if (
       event.detail &&
@@ -139,25 +164,10 @@ const Editor = () => {
 
     if (event.data && event.data.type === 'fileUpdate' && event.data.text) {
       reloadPageByFileData(event.data);
-      // const payload = YAML.parse(event.data.text);
-      // const allNodes = Object.values(payload.nodes);
-      // const allEdges = Object.values(payload.edges);
-      // const curNodes = allNodes.map((node) => {
-      //   const cNode = {
-      //     ...pick(node, ['id', 'position', 'type']),
-      //     style: get(node, 'data.style', {}),
-      //     data: {
-      //       ...get(node, 'data', {}),
-      //       inPorts: get(node, 'inPorts', {}),
-      //     },
-      //   };
-      //   return cNode;
-      // });
-      // // @ts-ignore
-      // setNodes(curNodes);
-      // // @ts-ignore
-      // setEdges(allEdges);
-      // setStore({ ...payload });
+    }
+
+    if (event.detail && event.detail.type === 'reloadReactFlow' && event.detail.storeState) {
+      reloadReactFlow(event.detail.storeState);
     }
   }
 
