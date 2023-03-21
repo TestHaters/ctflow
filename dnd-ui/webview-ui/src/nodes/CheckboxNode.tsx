@@ -10,7 +10,9 @@ const noType = { email: false, password: false, text: false };
 const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
   const [name, setName] = useState(data?.inPorts?.field || '');
   const [checked, setChecked] = useState(Boolean(data?.inPorts?.isChecked));
-  const [description, setDescription] = useState(data?.inPorts?.description || '')
+  const [description, setDescription] = useState(
+    data?.inPorts?.description || ''
+  );
   const { sourceHandleId, targetHandleId, inPorts } = data;
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const [edges] = useStore((store) => store.edges);
@@ -54,20 +56,30 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
   }, [name, checked, description]);
 
   return (
-    <div className="w-48" >
-      <div role="tooltip" className=" z-10 block inline-block px-3 py-2 w-full
+    <div className="w-48">
+      <div
+        role="tooltip"
+        className=" z-10 block inline-block px-3 py-2 w-full
       text-xs font-xs text-white bg-gray-500 rounded-lg shadow-sm
-      tooltip resize" style={{}}>
-          <textarea
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="What is this node about?"
-            className="w-full text-xs font-xs italic bg-gray-500 text-white resize-none"
-            style={{  paddingLeft: '4px', fontSize: "70%"  }}
-          />
+      tooltip resize"
+        style={{}}
+      >
+        <textarea
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="What is this node about?"
+          className="w-full text-xs font-xs italic bg-gray-500 text-white resize-none"
+          style={{ paddingLeft: '4px', fontSize: '70%' }}
+        />
       </div>
-      <div className="mt-2 pt-0 text-center w-full text-gray-500" style={{marginTop: "-8px"}}> ▼ </div>
+      <div
+        className="mt-2 pt-0 text-center w-full text-gray-500"
+        style={{ marginTop: '-8px' }}
+      >
+        {' '}
+        ▼{' '}
+      </div>
 
       <Handle
         type="target"
@@ -95,6 +107,7 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
             </div>
             <input
               type="text"
+              className="nodrag"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your selector"
@@ -107,6 +120,7 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
             </label>
             <input
               type="checkbox"
+              className="nodrag"
               checked={checked}
               onChange={(e) => setChecked(e.target.checked)}
               id="email"

@@ -110,6 +110,7 @@ const CustomNodeRender = (props) => {
               <label className="block">{customNode.params[key]}</label>
               <input
                 type="text"
+                className="nodrag"
                 value={values[key]}
                 onChange={(e) =>
                   setValues((prev) => ({ ...prev, [key]: e.target.value }))
