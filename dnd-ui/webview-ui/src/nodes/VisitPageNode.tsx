@@ -8,7 +8,9 @@ import { TextInput } from '../models/TextInput';
 const VisitPageNode = (props) => {
   const { id, data, isConnectable, xPos, yPos } = props;
   const [url, setUrl] = useState<string>(data?.inPorts?.url || '');
-  const [description, setDescription] = useState(data?.inPorts?.description || '')
+  const [description, setDescription] = useState(
+    data?.inPorts?.description || ''
+  );
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const { sourceHandleId, targetHandleId, inPorts } = data;
   const [edges] = useStore((store) => store.edges);
@@ -40,27 +42,40 @@ const VisitPageNode = (props) => {
   }
 
   useEffect(() => {
-    console.log('url', url)
+    console.log('url', url);
     setNodeStore({
-      nodes: { ...nodesStore, [id]: { ...nodesStore[id], inPorts: { url, description } } },
+      nodes: {
+        ...nodesStore,
+        [id]: { ...nodesStore[id], inPorts: { url, description } },
+      },
     });
   }, [url, description]);
 
   return (
-    <div className="w-48" >
-      <div role="tooltip" className=" z-10 block inline-block px-3 py-2 w-full
+    <div className="w-48">
+      <div
+        role="tooltip"
+        className=" z-10 block inline-block px-3 py-2 w-full
       text-xs font-xs text-white bg-gray-500 rounded-lg shadow-sm
-      tooltip resize" style={{}}>
-          <textarea
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="What is this node about?"
-            className="w-full text-xs font-xs italic bg-gray-500 text-white resize-none"
-            style={{  paddingLeft: '4px', fontSize: "70%"  }}
-          />
+      tooltip resize"
+        style={{}}
+      >
+        <textarea
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="What is this node about?"
+          className="w-full text-xs font-xs italic bg-gray-500 text-white resize-none"
+          style={{ paddingLeft: '4px', fontSize: '70%' }}
+        />
       </div>
-      <div className="mt-2 pt-0 text-center w-full text-gray-500" style={{marginTop: "-8px"}}> ▼ </div>
+      <div
+        className="mt-2 pt-0 text-center w-full text-gray-500"
+        style={{ marginTop: '-8px' }}
+      >
+        {' '}
+        ▼{' '}
+      </div>
 
       <Handle
         type="target"
@@ -85,6 +100,7 @@ const VisitPageNode = (props) => {
 
         <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
           <input
+            className="nodrag"
             id="page"
             type="text"
             value={url}

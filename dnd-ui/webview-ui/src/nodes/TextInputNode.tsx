@@ -8,7 +8,9 @@ import { TextInput } from '../models/TextInput';
 const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
   const [name, setName] = useState(data?.inPorts?.field || '');
   const [value, setValue] = useState(data?.inPorts?.value || '');
-  const [description, setDescription] = useState(data?.inPorts?.description || '')
+  const [description, setDescription] = useState(
+    data?.inPorts?.description || ''
+  );
   const { sourceHandleId, targetHandleId, inPorts } = data;
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const [edges] = useStore((store) => store.edges);
@@ -39,30 +41,53 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
     reactFlowInstance.setNodes((nds) => nds.filter((node) => node.id !== id));
   }
 
+  function handleNameChange(event: KeyboardEvent<HTMLInputElement>) {
+    event.preventDefault();
+    setName(event.target.value);
+  }
+
+  function handleValueChange(event: KeyboardEvent<HTMLInputElement>) {
+    event.preventDefault();
+    setValue(event.target.value);
+  }
+
   useEffect(() => {
     setNodeStore({
       nodes: {
         ...nodesStore,
-        [id]: { ...nodesStore[id], inPorts: { field: name, value, description } },
+        [id]: {
+          ...nodesStore[id],
+          inPorts: { field: name, value, description },
+        },
       },
     });
   }, [name, value, description]);
 
   return (
-    <div className="w-48" >
-      <div role="tooltip" className=" z-10 block inline-block px-3 py-2 w-full
+    <div className="w-48">
+      <div
+        role="tooltip"
+        className=" z-10 block inline-block px-3 py-2 w-full
       text-xs font-xs text-white bg-gray-500 rounded-lg shadow-sm
-      tooltip resize" style={{}}>
-          <textarea
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="What is this node about?"
-            className="w-full text-xs font-xs italic bg-gray-500 text-white resize-none"
-            style={{  paddingLeft: '4px', fontSize: "70%"  }}
-          />
+      tooltip resize"
+        style={{}}
+      >
+        <textarea
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="What is this node about?"
+          className="w-full text-xs font-xs italic bg-gray-500 text-white resize-none"
+          style={{ paddingLeft: '4px', fontSize: '70%' }}
+        />
       </div>
-      <div className="mt-2 pt-0 text-center w-full text-gray-500" style={{marginTop: "-8px"}}> ▼ </div>
+      <div
+        className="mt-2 pt-0 text-center w-full text-gray-500"
+        style={{ marginTop: '-8px' }}
+      >
+        {' '}
+        ▼{' '}
+      </div>
 
       <Handle
         type="target"
@@ -88,9 +113,10 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
               <label className="text-[11px]">Selector</label>
             </div>
             <input
+              className="nodrag"
               type="text"
               value={name}
-              onChange={(event) => setName(event.target.value)}
+              onChange={handleNameChange}
               placeholder="Your selector"
               style={{ color: 'black', paddingLeft: '4px' }}
             />
@@ -102,7 +128,7 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
             <input
               className="nodrag"
               value={value}
-              onChange={(event) => setValue(event.target.value)}
+              onChange={handleValueChange}
               placeholder="Your value"
               style={{ color: 'black', paddingLeft: '4px' }}
             />
@@ -115,7 +141,7 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
         position={Position.Right}
         id={targetHandleId}
         onConnect={commitChange}
-        style={{  background: '#555', width: 10, height: 10 }}
+        style={{ background: '#555', width: 10, height: 10 }}
         isConnectable={isConnectable}
       />
     </div>
