@@ -55,6 +55,8 @@ export default function MenuPanel({ viewport, setNodes }: IMenuPanelProps) {
         },
       });
     };
+
+    setModal(0);
   }
 
   return (
@@ -138,6 +140,11 @@ export default function MenuPanel({ viewport, setNodes }: IMenuPanelProps) {
               </label>
               <SuccessBtn type="submit">Upload</SuccessBtn>
             </form>
+            <div className="absolute right-6 top-2">
+              <button className="block m-2" onClick={() => setModal(0)}>
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            </div>
           </div>
         </Panel>
       )}
