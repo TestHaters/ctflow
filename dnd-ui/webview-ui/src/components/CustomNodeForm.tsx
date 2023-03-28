@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { vscode } from '../utilities/vscode';
+import SuccessBtn from './share/SuccessBtn';
 
 export default function CustomNodeForm({
   setModal,
@@ -32,7 +33,7 @@ export default function CustomNodeForm({
   }
 
   return (
-    <section className="bg-white w-[300px] h-[583px]">
+    <section className="bg-white w-[300px] h-[583px] p-2">
       <div className="pt-4">
         <div className="flex p-2 justify-between items-center">
           <div className="font-bold text-lg flex items-center mx-auto text-black">
@@ -127,12 +128,7 @@ export default function CustomNodeForm({
           </div>
         </div>
         <div>
-          <button
-            className="bg-green-500 rounded-md text-white p-2 block mx-auto"
-            onClick={handleCreate}
-          >
-            Create
-          </button>
+          <SuccessBtn onClick={handleCreate}>Create</SuccessBtn>
         </div>
       </div>
     </section>
