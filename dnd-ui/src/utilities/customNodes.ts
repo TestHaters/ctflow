@@ -62,3 +62,13 @@ export async function fetchCustomNodeList(webviewPanel: vscode.WebviewPanel) {
     payload: nodeList,
   });
 }
+
+export async function isCustomNodeExisted() {
+  const customNodeJsonFile = await vscode.workspace.findFiles(
+    ".customNodes.json",
+    "**/node_modules/**",
+    1
+  );
+
+  return customNodeJsonFile.length > 0;
+}

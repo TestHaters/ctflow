@@ -51,7 +51,8 @@ function NodeMenuPanel({
         <section ref={nodeMenuRef}>
           <Panel
             position="top-left"
-            style={{ left: 125, top: 50, width: 119, marginLeft: 10 }}
+            className="bg-white rounded-lg p2 shadow-lg"
+            style={{ left: 125, top: 50, width: 159, marginLeft: 10 }}
           >
             <div className="hover:bg-slate-200 p-2 rounded">
               <button id="visitNode" onClick={handleClick}>
@@ -88,7 +89,7 @@ function NodeMenuPanel({
                 CTFlow Recorder
               </button>
             </div>
-            
+
             <div className="hover:bg-slate-200 p-2 rounded">
               <button id="waitNode" onClick={handleClick}>
                 Wait node

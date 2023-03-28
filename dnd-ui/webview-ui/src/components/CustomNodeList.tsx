@@ -43,7 +43,7 @@ export default function CustomNodeList({
     setNodes((prev) => [...prev, newNode]);
   }
   return (
-    <div className="bg-white w-[300px] h-[583px]">
+    <div className="bg-white w-[300px] h-[583px] p-2">
       <div className="pb-4">
         <div className="flex pb-2 justify-between items-center">
           <div className="font-bold text-lg flex items-center mx-auto text-black">

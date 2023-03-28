@@ -9,6 +9,7 @@ import {
   convertUint8ArrayToString,
   createCustomNodeCollection,
   fetchCustomNodeList,
+  isCustomNodeExisted,
   parseJSON,
   writeDataToCustomNodesCollection,
 } from "../utilities/customNodes";
@@ -114,6 +115,12 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
           updateWebview();
           return;
 
+        case "importCustomNodes":
+          console.log("HIT importCustomNodes");
+
+          this.appendMoreCustomNodes(e.data);
+          return;
+
         // When Flow is changed, but not yet saved
         case "addEdit":
           // TODO: rewrite all file, perhaps only append to file
@@ -191,7 +198,7 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
     );
     let fileText = createCustomNodeCollection(payload, compiler);
 
-    if (customNodeJsonFile.length !== 0) {
+    if (await isCustomNodeExisted()) {
       const fileData = await vscode.workspace.fs.readFile(
         vscode.Uri.file(path + "/.customNodes.json")
       );
@@ -199,6 +206,33 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
       fileText = addCustomNodeCollection(curNodes, payload, compiler);
     }
     writeDataToCustomNodesCollection(fileText, path);
+  }
+
+  private async appendMoreCustomNodes(text: Record<string, any>) {
+    const path = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
+    if (await isCustomNodeExisted()) {
+      const fileData = await vscode.workspace.fs.readFile(
+        vscode.Uri.file(path + "/.customNodes.json")
+      );
+      const curNodes = flow([convertUint8ArrayToString, parseJSON])(fileData);
+      const incomingNodes = parseJSON(text.payload);
+      if (curNodes.compiler === incomingNodes.compiler) {
+        const newFileData = {
+          ...incomingNodes,
+          customNodes: [...curNodes.customNodes, ...incomingNodes.customNodes],
+        };
+        writeDataToCustomNodesCollection(JSON.stringify(newFileData), path);
+      } else {
+        console.error(
+          "Different compiler version, current .customNode.json file compiler is " +
+            curNodes.compiler +
+            " while the imported file has " +
+            incomingNodes.compiler
+        );
+      }
+    } else {
+      writeDataToCustomNodesCollection(text.payload, path);
+    }
   }
 
   /**
