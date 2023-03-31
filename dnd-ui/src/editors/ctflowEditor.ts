@@ -298,19 +298,19 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
   /**
    * Called by VS Code when the user saves the document.
    */
-  // async save(cancellation: vscode.CancellationToken): Promise<void> {
-  // 	await this.saveAs(this.uri, cancellation);
-  // 	this._savedEdits = Array.from(this._edits);
-  // }
+  async save(cancellation: vscode.CancellationToken): Promise<void> {
+  	// await this.saveAs(this.uri, cancellation);
+  	// this._savedEdits = Array.from(this._edits);
+  }
 
   /**
    * Called by VS Code when the user saves the document to a new location.
    */
-  // async saveAs(targetResource: vscode.Uri, cancellation: vscode.CancellationToken): Promise<void> {
-  // 	const fileData = await this._delegate.getFileData();
-  // 	if (cancellation.isCancellationRequested) {
-  // 		return;
-  // 	}
-  // 	await vscode.workspace.fs.writeFile(targetResource, fileData);
-  // }
+  async saveAs(targetResource: vscode.Uri, cancellation: vscode.CancellationToken): Promise<void> {
+  	// const fileData = await this._delegate.getFileData();
+  	// if (cancellation.isCancellationRequested) {
+  	// 	return;
+  	// }
+  	// await vscode.workspace.fs.writeFile(targetResource, fileData);
+  }
 }
