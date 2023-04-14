@@ -11,13 +11,21 @@ import { vscode } from '../utilities/vscode';
 import CustomNodeForm from './CustomNodeForm';
 import CustomNodeList from './CustomNodeList';
 import SuccessBtn from './share/SuccessBtn';
+import useUndoRedo from '../hooks/useUndoRedo';
 
 interface IMenuPanelProps {
   viewport: Viewport;
   setNodes: Dispatch<SetStateAction<Node<NodeDataType>[]>>;
+  undo: any;
+  redo: any;
 }
 
-export default function MenuPanel({ viewport, setNodes }: IMenuPanelProps) {
+export default function MenuPanel({
+  viewport,
+  setNodes,
+  undo,
+  redo,
+}: IMenuPanelProps) {
   const [show, setShow] = useState(false);
   const [modal, setModal] = useState<number>(0);
   const [file, setFile] = useState<File>();
@@ -101,6 +109,24 @@ export default function MenuPanel({ viewport, setNodes }: IMenuPanelProps) {
               onClick={openFileUpload}
             >
               <span>Import</span>
+            </button>
+          </div>
+          <div className="hover:bg-slate-200 p-2 rounded">
+            <button
+              id="custom-node-openner"
+              className="flex justify-between items-center w-full"
+              onClick={undo}
+            >
+              <span>Undo</span>
+            </button>
+          </div>
+          <div className="hover:bg-slate-200 p-2 rounded">
+            <button
+              id="custom-node-openner"
+              className="flex justify-between items-center w-full"
+              onClick={redo}
+            >
+              <span>Redo</span>
             </button>
           </div>
         </Panel>
