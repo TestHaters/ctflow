@@ -256,15 +256,13 @@ const Editor = () => {
     return compiledText;
   }
 
-  // function handleMoveEnd(_: unknown, curViewport: Viewport) {
-  //   viewport.current = curViewport;
-  // }
+  function handleMoveEnd(_: unknown, curViewport: Viewport) {
+    viewport.current = curViewport;
+  }
+  
   const dragStop = useCallback(() => {
     takeSnapshot();
   }, [takeSnapshot]);
-  const handleMoveEnd = useCallback((_: unknown, curViewport: Viewport) => {
-    viewport.current = curViewport;
-  }, []);
 
   return (
     <div style={{ height: windowHeight, width: windowWidth }}>
