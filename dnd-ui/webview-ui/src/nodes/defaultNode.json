@@ -1,0 +1,20 @@
+{
+  "buttonNode": {
+    "name": "User click",
+    "type": "buttonNode",
+    "description": "This is button node",
+    "placeholder": "Your selection"
+  },
+  "waitNode": {
+    "name": "Wait",
+    "type": "waitNode",
+    "description": "This is wait node",
+    "placeholder": "Wait time"
+  },
+  "visitNode": {
+    "name": "User visit",
+    "type": "visitNode",
+    "description": "This is visit node",
+    "placeholder": "Page url"
+  }
+}

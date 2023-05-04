@@ -39,6 +39,7 @@ import { toast } from 'react-toastify';
 import MenuPanel from '../components/MenuPanel';
 import CustomEdge from '../components/CustomEdge';
 import CustomNodeRender from '../nodes/CustomNodeRender';
+import AnyNode from '../nodes/AnyNode';
 
 const fitViewOptions: FitViewOptions = {
   padding: 0.2,
@@ -57,15 +58,16 @@ const initialEdges: Edge[] = [];
 const defaultViewport: Viewport = { x: 0, y: 0, zoom: 1.5 };
 
 const nodeTypes = {
-  buttonNode: ButtonNode,
+  // buttonNode: ButtonNode,
   textInputType: TextInputNode,
-  visitNode: VisitPageNode,
+  // visitNode: VisitPageNode,
   checkboxNode: CheckboxNode,
   containsNode: ContainsNode,
-  waitNode: WaitNode,
+  // waitNode: WaitNode,
   CTFlowRecorderNode: CTFlowRecorderNode,
   codeInjectionNode: CodeInjectionNode,
   customNode: CustomNodeRender,
+  anyNode: AnyNode,
 };
 
 const edgeTypes = {

@@ -49,12 +49,19 @@ export class Compiler {
   static findCompiler(node: any): typeof ButtonNodeCompiler {
     console.log('Node: ', node);
     switch (node.type) {
-      case 'ButtonNode': {
-        return ButtonNodeCompiler;
+      case 'anyNode': {
+        if (node.data.componentType === 'buttonNode') {
+          return ButtonNodeCompiler;
+        } else if (node.data.componentType === 'visitNode') {
+          return VisitPageNodeCompiler;
+        }
       }
-      case 'visitNode': {
-        return VisitPageNodeCompiler;
-      }
+      // case 'ButtonNode': {
+      //   return ButtonNodeCompiler;
+      // }
+      // case 'visitNode': {
+      //   return VisitPageNodeCompiler;
+      // }
       case 'textInputType': {
         return TextInputNodeCompiler;
       }
@@ -64,9 +71,9 @@ export class Compiler {
       case 'containsNode': {
         return ContainsNodeCompiler;
       }
-      case 'waitNode': {
-        return WaitNodeCompiler;
-      }
+      // case 'waitNode': {
+      //   return WaitNodeCompiler;
+      // }
       case 'codeInjectionNode': {
         return CodeInjectionNodeCompiler;
       }
@@ -74,7 +81,7 @@ export class Compiler {
         return CustomNodeCompiler;
       }
       case 'CTFlowRecorderNode': {
-        return CTFlowRecorderCompiler
+        return CTFlowRecorderCompiler;
       }
       default: {
         console.log(node, node.type);

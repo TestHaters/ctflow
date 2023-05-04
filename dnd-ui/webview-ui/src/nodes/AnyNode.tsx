@@ -1,28 +1,43 @@
 // @ts-nocheck
+import defaultNodes from './defaultNode.json';
 import { memo, useEffect, useState } from 'react';
 import { Handle, Position, useReactFlow } from 'reactflow';
 import { useStore } from '../context/store';
 import { TextInput } from '../models/TextInput';
+const iconsMap = {
+  buttonNode: 'fa-arrow-pointer',
+  visitNode: 'fa-door-open',
+  waitNode: 'fa-spinner',
+};
 
-const ButtonNode = (props) => {
+const AnyNode = (props) => {
   const { id, data, isConnectable, xPos, yPos } = props;
   const reactFlowInstance = useReactFlow();
+  const { sourceHandleId, targetHandleId, inPorts, componentType } = data;
 
-  const [name, setName] = useState(data?.inPorts?.field || '');
+  const [text, setText] = useState<string>(
+    componentType !== 'visitNode'
+      ? data?.inPorts?.field || ''
+      : data?.inPorts?.url || ''
+  );
+  // const [name, setName] = useState(data?.inPorts?.field || '');
   const [description, setDescription] = useState(
     data?.inPorts?.description || ''
   );
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const [edges] = useStore((store) => store.edges);
-  const { sourceHandleId, targetHandleId, inPorts } = data;
+  const nodeData = defaultNodes[componentType];
 
   function commitChange(params: any) {
     const inputNode = new TextInput({
       id,
-      type: 'buttonNode',
+      type: 'anyNode',
       data,
       position: { x: xPos, y: yPos },
-      inPorts: { description, field: name },
+      inPorts:
+        componentType !== 'visitNode'
+          ? { description, field: text }
+          : { description, url },
       outPorts: {},
     });
     setNodeStore({
@@ -43,17 +58,17 @@ const ButtonNode = (props) => {
 
   function handleChange(event: KeyboardEvent<HTMLInputElement>) {
     event.preventDefault();
-    setName(event.target.value);
+    setText(event.target.value);
   }
 
   useEffect(() => {
     setNodeStore({
       nodes: {
         ...nodesStore,
-        [id]: { ...nodesStore[id], inPorts: { field: name, description } },
+        [id]: { ...nodesStore[id], inPorts: { field: text, description } },
       },
     });
-  }, [name, description]);
+  }, [text, description]);
 
   return (
     <div className="w-48">
@@ -93,24 +108,29 @@ const ButtonNode = (props) => {
       <div>
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600  rounded-tl rounded-tr">
           <span className="mr-1">
-            <i className="fa-solid fa-arrow-pointer"></i>
+            <i className={`fa-solid ${iconsMap[componentType]}`}></i>
           </span>
-          <label>User click</label>
+          <label>{nodeData.name}</label>
           <span className="float-right" onClick={handleRemoveNode}>
             <i className="fa-solid fa-xmark"></i>
           </span>
         </div>
 
-        <div className="p-2 border-solid border-[1px] border-t-0 border-b-0 border-gray-600  "></div>
-
+        {/* <InputsRender
+          type={componentType}
+          value={text}
+          onChange={handleChange}
+          defaultValue={inPorts?.field}
+          placeholder={nodeData.placeholder}
+        /> */}
         <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
           <input
             type="text"
             className="nodrag"
-            value={name}
+            value={text}
             onChange={handleChange}
             defaultValue={inPorts?.field}
-            placeholder="Your selector"
+            placeholder={nodeData.placeholder}
             style={{ color: 'black', paddingLeft: '4px' }}
           />
         </div>
@@ -128,4 +148,4 @@ const ButtonNode = (props) => {
   );
 };
 
-export default memo(ButtonNode);
+export default memo(AnyNode);
