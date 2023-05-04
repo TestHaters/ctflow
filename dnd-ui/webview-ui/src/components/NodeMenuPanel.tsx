@@ -2,6 +2,7 @@
 import { Dispatch, memo, SetStateAction, useRef } from 'react';
 import { Panel } from 'reactflow';
 import { RFNode } from '../models/NodeFactory';
+import { useStore } from '../context/store';
 
 interface INodeMenuPanel {
   setShowMenu: Dispatch<SetStateAction<boolean>>;
@@ -17,8 +18,9 @@ function NodeMenuPanel({
   showMenu,
 }: INodeMenuPanel) {
   const nodeMenuRef = useRef(null);
+  const [takeSnapshot] = useStore(store => store.takeSnapshot);
 
-  function handleClick(event) {
+  async function handleClick(event) {
     const { x, y, zoom } = viewport;
     const curX = x / zoom;
     const curY = y / zoom;
@@ -26,8 +28,9 @@ function NodeMenuPanel({
       type: event.target.getAttribute('id'),
       position: { x: event.clientX - curX + 20, y: event.clientY - curY + 20 },
     });
-    setNodes((prev) => [...prev, newNode]);
+    await setNodes((prev) => [...prev, newNode]);
     setShowMenu(false);
+    takeSnapshot();
   }
 
   return (

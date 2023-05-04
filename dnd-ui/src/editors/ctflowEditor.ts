@@ -116,8 +116,6 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
           return;
 
         case "importCustomNodes":
-          console.log("HIT importCustomNodes");
-
           this.appendMoreCustomNodes(e.data);
           return;
 
@@ -184,7 +182,6 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
     let yamlFilePath = this.textDocument?.uri.fsPath.includes(".")
       ? this.textDocument?.uri.fsPath
       : "";
-    console.log("vscode.Uri.file(yamlFilePath)", vscode.Uri.file(yamlFilePath));
     vscode.workspace.fs.writeFile(vscode.Uri.file(yamlFilePath), writeData);
   }
 
