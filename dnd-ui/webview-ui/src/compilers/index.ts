@@ -54,6 +54,8 @@ export class Compiler {
           return ButtonNodeCompiler;
         } else if (node.data.componentType === 'visitNode') {
           return VisitPageNodeCompiler;
+        } else if (node.data.componentType === 'waitNode') {
+          return WaitNodeCompiler;
         }
       }
       // case 'ButtonNode': {

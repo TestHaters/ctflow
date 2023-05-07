@@ -21,7 +21,7 @@ function NodeMenuPanel({
   const nodeMenuRef = useRef(null);
   const [takeSnapshot] = useStore(store => store.takeSnapshot);
 
-  function handleClick(event, componentType) {
+  async function handleClick(event, componentType) {
     const { x, y, zoom } = viewport;
     const curX = x / zoom;
     const curY = y / zoom;
