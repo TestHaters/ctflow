@@ -3,6 +3,7 @@ import { Dispatch, memo, SetStateAction, useRef } from 'react';
 import { Panel } from 'reactflow';
 import defaultNodes from '../nodes/defaultNode.json';
 import { RFNode } from '../models/NodeFactory';
+import { useStore } from '../context/store';
 
 interface INodeMenuPanel {
   setShowMenu: Dispatch<SetStateAction<boolean>>;
@@ -18,6 +19,7 @@ function NodeMenuPanel({
   showMenu,
 }: INodeMenuPanel) {
   const nodeMenuRef = useRef(null);
+  const [takeSnapshot] = useStore(store => store.takeSnapshot);
 
   function handleClick(event, componentType) {
     const { x, y, zoom } = viewport;
@@ -30,8 +32,9 @@ function NodeMenuPanel({
       },
       position: { x: event.clientX - curX + 20, y: event.clientY - curY + 20 },
     });
-    setNodes((prev) => [...prev, newNode]);
+    await setNodes((prev) => [...prev, newNode]);
     setShowMenu(false);
+    takeSnapshot();
   }
 
   return (
