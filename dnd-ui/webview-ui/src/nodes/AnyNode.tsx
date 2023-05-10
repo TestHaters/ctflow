@@ -5,9 +5,12 @@ import { Handle, Position, useReactFlow } from 'reactflow';
 import { useStore } from '../context/store';
 import { TextInput } from '../models/TextInput';
 const iconsMap = {
-  buttonNode: 'fa-arrow-pointer',
-  visitNode: 'fa-door-open',
-  waitNode: 'fa-spinner',
+  buttonNode: 'fa-solid fa-arrow-pointer',
+  visitNode: 'fa-solid fa-door-open',
+  waitNode: 'fa-solid fa-spinner',
+  checkboxNode: 'fa-solid fa-square-check',
+  textInputNode: 'fa-regular fa-keyboard',
+  containsNode: 'fa-solid fa-box',
 };
 
 const AnyNode = (props) => {
@@ -15,12 +18,10 @@ const AnyNode = (props) => {
   const reactFlowInstance = useReactFlow();
   const { sourceHandleId, targetHandleId, inPorts, componentType } = data;
 
-  const [text, setText] = useState<string>(
-    componentType !== 'visitNode'
-      ? data?.inPorts?.field || ''
-      : data?.inPorts?.url || ''
+  const [firstInput, setText] = useState<string>(data?.inPorts?.field || '');
+  const [secondInput, setSecondInput] = useState<string>(
+    data?.inPorts?.value || ''
   );
-  // const [name, setName] = useState(data?.inPorts?.field || '');
   const [description, setDescription] = useState(
     data?.inPorts?.description || ''
   );
@@ -34,10 +35,11 @@ const AnyNode = (props) => {
       type: 'anyNode',
       data,
       position: { x: xPos, y: yPos },
-      inPorts:
-        componentType !== 'visitNode'
-          ? { description, field: text }
-          : { description, url },
+      inPorts: {
+        description,
+        field: firstInput,
+        value: secondInput,
+      },
       outPorts: {},
     });
     setNodeStore({
@@ -56,19 +58,29 @@ const AnyNode = (props) => {
     reactFlowInstance.setNodes((nds) => nds.filter((node) => node.id !== id));
   }
 
-  function handleChange(event: KeyboardEvent<HTMLInputElement>) {
+  function handleChange(event: KeyboardEvent<HTMLInputElement>, index: number) {
     event.preventDefault();
-    setText(event.target.value);
+
+    const value =
+      componentType === 'checkboxNode'
+        ? event.target.checked
+        : event.target.value;
+    const setTextState = index === 0 ? setText : setSecondInput;
+    console.log(value, index);
+    setTextState(value);
   }
 
   useEffect(() => {
     setNodeStore({
       nodes: {
         ...nodesStore,
-        [id]: { ...nodesStore[id], inPorts: { field: text, description } },
+        [id]: {
+          ...nodesStore[id],
+          inPorts: { field: firstInput, value: secondInput, description },
+        },
       },
     });
-  }, [text, description]);
+  }, [firstInput, secondInput, description]);
 
   return (
     <div className="w-48">
@@ -108,7 +120,7 @@ const AnyNode = (props) => {
       <div>
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600  rounded-tl rounded-tr">
           <span className="mr-1">
-            <i className={`fa-solid ${iconsMap[componentType]}`}></i>
+            <i className={iconsMap[componentType]}></i>
           </span>
           <label>{nodeData.name}</label>
           <span className="float-right" onClick={handleRemoveNode}>
@@ -116,24 +128,52 @@ const AnyNode = (props) => {
           </span>
         </div>
 
-        {/* <InputsRender
-          type={componentType}
-          value={text}
-          onChange={handleChange}
-          defaultValue={inPorts?.field}
-          placeholder={nodeData.placeholder}
-        /> */}
-        <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
-          <input
-            type="text"
-            className="nodrag"
-            value={text}
-            onChange={handleChange}
-            defaultValue={inPorts?.field}
-            placeholder={nodeData.placeholder}
-            style={{ color: 'black', paddingLeft: '4px' }}
-          />
-        </div>
+        {defaultNodes[componentType].inputs.map((input, index) => {
+          const defaultValue =
+            index === 0 ? inPorts?.field || '' : inPorts?.value || '';
+          const value = index === 0 ? firstInput : secondInput;
+          return (
+            <div
+              key={input.label + index}
+              className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br"
+            >
+              {componentType === 'checkboxNode' && input.type === 'checkbox' ? (
+                <>
+                  <label
+                    htmlFor={input.htmlFor + index}
+                    className="text-[11px] mr-1"
+                  >
+                    {input.label}
+                  </label>
+                  <input
+                    type={input.type}
+                    className="nodrag"
+                    checked={value}
+                    onChange={(event) => handleChange(event, index)}
+                    id={input.htmlFor + index}
+                  />
+                </>
+              ) : (
+                <>
+                  {input.label && (
+                    <div>
+                      <label className="text-[11px]">{input.label}</label>
+                    </div>
+                  )}
+                  <input
+                    type={input.type}
+                    className="nodrag"
+                    value={value}
+                    onChange={(event) => handleChange(event, index)}
+                    defaultValue={defaultValue}
+                    placeholder={input.placeholder}
+                    style={{ color: 'black', paddingLeft: '4px' }}
+                  />
+                </>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       <Handle

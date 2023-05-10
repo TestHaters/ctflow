@@ -59,10 +59,10 @@ const defaultViewport: Viewport = { x: 0, y: 0, zoom: 1.5 };
 
 const nodeTypes = {
   // buttonNode: ButtonNode,
-  textInputType: TextInputNode,
+  // textInputType: TextInputNode,
   // visitNode: VisitPageNode,
-  checkboxNode: CheckboxNode,
-  containsNode: ContainsNode,
+  // checkboxNode: CheckboxNode,
+  // containsNode: ContainsNode,
   // waitNode: WaitNode,
   CTFlowRecorderNode: CTFlowRecorderNode,
   codeInjectionNode: CodeInjectionNode,

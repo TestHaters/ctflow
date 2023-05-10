@@ -56,6 +56,16 @@ export class Compiler {
           return VisitPageNodeCompiler;
         } else if (node.data.componentType === 'waitNode') {
           return WaitNodeCompiler;
+        } else if (node.data.componentType === 'textInputNode') {
+          return TextInputNodeCompiler;
+        } else if (node.data.componentType === 'checkboxNode') {
+          console.log('CheckboxNodeCompiler');
+          
+          return CheckboxNodeCompiler;
+        } else if (node.data.componentType === 'containsNode') {
+          console.log('ContainsNodeCompiler');
+          
+          return ContainsNodeCompiler;
         }
       }
       // case 'ButtonNode': {
@@ -64,15 +74,15 @@ export class Compiler {
       // case 'visitNode': {
       //   return VisitPageNodeCompiler;
       // }
-      case 'textInputType': {
-        return TextInputNodeCompiler;
-      }
-      case 'checkboxNode': {
-        return CheckboxNodeCompiler;
-      }
-      case 'containsNode': {
-        return ContainsNodeCompiler;
-      }
+      // case
+      //   return TextInputNodeCompiler;
+      // }
+      // case 'checkboxNode': {
+      //   return CheckboxNodeCompiler;
+      // }
+      // case 'containsNode': {
+      //   return ContainsNodeCompiler;
+      // }
       // case 'waitNode': {
       //   return WaitNodeCompiler;
       // }
