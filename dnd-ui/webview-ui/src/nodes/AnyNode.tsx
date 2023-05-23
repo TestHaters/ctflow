@@ -4,6 +4,7 @@ import { memo, useEffect, useState } from 'react';
 import { Handle, Position, useReactFlow } from 'reactflow';
 import { useStore } from '../context/store';
 import { TextInput } from '../models/TextInput';
+import InputsRender from './InputsRender';
 const iconsMap = {
   buttonNode: 'fa-solid fa-arrow-pointer',
   visitNode: 'fa-solid fa-door-open',
@@ -11,6 +12,7 @@ const iconsMap = {
   checkboxNode: 'fa-solid fa-square-check',
   textInputNode: 'fa-regular fa-keyboard',
   containsNode: 'fa-solid fa-box',
+  codeInjectionNode: 'fa-solid fa-syringe',
 };
 
 const AnyNode = (props) => {
@@ -137,40 +139,17 @@ const AnyNode = (props) => {
               key={input.label + index}
               className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br"
             >
-              {componentType === 'checkboxNode' && input.type === 'checkbox' ? (
-                <>
-                  <label
-                    htmlFor={input.htmlFor + index}
-                    className="text-[11px] mr-1"
-                  >
-                    {input.label}
-                  </label>
-                  <input
-                    type={input.type}
-                    className="nodrag"
-                    checked={value}
-                    onChange={(event) => handleChange(event, index)}
-                    id={input.htmlFor + index}
-                  />
-                </>
-              ) : (
-                <>
-                  {input.label && (
-                    <div>
-                      <label className="text-[11px]">{input.label}</label>
-                    </div>
-                  )}
-                  <input
-                    type={input.type}
-                    className="nodrag"
-                    value={value}
-                    onChange={(event) => handleChange(event, index)}
-                    defaultValue={defaultValue}
-                    placeholder={input.placeholder}
-                    style={{ color: 'black', paddingLeft: '4px' }}
-                  />
-                </>
-              )}
+              <InputsRender
+                componentType={componentType}
+                type={input.type}
+                label={input.label}
+                index={index}
+                htmlFor={input.htmlFor}
+                value={value}
+                defaultValue={defaultValue}
+                placeholder={input.placeholder}
+                onChange={(event) => handleChange(event, index)}
+              />
             </div>
           );
         })}

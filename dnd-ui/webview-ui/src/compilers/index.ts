@@ -59,14 +59,15 @@ export class Compiler {
         } else if (node.data.componentType === 'textInputNode') {
           return TextInputNodeCompiler;
         } else if (node.data.componentType === 'checkboxNode') {
-          console.log('CheckboxNodeCompiler');
-          
           return CheckboxNodeCompiler;
         } else if (node.data.componentType === 'containsNode') {
-          console.log('ContainsNodeCompiler');
-          
           return ContainsNodeCompiler;
+        } else if (node.data.componentType === 'codeInjectionNode') {
+          console.log('codeInjectionNode Compiler');
+
+          return CodeInjectionNodeCompiler;
         }
+        return ButtonNodeCompiler;
       }
       // case 'ButtonNode': {
       //   return ButtonNodeCompiler;
@@ -86,9 +87,9 @@ export class Compiler {
       // case 'waitNode': {
       //   return WaitNodeCompiler;
       // }
-      case 'codeInjectionNode': {
-        return CodeInjectionNodeCompiler;
-      }
+      // case 'codeInjectionNode': {
+      //   return CodeInjectionNodeCompiler;
+      // }
       case 'customNode': {
         return CustomNodeCompiler;
       }

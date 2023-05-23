@@ -65,7 +65,7 @@ function NodeMenuPanel({
               const name =
                 node.type.charAt(0).toUpperCase() + node.type.slice(1);
               return (
-                <div className="hover:bg-slate-200 p-2 rounded">
+                <div className="hover:bg-slate-200 p-2 rounded" key={node.id}>
                   <button
                     id="anyNode"
                     onClick={(event) => handleClick(event, node.type)}
@@ -82,11 +82,11 @@ function NodeMenuPanel({
               </button>
             </div>
 
-            <div className="hover:bg-slate-200 p-2 rounded">
+            {/* <div className="hover:bg-slate-200 p-2 rounded">
               <button id="codeInjectionNode" onClick={handleClick}>
                 Code injection node
               </button>
-            </div>
+            </div> */}
           </Panel>
         </section>
       )}

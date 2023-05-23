@@ -85,5 +85,17 @@
         "placeholder": "Your value"
       }
     ]
+  },
+  "codeInjectionNode": {
+    "name": "Code injection",
+    "type": "codeInjectionNode",
+    "description": "This node injects code into the page",
+    "inputs": [
+      {
+        "label": "Code",
+        "type": "text",
+        "placeholder": "Your code"
+      }
+    ]
   }
 }
