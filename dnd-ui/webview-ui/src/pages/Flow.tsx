@@ -1,7 +1,9 @@
 import 'reactflow/dist/style.css';
 
-import { get, omit, pick } from 'lodash';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import get from 'lodash/get';
+import omit from 'lodash/omit';
+import pick from 'lodash/pick';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactFlow, {
   addEdge,
   Background,
@@ -39,6 +41,7 @@ import MenuPanel from '../components/MenuPanel';
 import CustomEdge from '../components/CustomEdge';
 import CustomNodeRender from '../nodes/CustomNodeRender';
 import useUndoRedo from '../hooks/useUndoRedo';
+import { IDetail, IOptions } from './types';
 
 const fitViewOptions: FitViewOptions = {
   padding: 0.2,
@@ -118,7 +121,10 @@ const Editor = () => {
     [takeSnapshot]
   );
 
-  function reloadPageByFileData(fileData: any, firstLoad?: boolean) {
+  function reloadPageByFileData(
+    fileData: { type: string; text: string },
+    firstLoad?: boolean
+  ) {
     const payload = YAML.parse(fileData.text);
     const allNodes = Object.values(payload.nodes);
     const allEdges = Object.values(payload.edges);
@@ -145,7 +151,7 @@ const Editor = () => {
   }
 
   // Reload UI (reactflow) by store
-  function reloadReactFlow(storeState: any) {
+  function reloadReactFlow(storeState: { nodes: Node[]; edges: Edge[] }) {
     const newNodes = Object.values(storeState.nodes).map((node) => {
       const cNode = {
         ...pick(node, ['id', 'position', 'type']),
@@ -164,7 +170,7 @@ const Editor = () => {
     setEdges(Object.values(storeState.edges));
   }
 
-  function handleCallback(event: any) {
+  function handleCallback(event: { detail?: IDetail; [key: string]: any }) {
     if (
       event.detail &&
       event.detail.type === 'fileUpdate' &&
@@ -188,7 +194,7 @@ const Editor = () => {
   }
 
   function handleSave() {
-    const inputNodes: any = nodes.reduce((acc, item) => {
+    const inputNodes: Record<string, IOptions> = nodes.reduce((acc, item) => {
       // @ts-ignore
       acc[item.id] = {
         ...pick(item, ['id', 'position', 'type']),
@@ -202,10 +208,9 @@ const Editor = () => {
       };
       return acc;
     }, {});
-    console.log('inputNodes', inputNodes);
 
     // verify that nodes of edge are exist
-    const validEdges = edges.filter((edge: any) => {
+    const validEdges = edges.filter((edge: Edge) => {
       return inputNodes[edge.source] && inputNodes[edge.target];
     });
 
@@ -215,9 +220,9 @@ const Editor = () => {
       return acc;
     }, {});
 
-    let payload = { nodes: inputNodes, edges: inputEdges };
+    const payload = { nodes: inputNodes, edges: inputEdges };
     setStore({ ...payload });
-    let yamlData = YAML.stringify(payload);
+    const yamlData = YAML.stringify(payload);
 
     // When testing on browser, the vscode.postMessage won't work
     // we will manually emit fileUpdate event
@@ -259,7 +264,7 @@ const Editor = () => {
   function handleMoveEnd(_: unknown, curViewport: Viewport) {
     viewport.current = curViewport;
   }
-  
+
   const dragStop = useCallback(() => {
     takeSnapshot();
   }, [takeSnapshot]);
