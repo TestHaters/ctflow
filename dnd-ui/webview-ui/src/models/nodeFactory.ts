@@ -3,6 +3,7 @@ interface IRFNode {
   id?: string | number;
   data?: { color?: string; label?: string };
   position?: { x: number; y: number };
+  componentType?: string;
   style?: Record<string, string | number>;
   type?: string;
   width?: number;
@@ -16,14 +17,25 @@ export class RFNode {
   position?: { x: number; y: number };
   style?: Record<string, string | number>;
   type?: string;
+  componentType?: string;
   width?: number;
   height?: number;
-  constructor({ id, data, position, style, type, width, height }: IRFNode) {
+  constructor({
+    id,
+    data,
+    position,
+    style,
+    type,
+    componentType,
+    width,
+    height,
+  }: IRFNode) {
     this.id = id || uuid();
     this.data = data || {};
     this.position = position || { x: 20, y: 250 };
     this.style = style || {};
     this.type = type;
+    this.componentType = componentType;
     this.width = width || 168;
     this.height = height || 125;
   }

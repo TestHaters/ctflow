@@ -1,32 +1,47 @@
 // @ts-nocheck
-import React, { memo, useEffect, useRef, useState } from 'react';
+import defaultNodes from './defaultNode.json';
+import { memo, useEffect, useState } from 'react';
 import { Handle, Position, useReactFlow } from 'reactflow';
-import { v4 as uuid } from 'uuid';
 import { useStore } from '../context/store';
 import { TextInput } from '../models/TextInput';
-import { size } from 'lodash';
+import InputsRender from './InputsRender';
+const iconsMap = {
+  buttonNode: 'fa-solid fa-arrow-pointer',
+  visitNode: 'fa-solid fa-door-open',
+  waitNode: 'fa-solid fa-spinner',
+  checkboxNode: 'fa-solid fa-square-check',
+  textInputNode: 'fa-regular fa-keyboard',
+  containsNode: 'fa-solid fa-box',
+  codeInjectionNode: 'fa-solid fa-syringe',
+};
 
-const noType = { email: false, password: false, text: false };
-
-const ButtonNode = (props) => {
+const AnyNode = (props) => {
   const { id, data, isConnectable, xPos, yPos } = props;
   const reactFlowInstance = useReactFlow();
+  const { sourceHandleId, targetHandleId, inPorts, componentType } = data;
 
-  const [name, setName] = useState(data?.inPorts?.field || '');
+  const [firstInput, setText] = useState<string>(data?.inPorts?.field || '');
+  const [secondInput, setSecondInput] = useState<string>(
+    data?.inPorts?.value || ''
+  );
   const [description, setDescription] = useState(
     data?.inPorts?.description || ''
   );
   const [nodesStore, setNodeStore] = useStore((store) => store.nodes);
   const [edges] = useStore((store) => store.edges);
-  const { sourceHandleId, targetHandleId, inPorts } = data;
+  const nodeData = defaultNodes[componentType];
 
   function commitChange(params: any) {
     const inputNode = new TextInput({
       id,
-      type: 'buttonNode',
+      type: 'anyNode',
       data,
       position: { x: xPos, y: yPos },
-      inPorts: { description, field: name },
+      inPorts: {
+        description,
+        field: firstInput,
+        value: secondInput,
+      },
       outPorts: {},
     });
     setNodeStore({
@@ -45,19 +60,29 @@ const ButtonNode = (props) => {
     reactFlowInstance.setNodes((nds) => nds.filter((node) => node.id !== id));
   }
 
-  function handleChange(event: KeyboardEvent<HTMLInputElement>) {
+  function handleChange(event: KeyboardEvent<HTMLInputElement>, index: number) {
     event.preventDefault();
-    setName(event.target.value);
+
+    const value =
+      componentType === 'checkboxNode'
+        ? event.target.checked
+        : event.target.value;
+    const setTextState = index === 0 ? setText : setSecondInput;
+    console.log(value, index);
+    setTextState(value);
   }
 
   useEffect(() => {
     setNodeStore({
       nodes: {
         ...nodesStore,
-        [id]: { ...nodesStore[id], inPorts: { field: name, description } },
+        [id]: {
+          ...nodesStore[id],
+          inPorts: { field: firstInput, value: secondInput, description },
+        },
       },
     });
-  }, [name, description]);
+  }, [firstInput, secondInput, description]);
 
   return (
     <div className="w-48">
@@ -97,27 +122,37 @@ const ButtonNode = (props) => {
       <div>
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600  rounded-tl rounded-tr">
           <span className="mr-1">
-            <i className="fa-solid fa-arrow-pointer"></i>
+            <i className={iconsMap[componentType]}></i>
           </span>
-          <label>User click</label>
+          <label>{nodeData.name}</label>
           <span className="float-right" onClick={handleRemoveNode}>
             <i className="fa-solid fa-xmark"></i>
           </span>
         </div>
 
-        <div className="p-2 border-solid border-[1px] border-t-0 border-b-0 border-gray-600  "></div>
-
-        <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
-          <input
-            type="text"
-            className="nodrag"
-            value={name}
-            onChange={handleChange}
-            defaultValue={inPorts?.field}
-            placeholder="Your selector"
-            style={{ color: 'black', paddingLeft: '4px' }}
-          />
-        </div>
+        {defaultNodes[componentType].inputs.map((input, index) => {
+          const defaultValue =
+            index === 0 ? inPorts?.field || '' : inPorts?.value || '';
+          const value = index === 0 ? firstInput : secondInput;
+          return (
+            <div
+              key={input.label + index}
+              className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br"
+            >
+              <InputsRender
+                componentType={componentType}
+                type={input.type}
+                label={input.label}
+                index={index}
+                htmlFor={input.htmlFor}
+                value={value}
+                defaultValue={defaultValue}
+                placeholder={input.placeholder}
+                onChange={(event) => handleChange(event, index)}
+              />
+            </div>
+          );
+        })}
       </div>
 
       <Handle
@@ -132,4 +167,4 @@ const ButtonNode = (props) => {
   );
 };
 
-export default memo(ButtonNode);
+export default memo(AnyNode);

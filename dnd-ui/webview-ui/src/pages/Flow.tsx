@@ -1,7 +1,7 @@
 import 'reactflow/dist/style.css';
 
 import { get, omit, pick } from 'lodash';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactFlow, {
   addEdge,
   Background,
@@ -25,19 +25,13 @@ import NodeMenuPanel from '../components/NodeMenuPanel';
 import SavePanel from '../components/SavePanel';
 import { useStore } from '../context/store';
 import { useGetWindowSize } from '../hooks/useGetWindowSize';
-import ButtonNode from '../nodes/ButtonNode';
-import CheckboxNode from '../nodes/CheckboxNode';
-import ContainsNode from '../nodes/ContainsNode';
-import TextInputNode from '../nodes/TextInputNode';
-import VisitPageNode from '../nodes/VisitPageNode';
-import WaitNode from '../nodes/WaitNode';
 import CTFlowRecorderNode from '../nodes/CTFlowRecorderNode';
-import CodeInjectionNode from '../nodes/CodeInjectionNode';
 import { vscode } from '../utilities/vscode';
 import { toast } from 'react-toastify';
 import MenuPanel from '../components/MenuPanel';
 import CustomEdge from '../components/CustomEdge';
 import CustomNodeRender from '../nodes/CustomNodeRender';
+import AnyNode from '../nodes/AnyNode';
 import useUndoRedo from '../hooks/useUndoRedo';
 
 const fitViewOptions: FitViewOptions = {
@@ -57,15 +51,9 @@ const initialEdges: Edge[] = [];
 const defaultViewport: Viewport = { x: 0, y: 0, zoom: 1.5 };
 
 const nodeTypes = {
-  buttonNode: ButtonNode,
-  textInputType: TextInputNode,
-  visitNode: VisitPageNode,
-  checkboxNode: CheckboxNode,
-  containsNode: ContainsNode,
-  waitNode: WaitNode,
   CTFlowRecorderNode: CTFlowRecorderNode,
-  codeInjectionNode: CodeInjectionNode,
   customNode: CustomNodeRender,
+  anyNode: AnyNode,
 };
 
 const edgeTypes = {
@@ -259,7 +247,7 @@ const Editor = () => {
   function handleMoveEnd(_: unknown, curViewport: Viewport) {
     viewport.current = curViewport;
   }
-  
+
   const dragStop = useCallback(() => {
     takeSnapshot();
   }, [takeSnapshot]);

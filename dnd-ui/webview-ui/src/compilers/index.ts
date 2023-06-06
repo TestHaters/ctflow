@@ -49,32 +49,52 @@ export class Compiler {
   static findCompiler(node: any): typeof ButtonNodeCompiler {
     console.log('Node: ', node);
     switch (node.type) {
-      case 'ButtonNode': {
+      case 'anyNode': {
+        if (node.data.componentType === 'buttonNode') {
+          return ButtonNodeCompiler;
+        } else if (node.data.componentType === 'visitNode') {
+          return VisitPageNodeCompiler;
+        } else if (node.data.componentType === 'waitNode') {
+          return WaitNodeCompiler;
+        } else if (node.data.componentType === 'textInputNode') {
+          return TextInputNodeCompiler;
+        } else if (node.data.componentType === 'checkboxNode') {
+          return CheckboxNodeCompiler;
+        } else if (node.data.componentType === 'containsNode') {
+          return ContainsNodeCompiler;
+        } else if (node.data.componentType === 'codeInjectionNode') {
+          console.log('codeInjectionNode Compiler');
+
+          return CodeInjectionNodeCompiler;
+        }
         return ButtonNodeCompiler;
       }
-      case 'visitNode': {
-        return VisitPageNodeCompiler;
-      }
-      case 'textInputType': {
-        return TextInputNodeCompiler;
-      }
-      case 'checkboxNode': {
-        return CheckboxNodeCompiler;
-      }
-      case 'containsNode': {
-        return ContainsNodeCompiler;
-      }
-      case 'waitNode': {
-        return WaitNodeCompiler;
-      }
-      case 'codeInjectionNode': {
-        return CodeInjectionNodeCompiler;
-      }
+      // case 'ButtonNode': {
+      //   return ButtonNodeCompiler;
+      // }
+      // case 'visitNode': {
+      //   return VisitPageNodeCompiler;
+      // }
+      // case
+      //   return TextInputNodeCompiler;
+      // }
+      // case 'checkboxNode': {
+      //   return CheckboxNodeCompiler;
+      // }
+      // case 'containsNode': {
+      //   return ContainsNodeCompiler;
+      // }
+      // case 'waitNode': {
+      //   return WaitNodeCompiler;
+      // }
+      // case 'codeInjectionNode': {
+      //   return CodeInjectionNodeCompiler;
+      // }
       case 'customNode': {
         return CustomNodeCompiler;
       }
       case 'CTFlowRecorderNode': {
-        return CTFlowRecorderCompiler
+        return CTFlowRecorderCompiler;
       }
       default: {
         console.log(node, node.type);
