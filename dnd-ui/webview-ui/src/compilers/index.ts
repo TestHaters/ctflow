@@ -1,4 +1,4 @@
-import { ButtonNodeCompiler } from './cypress/ButtonNodeCompiler';
+import { ButtonNodeCompiler } from './cypress/buttonNodeCompiler';
 import { VisitPageNodeCompiler } from './cypress/VisitPageNodeCompiler';
 import { TextInputNodeCompiler } from './cypress/TextInputNodeCompiler';
 import { CheckboxNodeCompiler } from './cypress/CheckboxNodeCompiler';
@@ -6,7 +6,6 @@ import { ContainsNodeCompiler } from './cypress/ContainsNodeCompiler';
 import { WaitNodeCompiler } from './cypress/WaitNodeCompiler';
 import { Graph } from './helpers/graph';
 import { CodeInjectionNodeCompiler } from './cypress/CodeInjectionNodeCompiler';
-import CTFlowRecorderNode from '../nodes/CTFlowRecorderNode';
 import { CTFlowRecorderCompiler } from './cypress/CTFlowRecorderCompiler';
 import { CustomNodeCompiler } from './cypress/CustomNodeCompiler';
 

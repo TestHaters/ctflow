@@ -2,7 +2,7 @@
 import { Dispatch, memo, SetStateAction, useRef } from 'react';
 import { Panel } from 'reactflow';
 import defaultNodes from '../nodes/defaultNode.json';
-import { RFNode } from '../models/NodeFactory';
+import { RFNode } from '../models/nodeFactory';
 import { useStore } from '../context/store';
 
 interface INodeMenuPanel {
