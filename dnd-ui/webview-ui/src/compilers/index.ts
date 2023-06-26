@@ -12,10 +12,10 @@ import { CustomNodeCompiler } from './cypress/CustomNodeCompiler';
 export class Compiler {
   // support multiple flow paths in a file
   static compile(store: any): string {
-    let graph = new Graph(store.nodes, store.edges);
-    let paths = graph.buildPaths();
+    const graph = new Graph(store.nodes, store.edges);
+    const paths = graph.buildPaths();
 
-    let compiledFlows = paths.map((path) => {
+    const compiledFlows = paths.map((path) => {
       let compiledText = '';
 
       // path is a list of node ids
@@ -46,7 +46,6 @@ export class Compiler {
   }
 
   static findCompiler(node: any): typeof ButtonNodeCompiler {
-    console.log('Node: ', node);
     switch (node.type) {
       case 'anyNode': {
         if (node.data.componentType === 'buttonNode') {
@@ -62,8 +61,6 @@ export class Compiler {
         } else if (node.data.componentType === 'containsNode') {
           return ContainsNodeCompiler;
         } else if (node.data.componentType === 'codeInjectionNode') {
-          console.log('codeInjectionNode Compiler');
-
           return CodeInjectionNodeCompiler;
         }
         return ButtonNodeCompiler;
