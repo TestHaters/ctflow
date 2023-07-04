@@ -1,8 +1,9 @@
 {
-  "name": "hello-world-react-vite",
-  "displayName": "hello-world-react-vite",
-  "description": "A hello world sample extension to demonstrate using React + Vite with the Webview UI Toolkit for VS Code.",
-  "version": "0.0.1",
+  "name": "CTFlow",
+  "displayName": "CTFlow",
+  "description": "Codeless Testing Flow",
+  "publisher": "ctflow",
+  "version": "0.6.2",
   "engines": {
     "vscode": "^1.46.0"
   },
@@ -14,6 +15,7 @@
     "onCustomEditor:codelessTesting.ctflow"
   ],
   "main": "./out/extension.js",
+  "browser": "./out/web/extension.js",
   "contributes": {
     "customEditors": [
       {
@@ -37,11 +39,16 @@
     "install:all": "npm install && cd webview-ui && npm install",
     "start:webview": "cd webview-ui && npm run start",
     "build:webview": "cd webview-ui && npm run build",
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm run compile && npm run package-web",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts"
+    "lint": "eslint src --ext ts",
+    "test-web": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
+    "pretest-web": "npm run compile-web",
+    "compile-web": "webpack",
+    "watch-web": "webpack --watch",
+    "package-web": "webpack --mode production"
   },
   "devDependencies": {
     "@types/glob": "^7.1.3",
@@ -50,15 +57,21 @@
     "@types/vscode": "^1.46.0",
     "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.14.1",
+    "@types/webpack-env": "^1.16.2",
     "eslint": "^7.19.0",
     "glob": "^7.1.6",
     "prettier": "^2.2.1",
     "typescript": "^4.1.3",
-    "vscode-test": "^1.5.0"
+    "vscode-test": "^1.5.0",
+    "webpack": "^5.52.1",
+    "webpack-cli": "^4.8.0",
+    "ts-loader": "^9.2.5",
+    "@vscode/test-web": "^0.0.22"
   },
   "dependencies": {
     "@testhaters/cypress-compiler": "^1.0.0",
     "dayjs": "^1.11.7",
+    "generator-code": "^1.7.5",
     "lodash.flow": "^3.5.0",
     "lodash.get": "^4.4.2",
     "lodash.omit": "^4.5.0",
