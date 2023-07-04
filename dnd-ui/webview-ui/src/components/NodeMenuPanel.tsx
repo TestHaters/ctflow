@@ -1,7 +1,9 @@
 // @ts-nocheck
 import { Dispatch, memo, SetStateAction, useRef } from 'react';
 import { Panel } from 'reactflow';
-import { RFNode } from '../models/NodeFactory';
+import defaultNodes from '../nodes/defaultNode.json';
+import { RFNode } from '../models/nodeFactory';
+import { useStore } from '../context/store';
 
 interface INodeMenuPanel {
   setShowMenu: Dispatch<SetStateAction<boolean>>;
@@ -17,17 +19,22 @@ function NodeMenuPanel({
   showMenu,
 }: INodeMenuPanel) {
   const nodeMenuRef = useRef(null);
+  const [takeSnapshot] = useStore((store) => store.takeSnapshot);
 
-  function handleClick(event) {
+  async function handleClick(event, componentType) {
     const { x, y, zoom } = viewport;
     const curX = x / zoom;
     const curY = y / zoom;
     const newNode = new RFNode({
       type: event.target.getAttribute('id'),
+      data: {
+        componentType,
+      },
       position: { x: event.clientX - curX + 20, y: event.clientY - curY + 20 },
     });
-    setNodes((prev) => [...prev, newNode]);
+    await setNodes((prev) => [...prev, newNode]);
     setShowMenu(false);
+    takeSnapshot();
   }
 
   return (
@@ -54,35 +61,20 @@ function NodeMenuPanel({
             className="bg-white rounded-lg p2 shadow-lg"
             style={{ left: 125, top: 50, width: 159, marginLeft: 10 }}
           >
-            <div className="hover:bg-slate-200 p-2 rounded">
-              <button id="visitNode" onClick={handleClick}>
-                Visit node
-              </button>
-            </div>
-
-            <div className="hover:bg-slate-200 p-2 rounded">
-              <button id="textInputType" onClick={handleClick}>
-                Typing node
-              </button>
-            </div>
-
-            <div className="hover:bg-slate-200 p-2 rounded">
-              <button id="checkboxNode" onClick={handleClick}>
-                Checkbox node
-              </button>
-            </div>
-
-            <div className="hover:bg-slate-200 p-2 rounded">
-              <button id="buttonNode" onClick={handleClick}>
-                Button node
-              </button>
-            </div>
-
-            <div className="hover:bg-slate-200 p-2 rounded">
-              <button id="containsNode" onClick={handleClick}>
-                Contains node
-              </button>
-            </div>
+            {Object.values(defaultNodes).map((node) => {
+              const name =
+                node.type.charAt(0).toUpperCase() + node.type.slice(1);
+              return (
+                <div className="hover:bg-slate-200 p-2 rounded" key={node.id}>
+                  <button
+                    id="anyNode"
+                    onClick={(event) => handleClick(event, node.type)}
+                  >
+                    {name.replace('Node', '')} Node
+                  </button>
+                </div>
+              );
+            })}
 
             <div className="hover:bg-slate-200 p-2 rounded">
               <button id="CTFlowRecorderNode" onClick={handleClick}>
@@ -90,16 +82,11 @@ function NodeMenuPanel({
               </button>
             </div>
 
-            <div className="hover:bg-slate-200 p-2 rounded">
-              <button id="waitNode" onClick={handleClick}>
-                Wait node
-              </button>
-            </div>
-            <div className="hover:bg-slate-200 p-2 rounded">
+            {/* <div className="hover:bg-slate-200 p-2 rounded">
               <button id="codeInjectionNode" onClick={handleClick}>
                 Code injection node
               </button>
-            </div>
+            </div> */}
           </Panel>
         </section>
       )}

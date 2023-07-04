@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Node, Viewport } from 'reactflow';
-import { RFNode } from '../models/NodeFactory';
+import { RFNode } from '../models/nodeFactory';
 import { NodeDataType } from '../pages/Flow';
 
 export default function CustomNodeList({

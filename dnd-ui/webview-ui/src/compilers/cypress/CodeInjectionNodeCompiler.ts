@@ -9,7 +9,7 @@ export class CodeInjectionNodeCompiler {
 
   static compile(nodeData: any): string {
     return `
-      ${nodeData.inPorts.code}
+      ${nodeData.inPorts.field}
     `;
   }
 }

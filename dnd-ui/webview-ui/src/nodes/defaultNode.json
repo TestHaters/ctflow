@@ -1,0 +1,101 @@
+{
+  "buttonNode": {
+    "name": "User click",
+    "type": "buttonNode",
+    "description": "This is button node",
+    "inputs": [
+      {
+        "label": "",
+        "type": "text",
+        "placeholder": "Your selection"
+      }
+    ]
+  },
+  "waitNode": {
+    "name": "Wait",
+    "type": "waitNode",
+    "description": "This is wait node",
+    "inputs": [
+      {
+        "label": "",
+        "type": "text",
+        "placeholder": "Wait time"
+      }
+    ]
+  },
+  "visitNode": {
+    "name": "User visit",
+    "type": "visitNode",
+    "description": "This is visit node",
+    "inputs": [
+      {
+        "label": "",
+        "type": "text",
+        "placeholder": "Page url"
+      }
+    ]
+  },
+  "textInputNode": {
+    "name": "User type",
+    "type": "textInputNode",
+    "description": "This is an input node",
+    "inputs": [
+      {
+        "label": "Selector",
+        "type": "text",
+        "placeholder": "Your selector"
+      },
+      {
+        "label": "Value",
+        "type": "text",
+        "placeholder": "Your value"
+      }
+    ]
+  },
+  "checkboxNode": {
+    "name": "Click on check box",
+    "type": "checkboxNode",
+    "description": "This is a checkbox node",
+    "inputs": [
+      {
+        "label": "Selector",
+        "type": "text",
+        "placeholder": "Your selector"
+      },
+      {
+        "label": "Status",
+        "type": "checkbox",
+        "htmlFor": "cur_checkbox"
+      }
+    ]
+  },
+  "containsNode": {
+    "name": "Check contains",
+    "type": "containsNode",
+    "description": "This node check if the page contains a text",
+    "inputs": [
+      {
+        "label": "Selector",
+        "type": "text",
+        "placeholder": "Your selector"
+      },
+      {
+        "label": "Value",
+        "type": "text",
+        "placeholder": "Your value"
+      }
+    ]
+  },
+  "codeInjectionNode": {
+    "name": "Code injection",
+    "type": "codeInjectionNode",
+    "description": "This node injects code into the page",
+    "inputs": [
+      {
+        "label": "Code",
+        "type": "text",
+        "placeholder": "Your code"
+      }
+    ]
+  }
+}

@@ -1,4 +1,4 @@
-import { ButtonNodeCompiler } from './cypress/ButtonNodeCompiler';
+import { ButtonNodeCompiler } from './cypress/buttonNodeCompiler';
 import { VisitPageNodeCompiler } from './cypress/VisitPageNodeCompiler';
 import { TextInputNodeCompiler } from './cypress/TextInputNodeCompiler';
 import { CheckboxNodeCompiler } from './cypress/CheckboxNodeCompiler';
@@ -6,17 +6,16 @@ import { ContainsNodeCompiler } from './cypress/ContainsNodeCompiler';
 import { WaitNodeCompiler } from './cypress/WaitNodeCompiler';
 import { Graph } from './helpers/graph';
 import { CodeInjectionNodeCompiler } from './cypress/CodeInjectionNodeCompiler';
-import CTFlowRecorderNode from '../nodes/CTFlowRecorderNode';
 import { CTFlowRecorderCompiler } from './cypress/CTFlowRecorderCompiler';
 import { CustomNodeCompiler } from './cypress/CustomNodeCompiler';
 
 export class Compiler {
   // support multiple flow paths in a file
   static compile(store: any): string {
-    let graph = new Graph(store.nodes, store.edges);
-    let paths = graph.buildPaths();
+    const graph = new Graph(store.nodes, store.edges);
+    const paths = graph.buildPaths();
 
-    let compiledFlows = paths.map((path) => {
+    const compiledFlows = paths.map((path) => {
       let compiledText = '';
 
       // path is a list of node ids
@@ -47,34 +46,51 @@ export class Compiler {
   }
 
   static findCompiler(node: any): typeof ButtonNodeCompiler {
-    console.log('Node: ', node);
     switch (node.type) {
-      case 'ButtonNode': {
+      case 'anyNode': {
+        if (node.data.componentType === 'buttonNode') {
+          return ButtonNodeCompiler;
+        } else if (node.data.componentType === 'visitNode') {
+          return VisitPageNodeCompiler;
+        } else if (node.data.componentType === 'waitNode') {
+          return WaitNodeCompiler;
+        } else if (node.data.componentType === 'textInputNode') {
+          return TextInputNodeCompiler;
+        } else if (node.data.componentType === 'checkboxNode') {
+          return CheckboxNodeCompiler;
+        } else if (node.data.componentType === 'containsNode') {
+          return ContainsNodeCompiler;
+        } else if (node.data.componentType === 'codeInjectionNode') {
+          return CodeInjectionNodeCompiler;
+        }
         return ButtonNodeCompiler;
       }
-      case 'visitNode': {
-        return VisitPageNodeCompiler;
-      }
-      case 'textInputType': {
-        return TextInputNodeCompiler;
-      }
-      case 'checkboxNode': {
-        return CheckboxNodeCompiler;
-      }
-      case 'containsNode': {
-        return ContainsNodeCompiler;
-      }
-      case 'waitNode': {
-        return WaitNodeCompiler;
-      }
-      case 'codeInjectionNode': {
-        return CodeInjectionNodeCompiler;
-      }
+      // case 'ButtonNode': {
+      //   return ButtonNodeCompiler;
+      // }
+      // case 'visitNode': {
+      //   return VisitPageNodeCompiler;
+      // }
+      // case
+      //   return TextInputNodeCompiler;
+      // }
+      // case 'checkboxNode': {
+      //   return CheckboxNodeCompiler;
+      // }
+      // case 'containsNode': {
+      //   return ContainsNodeCompiler;
+      // }
+      // case 'waitNode': {
+      //   return WaitNodeCompiler;
+      // }
+      // case 'codeInjectionNode': {
+      //   return CodeInjectionNodeCompiler;
+      // }
       case 'customNode': {
         return CustomNodeCompiler;
       }
       case 'CTFlowRecorderNode': {
-        return CTFlowRecorderCompiler
+        return CTFlowRecorderCompiler;
       }
       default: {
         console.log(node, node.type);
