@@ -3,7 +3,7 @@
   "displayName": "CTFlow",
   "description": "Codeless Testing Flow",
   "publisher": "ctflow",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "engines": {
     "vscode": "^1.46.0"
   },
