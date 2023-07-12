@@ -33,6 +33,12 @@ import CustomEdge from '../components/CustomEdge';
 import CustomNodeRender from '../nodes/CustomNodeRender';
 import AnyNode from '../nodes/AnyNode';
 import useUndoRedo from '../hooks/useUndoRedo';
+import ButtonNode from '../nodes/old_nodes/ButtonNode';
+import TextInputNode from '../nodes/old_nodes/TextInputNode';
+import VisitPageNode from '../nodes/old_nodes/VisitPageNode';
+import CheckboxNode from '../nodes/old_nodes/CheckboxNode';
+import ContainsNode from '../nodes/old_nodes/ContainsNode';
+import WaitNode from '../nodes/old_nodes/WaitNode';
 
 const fitViewOptions: FitViewOptions = {
   padding: 0.2,
@@ -54,6 +60,14 @@ const nodeTypes = {
   CTFlowRecorderNode: CTFlowRecorderNode,
   customNode: CustomNodeRender,
   anyNode: AnyNode,
+
+  // TODO: remove old nodes in new version
+  buttonNode: ButtonNode,
+  textInputType: TextInputNode,
+  visitNode: VisitPageNode,
+  checkboxNode: CheckboxNode,
+  containsNode: ContainsNode,
+  waitNode: WaitNode,
 };
 
 const edgeTypes = {
@@ -78,8 +92,6 @@ const Editor = () => {
 
   const onConnect = useCallback(
     (connection: Connection) => {
-      console.log('onConnect');
-
       takeSnapshot();
       setEdges((eds) => addEdge({ ...connection, type: 'customEdge' }, eds));
     },
@@ -89,7 +101,6 @@ const Editor = () => {
   const onEdgeUpdate = useCallback(
     (oldEdge: Edge, newConnection: Connection) => {
       takeSnapshot();
-      console.log('onEdgeUpdate');
 
       setEdges((els) => updateEdge(oldEdge, newConnection, els));
     },

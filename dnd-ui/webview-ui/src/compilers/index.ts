@@ -65,27 +65,29 @@ export class Compiler {
         }
         return ButtonNodeCompiler;
       }
-      // case 'ButtonNode': {
-      //   return ButtonNodeCompiler;
-      // }
-      // case 'visitNode': {
-      //   return VisitPageNodeCompiler;
-      // }
-      // case
-      //   return TextInputNodeCompiler;
-      // }
-      // case 'checkboxNode': {
-      //   return CheckboxNodeCompiler;
-      // }
-      // case 'containsNode': {
-      //   return ContainsNodeCompiler;
-      // }
-      // case 'waitNode': {
-      //   return WaitNodeCompiler;
-      // }
-      // case 'codeInjectionNode': {
-      //   return CodeInjectionNodeCompiler;
-      // }
+
+      // TODO: remove this code for old nodes compiler
+      case 'buttonNode': {
+        return ButtonNodeCompiler;
+      }
+      case 'visitNode': {
+        return VisitPageNodeCompiler;
+      }
+      case 'textInputType': {
+        return TextInputNodeCompiler;
+      }
+      case 'checkboxNode': {
+        return CheckboxNodeCompiler;
+      }
+      case 'containsNode': {
+        return ContainsNodeCompiler;
+      }
+      case 'waitNode': {
+        return WaitNodeCompiler;
+      }
+      case 'codeInjectionNode': {
+        return CodeInjectionNodeCompiler;
+      }
       case 'customNode': {
         return CustomNodeCompiler;
       }
