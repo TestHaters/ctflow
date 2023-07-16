@@ -9,7 +9,7 @@ export class VisitPageNodeCompiler {
 
   static compile(nodeData: any): string {
     return `
-      cy.visit('${nodeData.inPorts.url}')
+      cy.visit('${nodeData.inPorts.url || nodeData.inPorts.field}')
     `;
   }
 }
