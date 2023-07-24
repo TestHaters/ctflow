@@ -1,25 +1,36 @@
 import { Dispatch, SetStateAction, useState } from 'react';
+import { ICustomNode } from '../../types/customNodes';
 import { v4 as uuid } from 'uuid';
-import { vscode } from '../utilities/vscode';
-import SuccessBtn from './share/SuccessBtn';
+import { vscode } from '../../utilities/vscode';
+import EditBtn from '../share/EditBtn';
 
 export default function CustomNodeForm({
   setModal,
+  setNode,
+  node,
 }: {
   setModal: Dispatch<SetStateAction<number>>;
+  setNode: Dispatch<SetStateAction<ICustomNode | null>>;
+  node: ICustomNode | null;
 }) {
-  const [stringVals, setStringVals] = useState<Record<string, string>>({});
-  const [compiledText, setCompiledText] = useState('');
-  const [desc, setDesc] = useState('');
-  const [title, setTitle] = useState('');
+  const [stringVals, setStringVals] = useState<Record<string, string>>(
+    node?.params || {}
+  );
+  const [compiledText, setCompiledText] = useState(node?.compiledCode || '');
+  const [desc, setDesc] = useState(node?.description || '');
+  const [title, setTitle] = useState(node?.name || '');
 
-  function handleCreate() {
+  function handleEdit() {
+    if (!node?.id) {
+      console.error('Node id is not defined');
+      return;
+    }
     vscode.postMessage({
-      type: 'createCustomNode',
+      type: 'editCustomNode',
       data: {
         compiler: 'cypress',
         payload: {
-          id: uuid(),
+          id: node.id,
           name: title,
           params: {
             ...stringVals,
@@ -128,7 +139,7 @@ export default function CustomNodeForm({
           </div>
         </div>
         <div>
-          <SuccessBtn onClick={handleCreate}>Create</SuccessBtn>
+          <EditBtn onClick={handleEdit}>Edit</EditBtn>
         </div>
       </div>
     </section>

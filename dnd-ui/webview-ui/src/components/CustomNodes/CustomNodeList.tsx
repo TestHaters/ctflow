@@ -1,33 +1,39 @@
 // @ts-nocheck
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Node, Viewport } from 'reactflow';
-import { RFNode } from '../models/nodeFactory';
-import { NodeDataType } from '../pages/Flow';
+import { ICustomNode } from '../../types/customNodes';
+import { RFNode } from '../../models/nodeFactory';
+import { NodeDataType } from '../../pages/Flow';
 
 export default function CustomNodeList({
   setShow,
   setModal,
   viewport,
   setNodes,
+  setCurNode,
 }: {
   setShow: Dispatch<SetStateAction<boolean>>;
   setModal: Dispatch<SetStateAction<number>>;
   viewport: Viewport;
   setNodes: Dispatch<SetStateAction<Node<NodeDataType>[]>>;
+  setCurNode: Dispatch<SetStateAction<ICustomNode | null>>;
 }) {
-  const [customNodes, setCustomNodes] = useState<any[]>([]);
+  const [customNodes, setCustomNodes] = useState<ICustomNode[]>([]);
   useEffect(() => {
     window.addEventListener('message', handleCallback);
     () => window.removeEventListener('message', handleCallback);
   }, []);
 
-  function handleCallback(event: any) {
+  function handleCallback(event: React.MouseEvent<HTMLElement>) {
     if (event?.data?.type === 'customNodeList') {
       setCustomNodes(event.data.payload.customNodes);
     }
   }
 
-  function handleSelectNode(event: any, nodeData: any) {
+  function handleSelectNode(
+    event: React.MouseEvent<HTMLElement>,
+    nodeData: ICustomNode
+  ) {
     setShow(false);
     const { x, y, zoom } = viewport;
     const curX = x / zoom;
@@ -41,6 +47,12 @@ export default function CustomNodeList({
       data: { customNode: { ...nodeData } },
     });
     setNodes((prev) => [...prev, newNode]);
+  }
+
+  function handleEdit(event: React.MouseEvent<HTMLElement>, node) {
+    event.stopPropagation();
+    setCurNode(customNodes.find((n) => n.id === node.id));
+    setModal(4);
   }
   return (
     <div className="bg-white w-[300px] h-[583px] p-2">
@@ -64,7 +76,16 @@ export default function CustomNodeList({
               className="text-base hover:bg-slate-200 p-2 rounded cursor-pointer"
               onClick={(event) => handleSelectNode(event, node)}
             >
-              <button id={'custom_node' + node.id}>{node.name}</button>
+              <div className="group flex">
+                <button id={'custom_node' + node.id}>{node.name}</button>
+                &nbsp;&nbsp;
+                <button
+                  className="hidden group-hover:block"
+                  onClick={(event) => handleEdit(event, node)}
+                >
+                  <i className="fa-solid fa-pen-to-square"></i>
+                </button>
+              </div>
               <div className="text-xs text-black italic">
                 {node.description}
               </div>

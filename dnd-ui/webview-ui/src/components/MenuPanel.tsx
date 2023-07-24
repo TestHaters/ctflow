@@ -8,10 +8,11 @@ import {
 import { Node, Panel, Viewport } from 'reactflow';
 import { NodeDataType } from '../pages/Flow';
 import { vscode } from '../utilities/vscode';
-import CustomNodeForm from './CustomNodeForm';
-import CustomNodeList from './CustomNodeList';
+import { ICustomNode } from '../types/customNodes';
+import CustomNodeForm from './CustomNodes/CustomNodeForm';
+import CustomNodeList from './CustomNodes/CustomNodeList';
+import CustomNodeEdit from './CustomNodes/CustomNodeEdit';
 import SuccessBtn from './share/SuccessBtn';
-import useUndoRedo from '../hooks/useUndoRedo';
 
 interface IMenuPanelProps {
   viewport: Viewport;
@@ -29,6 +30,7 @@ export default function MenuPanel({
   const [show, setShow] = useState(false);
   const [modal, setModal] = useState<number>(0);
   const [file, setFile] = useState<File>();
+  const [curNode, setCurNode] = useState<ICustomNode | null>(null);
 
   function openCreateCustomNodePanel() {
     setShow(false);
@@ -146,6 +148,7 @@ export default function MenuPanel({
             setModal={setModal}
             viewport={viewport}
             setNodes={setNodes}
+            setCurNode={setCurNode}
           />
         </Panel>
       )}
@@ -172,6 +175,15 @@ export default function MenuPanel({
               </button>
             </div>
           </div>
+        </Panel>
+      )}
+      {modal === 4 && (
+        <Panel position="top-right" style={{ right: 10 }}>
+          <CustomNodeEdit
+            setModal={setModal}
+            setNode={setCurNode}
+            node={curNode}
+          />
         </Panel>
       )}
     </>

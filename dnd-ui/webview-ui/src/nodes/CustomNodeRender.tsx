@@ -66,15 +66,6 @@ const CustomNodeRender = (props) => {
     reactFlowInstance.setNodes((nds) => nds.filter((node) => node.id !== id));
   }
 
-  // useEffect(() => {
-  //   setNodeStore({
-  //     nodes: {
-  //       ...nodesStore,
-  //       [id]: { ...nodesStore[id], inPorts: { field: name } },
-  //     },
-  //   });
-  // }, [name]);
-
   return (
     <div>
       <Handle

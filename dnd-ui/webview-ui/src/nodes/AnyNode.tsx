@@ -88,10 +88,7 @@ const AnyNode = (props) => {
     <div className="w-48">
       <div
         role="tooltip"
-        className=" z-10 block inline-block px-3 py-2 w-full
-      text-xs font-xs text-white bg-gray-500 rounded-lg shadow-sm
-      tooltip resize"
-        style={{}}
+        className=" z-10 block inline-block px-3 py-2 w-full text-xs font-xs text-white bg-gray-500 rounded-lg shadow-sm tooltip resize"
       >
         <textarea
           type="text"
