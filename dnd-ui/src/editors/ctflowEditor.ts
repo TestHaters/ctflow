@@ -3,15 +3,16 @@ import { getNonce } from "../utilities/nonce";
 import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vscode";
 import { getUri } from "../utilities/getUri";
 import flow from "lodash.flow";
-import { ICustomNodePayload } from "../types";
+import { ICustomNode, ICustomNodePayload } from "../types";
 import {
-  addCustomNodeCollection,
-  convertUint8ArrayToString,
-  createCustomNodeCollection,
+  CustomNodes,
+  // addCustomNodeCollection,
+  // createCustomNodeCollection,
   fetchCustomNodeList,
-  isCustomNodeExisted,
+  CustomNodes.isExisted,
   parseJSON,
-  writeDataToCustomNodesCollection,
+  CustomNodes.readJSON,
+  CustomNodes.write,
 } from "../utilities/customNodes";
 
 interface CtflowEdit {
@@ -126,6 +127,9 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
           this.writeYamlFile(e.data.yamlData, e.data.fileExtension);
           this._savedEdits.push(e.data.yamlData);
           return;
+        case "editCustomNode":
+          this.editCustomNode(e.data);
+          return;
 
         case "createCustomNode":
           this.writeCustomNodeFile(e.data);
@@ -188,37 +192,43 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
   private async writeCustomNodeFile({ payload, compiler }: ICustomNodePayload) {
     const path = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
 
-    const customNodeJsonFile = await vscode.workspace.findFiles(
-      ".customNodes.json",
-      "**/node_modules/**",
-      1
-    );
-    let fileText = createCustomNodeCollection(payload, compiler);
+    let fileText = CustomNodes.create(payload, compiler);
 
-    if (await isCustomNodeExisted()) {
-      const fileData = await vscode.workspace.fs.readFile(
-        vscode.Uri.file(path + "/.customNodes.json")
-      );
-      const curNodes = flow([convertUint8ArrayToString, parseJSON])(fileData);
-      fileText = addCustomNodeCollection(curNodes, payload, compiler);
+    if (await CustomNodes.isExisted()) {
+      const curNodes = await CustomNodes.readJSON("/.customNodes.json");
+      fileText = CustomNodes.add(curNodes, payload, compiler);
     }
-    writeDataToCustomNodesCollection(fileText, path);
+    CustomNodes.write(fileText);
+  }
+
+  private async editCustomNode(data: ICustomNodePayload) {
+    const path = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
+    const { payload, compiler } = data;
+
+    const curNodes = await CustomNodes.readJSON("/.customNodes.json");
+    const newNodes = curNodes.customNodes.map((node: ICustomNode) =>
+      node.id === payload.id ? payload : node
+    );
+    if (curNodes.compiler === compiler) {
+      const nodes = {
+        ...curNodes,
+        customNodes: newNodes,
+      };
+      CustomNodes.write(JSON.stringify(nodes));
+    }
   }
 
   private async appendMoreCustomNodes(text: Record<string, any>) {
     const path = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
-    if (await isCustomNodeExisted()) {
-      const fileData = await vscode.workspace.fs.readFile(
-        vscode.Uri.file(path + "/.customNodes.json")
-      );
-      const curNodes = flow([convertUint8ArrayToString, parseJSON])(fileData);
+    if (await CustomNodes.isExisted()) {
       const incomingNodes = parseJSON(text.payload);
+      const curNodes = await CustomNodes.readJSON("/.customNodes.json");
       if (curNodes.compiler === incomingNodes.compiler) {
         const newFileData = {
           ...incomingNodes,
           customNodes: [...curNodes.customNodes, ...incomingNodes.customNodes],
         };
-        writeDataToCustomNodesCollection(JSON.stringify(newFileData), path);
+        CustomNodes.write(JSON.stringify(newFileData));
       } else {
         console.error(
           "Different compiler version, current .customNode.json file compiler is " +
@@ -228,7 +238,7 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
         );
       }
     } else {
-      writeDataToCustomNodesCollection(text.payload, path);
+      CustomNodes.write(text.payload);
     }
   }
 
@@ -296,18 +306,18 @@ export class CtFlowEditorProvider implements vscode.CustomTextEditorProvider {
    * Called by VS Code when the user saves the document.
    */
   async save(cancellation: vscode.CancellationToken): Promise<void> {
-  	// await this.saveAs(this.uri, cancellation);
-  	// this._savedEdits = Array.from(this._edits);
+    // await this.saveAs(this.uri, cancellation);
+    // this._savedEdits = Array.from(this._edits);
   }
 
   /**
    * Called by VS Code when the user saves the document to a new location.
    */
   async saveAs(targetResource: vscode.Uri, cancellation: vscode.CancellationToken): Promise<void> {
-  	// const fileData = await this._delegate.getFileData();
-  	// if (cancellation.isCancellationRequested) {
-  	// 	return;
-  	// }
-  	// await vscode.workspace.fs.writeFile(targetResource, fileData);
+    // const fileData = await this._delegate.getFileData();
+    // if (cancellation.isCancellationRequested) {
+    // 	return;
+    // }
+    // await vscode.workspace.fs.writeFile(targetResource, fileData);
   }
 }
