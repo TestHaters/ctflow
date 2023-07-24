@@ -14,6 +14,7 @@ export interface ICustomNodePayload {
 export interface ICustomNode {
   id: string;
   params: Record<string, string>;
+  name: string;
   compiledCode: string;
   description: string;
 }
