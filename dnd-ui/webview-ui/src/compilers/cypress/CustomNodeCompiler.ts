@@ -9,7 +9,8 @@ export class CustomNodeCompiler {
     let compiledText = nodeData.data.customNode.compiledCode;
     const values = nodeData.inPorts.values;
     Object.keys(values).map((val) => {
-      compiledText = compiledText.replace(val, values[val]);
+      const newVal = values[val].replace(/(?<!^)"(?!$)/g, '\\"');
+      compiledText = compiledText.replace(val, newVal);
     });
     return '\n' + compiledText + '\n';
   }
