@@ -6,7 +6,7 @@ import { getWebSocket } from '../socket/getWebSocket';
 console.log('getWebSocket:', getWebSocket);
 
 function SavePanel() {
-  const [isCollab, setCollab] = useState(false);
+  const [isCollab, setCollab] = useState(true);
   const style = 'rounded !text-white font-semibold py-2 px-5 cursor-pointer';
 
   function handleCollab(newStt) {
