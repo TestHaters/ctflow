@@ -1,64 +1,30 @@
-import express from "express";
-// import { spawn } from "child_process";
-import cors from "cors";
-import bodyParser from "body-parser";
+import express from 'express';
+import * as http from 'http';
+import { WebSocketServer } from 'ws';
+const app = express()
+const server = http.createServer(app);
 
-const app = express();
+const wss = new WebSocketServer({ server:server });
 
-const port = 33333;
+wss.on('connection', function connection(ws) {
+  ws.send('Welcome New Client!');
 
-app.use(cors());
-app.use(bodyParser.json());
+  ws.on('message', function incoming(message) {
+    console.log('received: %s', message);
 
-app.get("/", (_req, res) => {
-  res.json({ a: 1 });
+    wss.clients.forEach(function each(client) {
+      if (client !== ws && client.readyState === WebSocket.OPEN) {
+        client.send(message);
+      }
+    });
+
+  });
 });
 
-app.post("/", (_req, _res) => {
-  console.log('HIT HERE THAT WORKS');
-  
-  // TODO:
-  // 1. read the data from request body that have blocks schema
-  // 2. convert them into cypress test cases
-  // 3. write the test cases into the user codebase file system
-  // 4. trigger the command "yarn run cypress open"
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  // const e2eTestDir = `${__dirname}/To-do-app-with-React`;
-  // const side_process = spawn("yarn run cypress open", {
-  //   shell: true,
-  //   detached: true,
-  //   cwd: e2eTestDir,
-  // });
-
-  // side_process.stdout.on("data", (data: any) => {
-  //   console.log(`stdout: ${data}`);
-  // });
-
-  // side_process.stderr.on("data", (data: any) => {
-  //   console.log(`stderr: ${data}`);
-  // });
-
-  // side_process.on("error", (error: Error) => {
-  //   console.log(`error: ${error.message}`);
-  // });
-
-  // side_process.on("close", (code: string) => {
-  //   console.log(`child process exited with code ${code}`);
-  // });
-  // res.json({ b: 123 });
+wss.on('close', function close() {
+    console.log('disconnected');
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+app.get('/', (_req: any, res: any) => res.send('Hello World!'))
+
+server.listen(8888, () => console.log(`Lisening on port :8888`))

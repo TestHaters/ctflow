@@ -39,6 +39,7 @@ import VisitPageNode from '../nodes/old_nodes/VisitPageNode';
 import CheckboxNode from '../nodes/old_nodes/CheckboxNode';
 import ContainsNode from '../nodes/old_nodes/ContainsNode';
 import WaitNode from '../nodes/old_nodes/WaitNode';
+import CollabPanel from '../components/CollabPanel';
 
 const fitViewOptions: FitViewOptions = {
   padding: 0.2,
@@ -284,6 +285,7 @@ const Editor = () => {
         <Background style={{ backgroundColor: '#f5f5f5' }} />
         <MiniMap />
         <CompilePanel onClick={handleCompile} />
+        <CollabPanel />
         <SavePanel onClick={handleSave} />
         <NodeMenuPanel
           setShowMenu={setShowMenu}
