@@ -3,7 +3,6 @@ import 'reactflow/dist/style.css';
 import { get, omit, pick } from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactFlow, {
-  addEdge,
   Background,
   Connection,
   Controls,
@@ -11,35 +10,41 @@ import ReactFlow, {
   FitViewOptions,
   MiniMap,
   Node,
+  NodeChange,
+  OnNodesChange,
   OnSelectionChangeParams,
+  Viewport,
+  addEdge,
+  applyNodeChanges,
   updateEdge,
   useEdgesState,
   useNodesState,
-  Viewport,
 } from 'reactflow';
 import YAML from 'yaml';
 
+import { toast } from 'react-toastify';
 import { Compiler } from '../compilers';
+import CollabPanel from '../components/CollabPanel';
 import CompilePanel from '../components/CompilePanel';
+import CustomEdge from '../components/CustomEdge';
+import MenuPanel from '../components/MenuPanel';
 import NodeMenuPanel from '../components/NodeMenuPanel';
 import SavePanel from '../components/SavePanel';
 import { useStore } from '../context/store';
 import { useGetWindowSize } from '../hooks/useGetWindowSize';
-import CTFlowRecorderNode from '../nodes/CTFlowRecorderNode';
-import { vscode } from '../utilities/vscode';
-import { toast } from 'react-toastify';
-import MenuPanel from '../components/MenuPanel';
-import CustomEdge from '../components/CustomEdge';
-import CustomNodeRender from '../nodes/CustomNodeRender';
-import AnyNode from '../nodes/AnyNode';
 import useUndoRedo from '../hooks/useUndoRedo';
+import AnyNode from '../nodes/AnyNode';
+import CTFlowRecorderNode from '../nodes/CTFlowRecorderNode';
+import CustomNodeRender from '../nodes/CustomNodeRender';
 import ButtonNode from '../nodes/old_nodes/ButtonNode';
-import TextInputNode from '../nodes/old_nodes/TextInputNode';
-import VisitPageNode from '../nodes/old_nodes/VisitPageNode';
 import CheckboxNode from '../nodes/old_nodes/CheckboxNode';
 import ContainsNode from '../nodes/old_nodes/ContainsNode';
+import TextInputNode from '../nodes/old_nodes/TextInputNode';
+import VisitPageNode from '../nodes/old_nodes/VisitPageNode';
 import WaitNode from '../nodes/old_nodes/WaitNode';
-import CollabPanel from '../components/CollabPanel';
+import { getHelperLines } from '../utilities/helperLines';
+import { vscode } from '../utilities/vscode';
+import HelperLines from '../components/HelperLine';
 
 const fitViewOptions: FitViewOptions = {
   padding: 0.2,
@@ -79,11 +84,18 @@ const Editor = () => {
   const { height: windowHeight, width: windowWidth } = useGetWindowSize();
   const { takeSnapshot, undo, redo, setPast } = useUndoRedo();
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [, setSelectedNode] = useState<Node | null>(null);
   const [store, setStore] = useStore((store) => store);
   const [showMenu, setShowMenu] = useState(false);
+  const [helperLineHorizontal, setHelperLineHorizontal] = useState<
+    number | undefined
+  >(undefined);
+  const [helperLineVertical, setHelperLineVertical] = useState<
+    number | undefined
+  >(undefined);
+
   const viewport = useRef<Viewport>(defaultViewport);
 
   useEffect(() => {
@@ -215,9 +227,9 @@ const Editor = () => {
       return acc;
     }, {});
 
-    let payload = { nodes: inputNodes, edges: inputEdges };
+    const payload = { nodes: inputNodes, edges: inputEdges };
     setStore({ ...payload });
-    let yamlData = YAML.stringify(payload);
+    const yamlData = YAML.stringify(payload);
 
     // When testing on browser, the vscode.postMessage won't work
     // we will manually emit fileUpdate event
@@ -264,6 +276,46 @@ const Editor = () => {
     takeSnapshot();
   }, [takeSnapshot]);
 
+  const customApplyNodeChanges = useCallback(
+    (changes: NodeChange[], nodes: Node[]): Node[] => {
+      // reset the helper lines (clear existing lines, if any)
+      setHelperLineHorizontal(undefined);
+      setHelperLineVertical(undefined);
+
+      // this will be true if it's a single node being dragged
+      // inside we calculate the helper lines and snap position for the position where the node is being moved to
+      if (
+        changes.length === 1 &&
+        changes[0].type === 'position' &&
+        changes[0].dragging &&
+        changes[0].position
+      ) {
+        const helperLines = getHelperLines(changes[0], nodes);
+
+        // if we have a helper line, we snap the node to the helper line position
+        // this is being done by manipulating the node position inside the change object
+        changes[0].position.x =
+          helperLines.snapPosition.x ?? changes[0].position.x;
+        changes[0].position.y =
+          helperLines.snapPosition.y ?? changes[0].position.y;
+
+        // if helper lines are returned, we set them so that they can be displayed
+        setHelperLineHorizontal(helperLines.horizontal);
+        setHelperLineVertical(helperLines.vertical);
+      }
+
+      return applyNodeChanges(changes, nodes);
+    },
+    []
+  );
+
+  const onNodesChange: OnNodesChange = useCallback(
+    (changes) => {
+      setNodes((nodes) => customApplyNodeChanges(changes, nodes));
+    },
+    [setNodes, customApplyNodeChanges]
+  );
+
   return (
     <div style={{ height: windowHeight, width: windowWidth }}>
       <ReactFlow
@@ -298,6 +350,10 @@ const Editor = () => {
           setNodes={setNodes}
           undo={undo}
           redo={redo}
+        />
+        <HelperLines
+          horizontal={helperLineHorizontal}
+          vertical={helperLineVertical}
         />
       </ReactFlow>
     </div>
