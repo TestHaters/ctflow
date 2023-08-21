@@ -21,6 +21,11 @@ interface IMenuPanelProps {
   setNodes: Dispatch<SetStateAction<Node<NodeDataType>[]>>;
   undo: any;
   redo: any;
+  cut: any;
+  copy: any;
+  paste: any;
+  canCopy: boolean;
+  canPaste: boolean;
 }
 
 export default function MenuPanel({
@@ -28,6 +33,11 @@ export default function MenuPanel({
   setNodes,
   undo,
   redo,
+  cut,
+  copy,
+  paste,
+  canCopy,
+  canPaste,
 }: IMenuPanelProps) {
   const [show, setShow] = useState(false);
   const [modal, setModal] = useState<number>(0);
@@ -141,6 +151,36 @@ export default function MenuPanel({
                 onClick={redo}
               >
                 <span>Redo</span>
+              </button>
+            </div>
+            <div className="hover:bg-slate-200 p-2 rounded">
+              <button
+                id="custom-node-openner"
+                className="flex justify-between items-center w-full disabled:opacity-25"
+                onClick={cut}
+                disabled={!canCopy}
+              >
+                <span>Cut</span>
+              </button>
+            </div>
+            <div className="hover:bg-slate-200 p-2 rounded">
+              <button
+                id="custom-node-openner"
+                className="flex justify-between items-center w-full disabled:opacity-25"
+                disabled={!canCopy}
+                onClick={copy}
+              >
+                <span>Copy</span>
+              </button>
+            </div>
+            <div className="hover:bg-slate-200 p-2 rounded">
+              <button
+                id="custom-node-openner"
+                className="flex justify-between items-center w-full disabled:opacity-25"
+                disabled={!canPaste}
+                onClick={paste}
+              >
+                <span>Paste</span>
               </button>
             </div>
           </div>

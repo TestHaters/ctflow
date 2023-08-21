@@ -1,6 +1,9 @@
 import 'reactflow/dist/style.css';
+import './flow.css';
 
-import { get, omit, pick } from 'lodash';
+import get from 'lodash/get';
+import omit from 'lodash/omit';
+import pick from 'lodash/pick';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactFlow, {
   Background,
@@ -45,6 +48,7 @@ import WaitNode from '../nodes/old_nodes/WaitNode';
 import { getHelperLines } from '../utilities/helperLines';
 import { vscode } from '../utilities/vscode';
 import HelperLines from '../components/HelperLine';
+import useCopyPaste from '../hooks/useCopyPaste';
 
 const fitViewOptions: FitViewOptions = {
   padding: 0.2,
@@ -95,6 +99,11 @@ const Editor = () => {
   const [helperLineVertical, setHelperLineVertical] = useState<
     number | undefined
   >(undefined);
+  const { cut, copy, paste, bufferedNodes } = useCopyPaste();
+  const canCopy = nodes.some(({ selected }) => selected);
+  const canPaste = bufferedNodes.length > 0;
+
+  console.log('nodes', nodes);
 
   const viewport = useRef<Viewport>(defaultViewport);
 
@@ -350,6 +359,11 @@ const Editor = () => {
           setNodes={setNodes}
           undo={undo}
           redo={redo}
+          cut={cut}
+          copy={copy}
+          paste={paste}
+          canCopy={canCopy}
+          canPaste={canPaste}
         />
         <HelperLines
           horizontal={helperLineHorizontal}
