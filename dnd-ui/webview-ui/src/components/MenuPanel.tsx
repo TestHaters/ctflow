@@ -4,6 +4,7 @@ import {
   SetStateAction,
   useState,
   FormEvent,
+  useRef,
 } from 'react';
 import { Node, Panel, Viewport } from 'reactflow';
 import { NodeDataType } from '../pages/Flow';
@@ -13,12 +14,18 @@ import CustomNodeForm from './CustomNodes/CustomNodeForm';
 import CustomNodeList from './CustomNodes/CustomNodeList';
 import CustomNodeEdit from './CustomNodes/CustomNodeEdit';
 import SuccessBtn from './share/SuccessBtn';
+import { useStaticClickAway } from '../hooks/useClickOutside';
 
 interface IMenuPanelProps {
   viewport: Viewport;
   setNodes: Dispatch<SetStateAction<Node<NodeDataType>[]>>;
   undo: any;
   redo: any;
+  cut: any;
+  copy: any;
+  paste: any;
+  canCopy: boolean;
+  canPaste: boolean;
 }
 
 export default function MenuPanel({
@@ -26,11 +33,21 @@ export default function MenuPanel({
   setNodes,
   undo,
   redo,
+  cut,
+  copy,
+  paste,
+  canCopy,
+  canPaste,
 }: IMenuPanelProps) {
   const [show, setShow] = useState(false);
   const [modal, setModal] = useState<number>(0);
   const [file, setFile] = useState<File>();
   const [curNode, setCurNode] = useState<ICustomNode | null>(null);
+
+  const menuBtnRef = useRef(null);
+  const menuRef = useRef(null);
+
+  useStaticClickAway(menuRef, () => setShow(false), menuBtnRef);
 
   function openCreateCustomNodePanel() {
     setShow(false);
@@ -74,12 +91,16 @@ export default function MenuPanel({
       <Panel
         position="top-left"
         style={{ left: 230 }}
-        onClick={() => setShow((prev) => !prev)}
+        // onClick={() => setShow((prev) => !prev)}
         className="rounded !text-black font-semibold py-2 px-5 cursor-pointer"
       >
-        <span className="ml-1">
+        <div
+          onClick={() => setShow((prev) => !prev)}
+          ref={menuBtnRef}
+          className="ml-1"
+        >
           <i className="fa-solid fa-bars"></i>
-        </span>
+        </div>
       </Panel>
       {show && (
         <Panel
@@ -87,49 +108,84 @@ export default function MenuPanel({
           style={{ left: 242, top: 50, width: 200, marginLeft: 10 }}
           className="bg-white shadow-lg rounded-lg p-2"
         >
-          <div className="hover:bg-slate-200 p-2 rounded">
-            <button
-              id="custom-node-openner"
-              onClick={openCreateCustomNodePanel}
-            >
-              Create custom node
-            </button>
-          </div>
-          <div className="hover:bg-slate-200 p-2 rounded">
-            <button
-              id="custom-node-openner"
-              className="flex justify-between items-center w-full"
-              onClick={openCustomNodesList}
-            >
-              <span>Custom nodes list</span>
-            </button>
-          </div>
-          <div className="hover:bg-slate-200 p-2 rounded">
-            <button
-              id="custom-node-openner"
-              className="flex justify-between items-center w-full"
-              onClick={openFileUpload}
-            >
-              <span>Import</span>
-            </button>
-          </div>
-          <div className="hover:bg-slate-200 p-2 rounded">
-            <button
-              id="custom-node-openner"
-              className="flex justify-between items-center w-full"
-              onClick={undo}
-            >
-              <span>Undo</span>
-            </button>
-          </div>
-          <div className="hover:bg-slate-200 p-2 rounded">
-            <button
-              id="custom-node-openner"
-              className="flex justify-between items-center w-full"
-              onClick={redo}
-            >
-              <span>Redo</span>
-            </button>
+          <div ref={menuRef}>
+            <div className="hover:bg-slate-200 p-2 rounded">
+              <button
+                id="custom-node-openner"
+                onClick={openCreateCustomNodePanel}
+              >
+                Create custom node
+              </button>
+            </div>
+            <div className="hover:bg-slate-200 p-2 rounded">
+              <button
+                id="custom-node-openner"
+                className="flex justify-between items-center w-full"
+                onClick={openCustomNodesList}
+              >
+                <span>Custom nodes list</span>
+              </button>
+            </div>
+            <div className="hover:bg-slate-200 p-2 rounded">
+              <button
+                id="custom-node-openner"
+                className="flex justify-between items-center w-full"
+                onClick={openFileUpload}
+              >
+                <span>Import</span>
+              </button>
+            </div>
+            <div className="hover:bg-slate-200 p-2 rounded">
+              <button
+                id="custom-node-openner"
+                className="flex justify-between items-center w-full"
+                onClick={undo}
+              >
+                <span>Undo</span>
+              </button>
+            </div>
+            <div className="hover:bg-slate-200 p-2 rounded">
+              <button
+                id="custom-node-openner"
+                className="flex justify-between items-center w-full"
+                onClick={redo}
+              >
+                <span>Redo</span>
+              </button>
+            </div>
+            <div className="hover:bg-slate-200 p-2 rounded">
+              <button
+                id="custom-node-openner"
+                className="flex justify-between items-center w-full disabled:opacity-25"
+                onClick={cut}
+                disabled={!canCopy}
+              >
+                <span>Cut</span>
+              </button>
+            </div>
+            <div className="hover:bg-slate-200 p-2 rounded">
+              <button
+                id="custom-node-openner"
+                className="flex justify-between items-center w-full disabled:opacity-25"
+                disabled={!canCopy}
+                onClick={copy}
+              >
+                <span>Copy</span>
+              </button>
+            </div>
+            <div className="hover:bg-slate-200 p-2 rounded">
+              <button
+                id="custom-node-openner"
+                className="flex justify-between items-center w-full disabled:opacity-25"
+                disabled={!canPaste}
+                onClick={(e) => {
+                  e.preventDefault();
+                  paste();
+                }}
+              >
+                <span>Paste</span>
+              </button>
+            </div>
           </div>
         </Panel>
       )}

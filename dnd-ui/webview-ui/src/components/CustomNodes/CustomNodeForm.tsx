@@ -1,7 +1,8 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { vscode } from '../../utilities/vscode';
 import SuccessBtn from '../share/SuccessBtn';
+import useClickOutside from '../../hooks/useClickOutside';
 
 export default function CustomNodeForm({
   setModal,
@@ -12,6 +13,10 @@ export default function CustomNodeForm({
   const [compiledText, setCompiledText] = useState('');
   const [desc, setDesc] = useState('');
   const [title, setTitle] = useState('');
+
+  const listRef = useRef(null);
+
+  useClickOutside(listRef, () => setModal(0));
 
   function handleCreate() {
     vscode.postMessage({
@@ -33,7 +38,7 @@ export default function CustomNodeForm({
   }
 
   return (
-    <section className="bg-white w-[300px] h-[583px] p-2">
+    <section className="bg-white w-[300px] h-[583px] p-2" ref={listRef}>
       <div className="pt-4">
         <div className="flex p-2 justify-between items-center">
           <div className="font-bold text-lg flex items-center mx-auto text-black">

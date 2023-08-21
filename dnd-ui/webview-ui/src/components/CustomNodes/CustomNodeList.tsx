@@ -1,9 +1,10 @@
 // @ts-nocheck
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Node, Viewport } from 'reactflow';
 import { ICustomNode } from '../../types/customNodes';
 import { RFNode } from '../../models/nodeFactory';
 import { NodeDataType } from '../../pages/Flow';
+import useClickOutside from '../../hooks/useClickOutside';
 
 export default function CustomNodeList({
   setShow,
@@ -19,6 +20,10 @@ export default function CustomNodeList({
   setCurNode: Dispatch<SetStateAction<ICustomNode | null>>;
 }) {
   const [customNodes, setCustomNodes] = useState<ICustomNode[]>([]);
+  const listRef = useRef(null);
+
+  useClickOutside(listRef, () => setModal(0));
+
   useEffect(() => {
     window.addEventListener('message', handleCallback);
     () => window.removeEventListener('message', handleCallback);
@@ -55,7 +60,7 @@ export default function CustomNodeList({
     setModal(4);
   }
   return (
-    <div className="bg-white w-[300px] h-[583px] p-2">
+    <div className="bg-white w-[300px] h-[583px] p-2" ref={listRef}>
       <div className="pb-4">
         <div className="flex pb-2 justify-between items-center">
           <div className="font-bold text-lg flex items-center mx-auto text-black">

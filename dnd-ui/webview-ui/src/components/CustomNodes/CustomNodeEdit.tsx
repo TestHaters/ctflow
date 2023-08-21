@@ -1,10 +1,11 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { ICustomNode } from '../../types/customNodes';
 import { v4 as uuid } from 'uuid';
 import { vscode } from '../../utilities/vscode';
 import EditBtn from '../share/EditBtn';
+import useClickOutside from '../../hooks/useClickOutside';
 
-export default function CustomNodeForm({
+export default function CustomNodeEdit({
   setModal,
   setNode,
   node,
@@ -19,6 +20,9 @@ export default function CustomNodeForm({
   const [compiledText, setCompiledText] = useState(node?.compiledCode || '');
   const [desc, setDesc] = useState(node?.description || '');
   const [title, setTitle] = useState(node?.name || '');
+  const editRef = useRef(null);
+
+  useClickOutside(editRef, () => setModal(0));
 
   function handleEdit() {
     if (!node?.id) {

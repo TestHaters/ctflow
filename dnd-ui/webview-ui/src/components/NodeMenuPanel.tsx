@@ -4,6 +4,7 @@ import { Panel } from 'reactflow';
 import defaultNodes from '../nodes/defaultNode.json';
 import { RFNode } from '../models/nodeFactory';
 import { useStore } from '../context/store';
+import { useStaticClickAway } from '../hooks/useClickOutside';
 
 interface INodeMenuPanel {
   setShowMenu: Dispatch<SetStateAction<boolean>>;
@@ -19,7 +20,10 @@ function NodeMenuPanel({
   showMenu,
 }: INodeMenuPanel) {
   const nodeMenuRef = useRef(null);
+  const addNodeRef = useRef(null);
   const [takeSnapshot] = useStore((store) => store.takeSnapshot);
+
+  useStaticClickAway(nodeMenuRef, () => setShowMenu(false), addNodeRef);
 
   async function handleClick(event, componentType) {
     const { x, y, zoom } = viewport;
@@ -42,17 +46,18 @@ function NodeMenuPanel({
       <Panel
         position="top-left"
         style={{ left: 120 }}
-        onClick={() => setShowMenu((prev) => !prev)}
         className="rounded !text-black font-semibold py-2 px-5 cursor-pointer"
       >
-        Add Node
-        <span className="ml-1">
-          {showMenu ? (
-            <i className="fa-solid fa-angle-down"></i>
-          ) : (
-            <i className="fa-solid fa-plus"></i>
-          )}
-        </span>
+        <div onClick={() => setShowMenu((prev) => !prev)} ref={addNodeRef}>
+          Add Node
+          <span className="ml-1">
+            {showMenu ? (
+              <i className="fa-solid fa-angle-down"></i>
+            ) : (
+              <i className="fa-solid fa-plus"></i>
+            )}
+          </span>
+        </div>
       </Panel>
       {showMenu && (
         <section ref={nodeMenuRef}>

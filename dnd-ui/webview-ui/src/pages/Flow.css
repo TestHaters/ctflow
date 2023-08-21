@@ -1,0 +1,4 @@
+.selected {
+  box-shadow: 0 0 2px 3px #ff0071;
+  border-radius: 0.5rem;
+}

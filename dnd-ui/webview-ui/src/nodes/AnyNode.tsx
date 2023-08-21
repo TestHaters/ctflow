@@ -1,7 +1,7 @@
 // @ts-nocheck
 import defaultNodes from './defaultNode.json';
 import { memo, useEffect, useState } from 'react';
-import { Handle, Position, useReactFlow } from 'reactflow';
+import { Handle, NodeToolbar, Position, useReactFlow } from 'reactflow';
 import { useStore } from '../context/store';
 import { TextInput } from '../models/TextInput';
 import InputsRender from './InputsRender';
@@ -85,28 +85,29 @@ const AnyNode = (props) => {
   }, [firstInput, secondInput, description]);
 
   return (
-    <div className="w-48">
-      <div
-        role="tooltip"
-        className=" z-10 block inline-block px-3 py-2 w-full text-xs font-xs text-white bg-gray-500 rounded-lg shadow-sm tooltip resize"
-      >
-        <textarea
-          type="text"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="What is this node about?"
-          className="w-full text-xs font-xs italic bg-gray-500 text-white resize-none"
-          style={{ paddingLeft: '4px', fontSize: '70%' }}
-        />
-      </div>
-      <div
-        className="mt-2 pt-0 text-center w-full text-gray-500"
-        style={{ marginTop: '-8px' }}
-      >
-        {' '}
-        ▼{' '}
-      </div>
-
+    <>
+      <NodeToolbar className="w-48">
+        <div
+          role="tooltip"
+          className=" z-10 block inline-block px-3 py-2 w-full text-xs font-xs text-white bg-gray-500 rounded-lg shadow-sm tooltip resize"
+        >
+          <textarea
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="What is this node about?"
+            className="w-full text-xs font-xs italic bg-gray-500 text-white resize-none"
+            style={{ paddingLeft: '4px', fontSize: '70%' }}
+          />
+        </div>
+        <div
+          className="mt-2 pt-0 text-center w-full text-gray-500"
+          style={{ marginTop: '-8px' }}
+        >
+          {' '}
+          ▼{' '}
+        </div>
+      </NodeToolbar>
       <Handle
         type="target"
         position={Position.Left}
@@ -116,7 +117,7 @@ const AnyNode = (props) => {
         isConnectable={isConnectable}
       />
 
-      <div>
+      <div className="w-48">
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600  rounded-tl rounded-tr">
           <span className="mr-1">
             <i className={iconsMap[componentType]}></i>
@@ -157,10 +158,10 @@ const AnyNode = (props) => {
         position={Position.Right}
         id={targetHandleId}
         onConnect={commitChange}
-        style={{ top: 120, background: '#555', width: 10, height: 10 }}
+        style={{ background: '#555', width: 10, height: 10 }}
         isConnectable={isConnectable}
       />
-    </div>
+    </>
   );
 };
 
