@@ -47,7 +47,6 @@ export function useStaticClickAway(
   callback: () => void,
   ...rest: RefObject<HTMLElement>[]
 ) {
-  console.log('rest', rest)
   const callbackRef = useRef(callback);
   React.useEffect(() => {
     const handleClickOutside = (event: Event) => {

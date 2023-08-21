@@ -103,8 +103,6 @@ const Editor = () => {
   const canCopy = nodes.some(({ selected }) => selected);
   const canPaste = bufferedNodes.length > 0;
 
-  console.log('nodes', nodes);
-
   const viewport = useRef<Viewport>(defaultViewport);
 
   useEffect(() => {

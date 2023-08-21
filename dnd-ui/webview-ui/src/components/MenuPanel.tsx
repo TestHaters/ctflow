@@ -178,7 +178,10 @@ export default function MenuPanel({
                 id="custom-node-openner"
                 className="flex justify-between items-center w-full disabled:opacity-25"
                 disabled={!canPaste}
-                onClick={paste}
+                onClick={(e) => {
+                  e.preventDefault();
+                  paste();
+                }}
               >
                 <span>Paste</span>
               </button>

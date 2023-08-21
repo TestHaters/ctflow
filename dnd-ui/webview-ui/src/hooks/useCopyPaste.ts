@@ -104,6 +104,7 @@ export function useCopyPaste<NodeData, EdgeData>() {
         x: mousePosRef.current.x,
         y: mousePosRef.current.y,
       })
+      // params
     ) => {
       const minX = Math.min(...bufferedNodes.map((s) => s.position.x));
       const minY = Math.min(...bufferedNodes.map((s) => s.position.y));
