@@ -128,7 +128,7 @@ const AnyNode = (props) => {
         isConnectable={isConnectable}
       />
 
-      <div className="w-48">
+      <div className="primary-color w-48">
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600  rounded-tl rounded-tr">
           <span className="mr-1">
             <FontAwesomeIcon icon={iconsMap[componentType]} />

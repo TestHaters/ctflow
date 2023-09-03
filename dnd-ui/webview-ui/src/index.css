@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
+div {
     font-size: 13px;
 }
 
