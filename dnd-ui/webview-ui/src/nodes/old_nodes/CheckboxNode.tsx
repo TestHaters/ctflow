@@ -4,6 +4,8 @@ import { Handle, Position, useReactFlow } from 'reactflow';
 import { v4 as uuid } from 'uuid';
 import { useStore } from '../../context/store';
 import { TextInput } from '../../models/TextInput';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark, faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 
 const noType = { email: false, password: false, text: false };
 
@@ -92,11 +94,11 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
       <div>
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
           <span className="mr-1">
-            <i className="fa-solid fa-square-check"></i>
+            <FontAwesomeIcon icon={faSquareCheck} />
           </span>
           <label>Click on check box</label>
           <span className="float-right" onClick={handleRemoveNode}>
-            <i className="fa-solid fa-xmark"></i>
+            <FontAwesomeIcon icon={faXmark} />
           </span>
         </div>
 

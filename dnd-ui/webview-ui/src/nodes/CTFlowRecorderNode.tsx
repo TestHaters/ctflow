@@ -1,11 +1,12 @@
 // @ts-nocheck
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Handle, Position, useReactFlow } from 'reactflow';
-import { v4 as uuid } from 'uuid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useStore } from '../context/store';
 import { TextArea } from '../models/TextArea';
 import YAML from 'yaml';
 import { useNodesState, useEdgesState } from 'reactflow';
+import { faArrowPointer } from '@fortawesome/free-solid-svg-icons';
 
 const noType = { email: false, password: false, text: false };
 
@@ -157,11 +158,11 @@ const CTFlowRecorderNode = (props) => {
       <div>
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
           <span className="mr-1">
-            <i className="fa-solid fa-arrow-pointer"></i>
+            <FontAwesomeIcon icon={faArrowPointer} />
           </span>
           <label>CTFlow Scripts</label>
           <span className="float-right" onClick={handleRemoveNode}>
-            <i className="fa-solid fa-xmark"></i>
+            <FontAwesomeIcon icon={faXmark} />
           </span>
         </div>
 

@@ -4,6 +4,8 @@ import { Handle, Position, useReactFlow } from 'reactflow';
 import { v4 as uuid } from 'uuid';
 import { useStore } from '../../context/store';
 import { TextInput } from '../../models/TextInput';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const WaitNode = ({ id, data, isConnectable, xPos, yPos }) => {
   const reactFlowInstance = useReactFlow();
@@ -88,11 +90,11 @@ const WaitNode = ({ id, data, isConnectable, xPos, yPos }) => {
       <div>
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
           <span className="mr-1">
-            <i className="fa-solid fa-spinner"></i>
+            <FontAwesomeIcon icon={faSpinner} />
           </span>
           <label>Wait</label>
           <span className="float-right" onClick={handleRemoveNode}>
-            <i className="fa-solid fa-xmark"></i>
+            <FontAwesomeIcon icon={faXmark} />
           </span>
         </div>
 

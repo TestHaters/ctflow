@@ -1,9 +1,11 @@
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { ICustomNode } from '../../types/customNodes';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { v4 as uuid } from 'uuid';
 import { vscode } from '../../utilities/vscode';
 import EditBtn from '../share/EditBtn';
 import useClickOutside from '../../hooks/useClickOutside';
+import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 export default function CustomNodeEdit({
   setModal,
@@ -56,7 +58,7 @@ export default function CustomNodeEdit({
           </div>
           <div>
             <button className="block m-2" onClick={() => setModal(0)}>
-              <i className="fa-solid fa-xmark"></i>
+              <FontAwesomeIcon icon={faXmark} />
             </button>
           </div>
         </div>
@@ -88,7 +90,7 @@ export default function CustomNodeEdit({
               }))
             }
           >
-            <i className="fa-solid fa-plus"></i>
+            <FontAwesomeIcon icon={faPlus} />
           </button>
         </div>
         <div className="max-h-28 overflow-scroll">

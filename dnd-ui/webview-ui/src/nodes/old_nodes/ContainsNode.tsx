@@ -4,6 +4,8 @@ import { Handle, Position, useReactFlow } from 'reactflow';
 import { v4 as uuid } from 'uuid';
 import { useStore } from '../../context/store';
 import { TextInput } from '../../models/TextInput';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBox, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const ContainsNode = ({ id, data, isConnectable, xPos, yPos }) => {
   const [name, setName] = useState(data?.inPorts?.field || '');
@@ -91,11 +93,11 @@ const ContainsNode = ({ id, data, isConnectable, xPos, yPos }) => {
       <div>
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
           <span className="mr-1">
-            <i className="fa-solid fa-box"></i>
+            <FontAwesomeIcon icon={faBox} />
           </span>
           <label>Check contains</label>
           <span className="float-right" onClick={handleRemoveNode}>
-            <i className="fa-solid fa-xmark"></i>
+            <FontAwesomeIcon icon={faXmark} />
           </span>
         </div>
         <div className="px-2 pb-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">

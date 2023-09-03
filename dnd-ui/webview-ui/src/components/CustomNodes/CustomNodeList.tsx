@@ -1,10 +1,13 @@
 // @ts-nocheck
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Node, Viewport } from 'reactflow';
 import { ICustomNode } from '../../types/customNodes';
 import { RFNode } from '../../models/nodeFactory';
 import { NodeDataType } from '../../pages/Flow';
 import useClickOutside from '../../hooks/useClickOutside';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 
 export default function CustomNodeList({
   setShow,
@@ -68,7 +71,7 @@ export default function CustomNodeList({
           </div>
           <div>
             <button className="block m-2" onClick={() => setModal(0)}>
-              <i className="fa-solid fa-xmark"></i>
+              <FontAwesomeIcon icon={faXmark} />
             </button>
           </div>
         </div>
@@ -88,7 +91,7 @@ export default function CustomNodeList({
                   className="hidden group-hover:block"
                   onClick={(event) => handleEdit(event, node)}
                 >
-                  <i className="fa-solid fa-pen-to-square"></i>
+                  <FontAwesomeIcon icon={faPenToSquare} />
                 </button>
               </div>
               <div className="text-xs text-black italic">
