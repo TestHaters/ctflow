@@ -1,8 +1,10 @@
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { v4 as uuid } from 'uuid';
 import { vscode } from '../../utilities/vscode';
 import SuccessBtn from '../share/SuccessBtn';
 import useClickOutside from '../../hooks/useClickOutside';
+import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 export default function CustomNodeForm({
   setModal,
@@ -46,7 +48,7 @@ export default function CustomNodeForm({
           </div>
           <div>
             <button className="block m-2" onClick={() => setModal(0)}>
-              <i className="fa-solid fa-xmark"></i>
+              <FontAwesomeIcon icon={faXmark} />
             </button>
           </div>
         </div>
@@ -78,7 +80,7 @@ export default function CustomNodeForm({
               }))
             }
           >
-            <i className="fa-solid fa-plus"></i>
+            <FontAwesomeIcon icon={faPlus} />
           </button>
         </div>
         <div className="max-h-28 overflow-scroll">

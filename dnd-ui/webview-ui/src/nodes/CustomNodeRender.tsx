@@ -1,9 +1,11 @@
 /* eslint-disable react/prop-types */
 // @ts-nocheck
 import React, { memo, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Handle, Position, useReactFlow } from 'reactflow';
 import { useStore } from '../context/store';
 import { CustomNodeInput } from '../models/CustomNodeInput';
+import { faPuzzlePiece, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const CustomNodeRender = (props) => {
   const { id, data, isConnectable, xPos, yPos } = props;
@@ -80,11 +82,11 @@ const CustomNodeRender = (props) => {
       <div>
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
           <span className="mr-1">
-            <i className="fa-sharp fa-solid fa-puzzle-piece"></i>
+            <FontAwesomeIcon icon={faPuzzlePiece} />
           </span>
           <label>{customNode?.name || ''}</label>
           <span className="float-right" onClick={handleRemoveNode}>
-            <i className="fa-solid fa-xmark"></i>
+            <FontAwesomeIcon icon={faXmark} />
           </span>
         </div>
 

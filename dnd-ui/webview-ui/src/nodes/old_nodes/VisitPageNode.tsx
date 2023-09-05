@@ -1,5 +1,16 @@
 // @ts-nocheck
 import React, { memo, useEffect, useRef, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faArrowPointer,
+  faBox,
+  faDoorOpen,
+  faKeyboard,
+  faSpinner,
+  faSquareCheck,
+  faSyringe,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { Handle, Position, useReactFlow } from 'reactflow';
 import { v4 as uuid } from 'uuid';
 import { TextInput } from '../../models/TextInput';
@@ -89,12 +100,12 @@ const VisitPageNode = (props) => {
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600 rounded-tl rounded-tr">
           <label htmlFor="page">
             <span className="mr-1">
-              <i className="fa-solid fa-door-open"></i>
+              <FontAwesomeIcon icon={faDoorOpen} />
             </span>
             User visit
           </label>
           <span className="float-right" onClick={handleRemoveNode}>
-            <i className="fa-solid fa-xmark"></i>
+            <FontAwesomeIcon icon={faXmark} />
           </span>
         </div>
 

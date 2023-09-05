@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { memo, useEffect, useState } from 'react';
 import { Handle, Position, useReactFlow } from 'reactflow';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useStore } from '../../context/store';
 import { TextInput } from '../../models/TextInput';
 
@@ -93,11 +94,11 @@ const ButtonNode = (props) => {
       <div>
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600  rounded-tl rounded-tr">
           <span className="mr-1">
-            <i className="fa-solid fa-arrow-pointer"></i>
+            <FontAwesomeIcon icon={faArrowPointer} />
           </span>
           <label>User click</label>
           <span className="float-right" onClick={handleRemoveNode}>
-            <i className="fa-solid fa-xmark"></i>
+            <FontAwesomeIcon icon={faXmark} />
           </span>
         </div>
 

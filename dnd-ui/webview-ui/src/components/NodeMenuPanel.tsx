@@ -1,10 +1,12 @@
 // @ts-nocheck
 import { Dispatch, memo, SetStateAction, useRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel } from 'reactflow';
 import defaultNodes from '../nodes/defaultNode.json';
 import { RFNode } from '../models/nodeFactory';
 import { useStore } from '../context/store';
 import { useStaticClickAway } from '../hooks/useClickOutside';
+import { faAngleDown, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 interface INodeMenuPanel {
   setShowMenu: Dispatch<SetStateAction<boolean>>;
@@ -42,7 +44,7 @@ function NodeMenuPanel({
   }
 
   return (
-    <>
+    <div className="primary-color">
       <Panel
         position="top-left"
         style={{ left: 120 }}
@@ -52,9 +54,9 @@ function NodeMenuPanel({
           Add Node
           <span className="ml-1">
             {showMenu ? (
-              <i className="fa-solid fa-angle-down"></i>
+              <FontAwesomeIcon icon={faAngleDown} />
             ) : (
-              <i className="fa-solid fa-plus"></i>
+              <FontAwesomeIcon icon={faPlus} />
             )}
           </span>
         </div>
@@ -95,7 +97,7 @@ function NodeMenuPanel({
           </Panel>
         </section>
       )}
-    </>
+    </div>
   );
 }
 

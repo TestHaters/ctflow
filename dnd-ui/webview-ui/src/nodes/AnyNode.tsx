@@ -2,17 +2,28 @@
 import defaultNodes from './defaultNode.json';
 import { memo, useEffect, useState } from 'react';
 import { Handle, NodeToolbar, Position, useReactFlow } from 'reactflow';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faArrowPointer,
+  faBox,
+  faDoorOpen,
+  faKeyboard,
+  faSpinner,
+  faSquareCheck,
+  faSyringe,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { useStore } from '../context/store';
 import { TextInput } from '../models/TextInput';
 import InputsRender from './InputsRender';
 const iconsMap = {
-  buttonNode: 'fa-solid fa-arrow-pointer',
-  visitNode: 'fa-solid fa-door-open',
-  waitNode: 'fa-solid fa-spinner',
-  checkboxNode: 'fa-solid fa-square-check',
-  textInputNode: 'fa-regular fa-keyboard',
-  containsNode: 'fa-solid fa-box',
-  codeInjectionNode: 'fa-solid fa-syringe',
+  buttonNode: faArrowPointer,
+  visitNode: faDoorOpen,
+  waitNode: faSpinner,
+  checkboxNode: faSquareCheck,
+  textInputNode: faKeyboard,
+  containsNode: faBox,
+  codeInjectionNode: faSyringe,
 };
 
 const AnyNode = (props) => {
@@ -117,27 +128,24 @@ const AnyNode = (props) => {
         isConnectable={isConnectable}
       />
 
-      <div className="w-48">
+      <div className="primary-color w-48">
         <div className="p-1 px-2 border-solid border-[1px] border-gray-600  rounded-tl rounded-tr">
           <span className="mr-1">
-            <i className={iconsMap[componentType]}></i>
+            <FontAwesomeIcon icon={iconsMap[componentType]} />
           </span>
           <label>{nodeData.name}</label>
           <span className="float-right" onClick={handleRemoveNode}>
-            <i className="fa-solid fa-xmark"></i>
+            <FontAwesomeIcon icon={faXmark} />
           </span>
         </div>
-
-        {defaultNodes[componentType].inputs.map((input, index) => {
-          const defaultValue =
-            index === 0 ? inPorts?.field || '' : inPorts?.value || '';
-          const value = index === 0 ? firstInput : secondInput;
-          return (
-            <div
-              key={input.label + index}
-              className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br"
-            >
+        <div className="p-2 border-solid border-[1px] border-t-0 border-gray-600 rounded-bl rounded-br">
+          {defaultNodes[componentType].inputs.map((input, index) => {
+            const defaultValue =
+              index === 0 ? inPorts?.field || '' : inPorts?.value || '';
+            const value = index === 0 ? firstInput : secondInput;
+            return (
               <InputsRender
+                key={input.label + index}
                 componentType={componentType}
                 type={input.type}
                 label={input.label}
@@ -148,9 +156,9 @@ const AnyNode = (props) => {
                 placeholder={input.placeholder}
                 onChange={(event) => handleChange(event, index)}
               />
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       <Handle
