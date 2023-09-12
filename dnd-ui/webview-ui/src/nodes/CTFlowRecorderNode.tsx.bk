@@ -54,65 +54,6 @@ const CTFlowRecorderNode = (props) => {
       console.log('watch on key');
       const source = doc.metadata.hasPendingWrites ? 'Local' : 'Server';
       console.log(source, ' data: ', doc.data());
-
-      const snapshotData = doc.data();
-      const payload = { nodes: {}, edges: {} };
-
-      snapshotData.nodes.forEach((node) => {
-        payload.nodes[node.id] = node;
-      });
-
-      snapshotData.edges.forEach((edge) => {
-        payload.edges[edge.id] = edge;
-      });
-
-      Object.keys(payload.nodes).map((nodeId, index) => {
-        payload.nodes[nodeId].position = {
-          x: Number(xPos) + 250 * index,
-          y: yPos,
-        };
-      });
-
-      const textAreaNode = new TextArea({
-        id,
-        type: 'CTFlowRecorderNode',
-        data,
-        position: {
-          // new node position is based on the number of parsed nodes
-          x: xPos + (Object.keys(payload.nodes).length + 1) * 250,
-          y: yPos,
-        },
-        inPorts: { code: '' },
-        outPorts: {},
-      });
-
-      console.log('textAreaNode', textAreaNode);
-
-      const newNodeStore = {
-        ...nodesStore,
-        ...payload.nodes,
-        [id]: { ...nodesStore[id], ...textAreaNode, description },
-      };
-
-      const newEdgeStore = {
-        ...edges,
-        ...payload.edges,
-      };
-
-      setNodeStore({
-        nodes: newNodeStore,
-        edges: newEdgeStore,
-      });
-
-      console.log('payload', payload);
-      console.log('nodesStore', nodesStore);
-      const event = new CustomEvent('message', {
-        detail: {
-          type: 'reloadReactFlow',
-          storeState: { nodes: newNodeStore, edges: newEdgeStore },
-        },
-      });
-      window.dispatchEvent(event);
     });
 
     // when unmount, call unsub
