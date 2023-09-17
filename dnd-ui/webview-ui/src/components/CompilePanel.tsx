@@ -1,5 +1,7 @@
 // @ts-nocheck
 import { memo } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { Panel } from 'reactflow';
 
 function CompilePanel({ onClick }) {
@@ -13,7 +15,7 @@ function CompilePanel({ onClick }) {
     >
       Run
       <span className="ml-1">
-        <i className="fa-solid fa-play"></i>
+        <FontAwesomeIcon icon={faPlay} />
       </span>
     </Panel>
   );

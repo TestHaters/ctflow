@@ -1,6 +1,8 @@
 // @ts-nocheck
 import { memo } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel } from 'reactflow';
+import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 
 function SavePanel({ onClick }) {
   // TODO: loading state when onClick running
@@ -12,7 +14,7 @@ function SavePanel({ onClick }) {
       onClick={onClick}
     >
       <span className="mr-1">
-        <i className="fa-solid fa-floppy-disk"></i>
+        <FontAwesomeIcon icon={faFloppyDisk} />
       </span>
       Save
     </Panel>

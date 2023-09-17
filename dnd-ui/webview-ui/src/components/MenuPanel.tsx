@@ -6,6 +6,8 @@ import {
   FormEvent,
   useRef,
 } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Node, Panel, Viewport } from 'reactflow';
 import { NodeDataType } from '../pages/Flow';
 import { vscode } from '../utilities/vscode';
@@ -87,7 +89,7 @@ export default function MenuPanel({
   }
 
   return (
-    <>
+    <div className="primary-color">
       <Panel
         position="top-left"
         style={{ left: 230 }}
@@ -99,7 +101,7 @@ export default function MenuPanel({
           ref={menuBtnRef}
           className="ml-1"
         >
-          <i className="fa-solid fa-bars"></i>
+          <FontAwesomeIcon icon={faBars} />
         </div>
       </Panel>
       {show && (
@@ -227,7 +229,7 @@ export default function MenuPanel({
             </form>
             <div className="absolute right-6 top-2">
               <button className="block m-2" onClick={() => setModal(0)}>
-                <i className="fa-solid fa-xmark"></i>
+                <FontAwesomeIcon icon={faXmark} />
               </button>
             </div>
           </div>
@@ -242,6 +244,6 @@ export default function MenuPanel({
           />
         </Panel>
       )}
-    </>
+    </div>
   );
 }

@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+div {
+    font-size: 13px;
+}
+
+.primary-color {
+    color: #6688CC;
+}

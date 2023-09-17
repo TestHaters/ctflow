@@ -1,5 +1,7 @@
 // @ts-nocheck
-import { useState, useRef } from 'react';
+import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHandshake } from '@fortawesome/free-regular-svg-icons';
 import { memo } from 'react';
 import { Panel } from 'reactflow';
 import { getWebSocket } from '../socket/getWebSocket';
@@ -28,9 +30,9 @@ function SavePanel() {
     >
       <span className="mr-1">
         {isCollab ? (
-          <i className="animate-pulse fa-regular fa-handshake"></i>
+          <FontAwesomeIcon className="animate-pulse" icon={faHandshake} />
         ) : (
-          <i className="fa-regular fa-handshake"></i>
+          <FontAwesomeIcon icon={faHandshake} />
         )}
       </span>
     </Panel>
