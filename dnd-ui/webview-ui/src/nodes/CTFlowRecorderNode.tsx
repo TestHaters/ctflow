@@ -6,7 +6,7 @@ import { useStore } from '../context/store';
 import { TextArea } from '../models/TextArea';
 import YAML from 'yaml';
 import { watchOnKey } from '../socket/firebase';
-import { faArrowPointer } from '@fortawesome/free-solid-svg-icons';
+import { faArrowPointer, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const noType = { email: false, password: false, text: false };
 
