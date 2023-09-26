@@ -32,6 +32,7 @@ export default function InputsRender({
             className="nodrag"
             checked={value as boolean}
             onChange={onChange}
+            onKeyDown={(event) => event.stopPropagation()}
             id={htmlFor + index}
           />
         </>
@@ -43,6 +44,7 @@ export default function InputsRender({
           <textarea
             onChange={onChange}
             className="nodrag"
+            onKeyDown={(event) => event.stopPropagation()}
             defaultValue={defaultValue}
             value={value as string}
             style={{
@@ -69,6 +71,7 @@ export default function InputsRender({
             className="nodrag"
             value={value as string}
             onChange={onChange}
+            onKeyDown={(event) => event.stopPropagation()}
             defaultValue={defaultValue}
             placeholder={placeholder}
             style={{ color: 'black', paddingLeft: '4px' }}

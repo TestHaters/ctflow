@@ -24,10 +24,10 @@ export function useCopyPaste<NodeData, EdgeData>() {
   const [bufferedEdges, setBufferedEdges] = useState([] as Edge<EdgeData>[]);
 
   // initialize the copy/paste hook
-  // 1. remove native copy/paste/cut handlers
+  // 1. only remove cut event handle because we need copy/paste for input tags
   // 2. add mouse move handler to keep track of the current mouse position
   useEffect(() => {
-    const events = ['cut', 'copy', 'paste'];
+    const events = ['cut'];
 
     if (rfDomNode) {
       const preventDefault = (e: Event) => e.preventDefault();
