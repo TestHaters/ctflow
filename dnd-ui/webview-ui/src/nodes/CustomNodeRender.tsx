@@ -108,6 +108,7 @@ const CustomNodeRender = (props) => {
                 onChange={(e) =>
                   setValues((prev) => ({ ...prev, [key]: e.target.value }))
                 }
+                onKeyDown={(event) => event.stopPropagation()}
                 onBlur={updateNodeValue}
                 // defaultValue={inPorts?.field}
                 placeholder="Your selector"

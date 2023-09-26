@@ -110,6 +110,7 @@ const ContainsNode = ({ id, data, isConnectable, xPos, yPos }) => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              onKeyDown={(event) => event.stopPropagation()}
               placeholder="Your selector"
               style={{ color: 'black', paddingLeft: '4px' }}
             />
@@ -123,6 +124,7 @@ const ContainsNode = ({ id, data, isConnectable, xPos, yPos }) => {
               type={textType}
               value={value}
               onChange={(e) => setValue(e.target.value)}
+              onKeyDown={(event) => event.stopPropagation()}
               placeholder="Your value"
               style={{ color: 'black', paddingLeft: '4px' }}
             />

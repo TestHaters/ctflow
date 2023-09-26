@@ -110,6 +110,7 @@ const ButtonNode = (props) => {
             className="nodrag"
             value={name}
             onChange={handleChange}
+            onKeyDown={(event) => event.stopPropagation()}
             defaultValue={inPorts?.field}
             placeholder="Your selector"
             style={{ color: 'black', paddingLeft: '4px' }}
