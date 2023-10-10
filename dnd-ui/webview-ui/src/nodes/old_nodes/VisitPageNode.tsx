@@ -116,6 +116,7 @@ const VisitPageNode = (props) => {
             type="text"
             value={url}
             onChange={(event) => setUrl(event.target.value)}
+            onKeyDown={(event) => event.stopPropagation()}
             placeholder="Page url"
             style={{ color: 'black', paddingLeft: '4px' }}
           />
