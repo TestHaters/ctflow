@@ -110,6 +110,7 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
             <input
               type="text"
               className="nodrag"
+              onKeyDown={(event) => event.stopPropagation()}
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your selector"
@@ -125,6 +126,7 @@ const CheckboxNode = ({ id, data, isConnectable, xPos, yPos }) => {
               className="nodrag"
               checked={checked}
               onChange={(e) => setChecked(e.target.checked)}
+              onKeyDown={(event) => event.stopPropagation()}
               id="email"
             />
           </div>

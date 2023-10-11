@@ -138,8 +138,6 @@ const CTFlowRecorderNode = (props) => {
       outPorts: {},
     });
 
-    console.log('textAreaNode', textAreaNode);
-
     const newNodeStore = {
       ...nodesStore,
       ...parsedData.nodes,
@@ -156,8 +154,6 @@ const CTFlowRecorderNode = (props) => {
       edges: newEdgeStore,
     });
 
-    console.log('parsedData', parsedData);
-    console.log('nodesStore', nodesStore);
     const event = new CustomEvent('message', {
       detail: {
         type: 'reloadReactFlow',
@@ -207,6 +203,7 @@ const CTFlowRecorderNode = (props) => {
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          onKeyDown={(event) => event.stopPropagation()}
           placeholder="What is this node about?"
           className="nodrag w-full text-xs font-xs italic bg-gray-500 text-white resize-none"
           style={{ paddingLeft: '4px', fontSize: '70%' }}
@@ -247,6 +244,7 @@ const CTFlowRecorderNode = (props) => {
             <textarea
               className="nodrag"
               onChange={(e) => setCode(e.target.value)}
+              onKeyDown={(event) => event.stopPropagation()}
               value={''}
               style={{
                 color: 'black',

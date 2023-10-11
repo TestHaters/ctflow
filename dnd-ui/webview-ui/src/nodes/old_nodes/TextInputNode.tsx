@@ -120,6 +120,7 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
               type="text"
               value={name}
               onChange={handleNameChange}
+              onKeyDown={(event) => event.stopPropagation()}
               placeholder="Your selector"
               style={{ color: 'black', paddingLeft: '4px' }}
             />
@@ -132,6 +133,7 @@ const TextInputNode = ({ id, data, isConnectable, xPos, yPos }) => {
               className="nodrag"
               value={value}
               onChange={handleValueChange}
+              onKeyDown={(event) => event.stopPropagation()}
               placeholder="Your value"
               style={{ color: 'black', paddingLeft: '4px' }}
             />
