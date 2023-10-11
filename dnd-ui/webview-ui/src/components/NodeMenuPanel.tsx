@@ -68,11 +68,14 @@ function NodeMenuPanel({
             className="bg-white rounded-lg p2 shadow-lg"
             style={{ left: 125, top: 50, width: 159, marginLeft: 10 }}
           >
-            {Object.values(defaultNodes).map((node) => {
+            {Object.values(defaultNodes).map((node, index) => {
               const name =
                 node.type.charAt(0).toUpperCase() + node.type.slice(1);
               return (
-                <div className="hover:bg-slate-200 p-2 rounded" key={node.id}>
+                <div
+                  className="hover:bg-slate-200 p-2 rounded"
+                  key={node.name + index}
+                >
                   <button
                     id="anyNode"
                     onClick={(event) => handleClick(event, node.type)}

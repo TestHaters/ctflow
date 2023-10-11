@@ -4,6 +4,7 @@ import { Handle, Position, useReactFlow } from 'reactflow';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useStore } from '../../context/store';
 import { TextInput } from '../../models/TextInput';
+import { faArrowPointer, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const ButtonNode = (props) => {
   const { id, data, isConnectable, xPos, yPos } = props;
