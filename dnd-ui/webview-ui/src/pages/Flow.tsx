@@ -22,12 +22,12 @@ import ReactFlow, {
   updateEdge,
   useEdgesState,
   useNodesState,
+  useReactFlow,
 } from 'reactflow';
 import YAML from 'yaml';
 
 import { toast } from 'react-toastify';
 import { Compiler } from '../compilers';
-import CollabPanel from '../components/CollabPanel';
 import CompilePanel from '../components/CompilePanel';
 import CustomEdge from '../components/CustomEdge';
 import MenuPanel from '../components/MenuPanel';
@@ -87,6 +87,7 @@ const edgeTypes = {
 const Editor = () => {
   const { height: windowHeight, width: windowWidth } = useGetWindowSize();
   const { takeSnapshot, undo, redo, setPast } = useUndoRedo();
+  // useAutoLayout({ direction: 'TB' });
 
   const [nodes, setNodes] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -104,11 +105,16 @@ const Editor = () => {
   const canPaste = bufferedNodes.length > 0;
 
   const viewport = useRef<Viewport>(defaultViewport);
+  const { fitView } = useReactFlow();
 
   useEffect(() => {
     window.addEventListener('message', handleCallback);
     () => window.removeEventListener('message', handleCallback);
   }, []);
+
+  useEffect(() => {
+    fitView({ duration: 400 });
+  }, [nodes, fitView]);
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -238,19 +244,6 @@ const Editor = () => {
     setStore({ ...payload });
     const yamlData = YAML.stringify(payload);
 
-    // When testing on browser, the vscode.postMessage won't work
-    // we will manually emit fileUpdate event
-    // if (window) {
-    //   const simulateFileUpdateTriggerOnBrowser = new CustomEvent("message", {
-    //     detail: {
-    //       "type": 'fileUpdate',
-    //       "text": yamlData,
-    //     },
-    //   });
-
-    //   //  window.dispatchEvent(simulateFileUpdateTriggerOnBrowser)
-    // }
-
     vscode.postMessage({
       type: 'addEdit',
       data: {
@@ -344,7 +337,6 @@ const Editor = () => {
         <Background style={{ backgroundColor: '#f5f5f5' }} />
         <MiniMap />
         <CompilePanel onClick={handleCompile} />
-        <CollabPanel />
         <SavePanel onClick={handleSave} />
         <NodeMenuPanel
           setShowMenu={setShowMenu}
