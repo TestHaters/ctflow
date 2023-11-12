@@ -215,6 +215,8 @@ const Editor = () => {
         componentName: 'compName',
         outputQ: ['outputQ'],
         // @ts-ignore
+        tags: { ...store.nodes[item.id].tags },
+        // @ts-ignore
         inPorts: { ...store.nodes[item.id].inPorts },
         outPorts: {},
         data: { ...omit(item.data, ['inPorts']) },

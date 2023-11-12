@@ -8,6 +8,7 @@ interface IOptions {
   icon?: string | undefined;
   description?: string | undefined;
   componentName?: string | null | undefined;
+  tags?: string[] | undefined;
   outputQ?: any[] | undefined;
 }
 
@@ -21,6 +22,7 @@ export class AppModel {
   icon?: string;
   description?: string;
   componentName?: string | null;
+  tags?: string[] | undefined;
   outputQ?: any[];
   constructor(options: IOptions) {
     this.id = options.id || 'string';

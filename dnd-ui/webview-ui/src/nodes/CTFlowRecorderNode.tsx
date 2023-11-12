@@ -8,6 +8,7 @@ import YAML from 'yaml';
 import { useNodesState, useEdgesState } from 'reactflow';
 import { watchOnKey } from '../socket/firebase';
 import { Timestamp } from 'firebase/firestore';
+import { watch } from 'fs';
 
 const noType = { email: false, password: false, text: false };
 
@@ -26,6 +27,7 @@ const CTFlowRecorderNode = (props) => {
   const [edges, setEdgeStore] = useStore((store) => store.edges);
   const [store, setStore] = useStore((store) => store);
   const { sourceHandleId, targetHandleId, inPorts } = data;
+  const [watchMode, setWatchMode] = useState(false);
 
   function commitChange(params: any) {
     const textAreaNode = new TextArea({
@@ -54,9 +56,11 @@ const CTFlowRecorderNode = (props) => {
 
   // call 1 time when component int.
   useEffect(() => {
-    if (!recordingId || recordingId.length !== 9) {
+    console.log(watchMode)
+
+    if (!watchMode && recordingId) {
       return () => {
-        console.log('print', recordingId);
+        console.log('Ignore Watch Mode', watchMode, recordingId);
       };
     }
 
@@ -75,6 +79,10 @@ const CTFlowRecorderNode = (props) => {
       snapshotData.nodes.forEach((node) => {
         const newId = uuid();
         timestamps_uuids[node.id] = newId;
+        node.tags = [
+          'recording-id:' + recordingId,
+          'original-recording-node-id:' + node.id,
+        ];
         node.id = newId;
         payload.nodes[node.id] = node;
       });
@@ -82,6 +90,7 @@ const CTFlowRecorderNode = (props) => {
       snapshotData.edges.forEach((edge) => {
         edge.source = timestamps_uuids[edge.source];
         edge.target = timestamps_uuids[edge.target];
+        edge.tags = ['recording-id:' + recordingId];
         payload.edges[edge.id] = edge;
       });
 
@@ -92,6 +101,7 @@ const CTFlowRecorderNode = (props) => {
         };
       });
 
+      // What is this? is this the pucking CTFlow Recorder node?
       const textAreaNode = new TextArea({
         id,
         type: 'CTFlowRecorderNode',
@@ -107,14 +117,30 @@ const CTFlowRecorderNode = (props) => {
 
       console.log('textAreaNode', textAreaNode);
 
+      // Remove duplicated nodes that generated from this recorder through tags with recording-id:${recordingId}
+      const deduplicatedNodesStore = Object.fromEntries(
+        Object.entries(nodesStore).filter(
+          ([nodeId, node]) =>
+            !node.tags?.includes('recording-id:' + recordingId)
+        )
+      );
+      console.log('deduplicatedNodes', deduplicatedNodesStore);
+
       const newNodeStore = {
-        ...nodesStore,
+        ...deduplicatedNodesStore,
         ...payload.nodes,
-        [id]: { ...nodesStore[id], ...textAreaNode, description },
+        [id]: { ...deduplicatedNodesStore[id], ...textAreaNode, description },
       };
 
+      const deduplicatedEdges = Object.fromEntries(
+        Object.entries(edges).filter(
+          ([edgeId, edge]) =>
+            !edge.tags?.includes('recording-id:' + recordingId)
+        )
+      );
+
       const newEdgeStore = {
-        ...edges,
+        ...deduplicatedEdges,
         ...payload.edges,
       };
 
@@ -125,6 +151,7 @@ const CTFlowRecorderNode = (props) => {
 
       console.log('payload', payload);
       console.log('nodesStore', nodesStore);
+
       const event = new CustomEvent('message', {
         detail: {
           type: 'reloadReactFlow',
@@ -138,7 +165,7 @@ const CTFlowRecorderNode = (props) => {
     return async () => {
       await unsub;
     };
-  }, [recordingId]);
+  }, [watchMode]);
 
   return (
     <div className="w-72">
@@ -180,7 +207,7 @@ const CTFlowRecorderNode = (props) => {
           <span className="mr-1">
             <i className="fa-solid fa-arrow-pointer"></i>
           </span>
-          <label>CTFlow Scripts</label>
+          <label>CTFlow Recorder</label>
           <span className="float-right" onClick={handleRemoveNode}>
             <i className="fa-solid fa-xmark"></i>
           </span>
@@ -199,8 +226,8 @@ const CTFlowRecorderNode = (props) => {
               onChange={(e) => {
                 setRecordingId(e.target.value);
               }}
-              placeholder="9 digits"
-              type="number"
+              placeholder="an uuid"
+              type="string"
               style={{
                 color: 'black',
                 paddingLeft: '4px',
@@ -208,6 +235,14 @@ const CTFlowRecorderNode = (props) => {
                 textAlign: 'center',
               }}
             />
+
+            <button
+              onClick={() => {
+                setWatchMode(!watchMode);
+              }}
+            >
+              {watchMode ? 'Stop Watching' : 'Start Watching'}
+            </button>
           </div>
         </div>
       </div>
