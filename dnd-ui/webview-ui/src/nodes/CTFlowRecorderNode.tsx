@@ -226,7 +226,7 @@ const CTFlowRecorderNode = (props) => {
               onChange={(e) => {
                 setRecordingId(e.target.value);
               }}
-              placeholder="9 digits"
+              placeholder="an uuid"
               type="string"
               style={{
                 color: 'black',
