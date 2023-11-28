@@ -91,6 +91,14 @@ function NodeMenuPanel({
                 CTFlow Recorder
               </button>
             </div>
+            <div className="hover:bg-slate-200 p-2 rounded">
+              <button
+                id="group"
+                onClick={(event) => handleClick(event, 'group')}
+              >
+                Group
+              </button>
+            </div>
 
             {/* <div className="hover:bg-slate-200 p-2 rounded">
               <button id="codeInjectionNode" onClick={handleClick}>
