@@ -103,7 +103,6 @@ const Editor = () => {
   const { height: windowHeight, width: windowWidth } = useGetWindowSize();
   const { takeSnapshot, undo, redo, setPast } = useUndoRedo();
   const wrapperRef = useRef<HTMLDivElement>(null);
-  // useAutoLayout({ direction: 'TB' });
 
   const [nodes, setNodes] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -121,17 +120,13 @@ const Editor = () => {
   const canPaste = bufferedNodes.length > 0;
 
   const viewport = useRef<Viewport>(defaultViewport);
-  const { project, getIntersectingNodes, fitView } = useReactFlow();
+  const { project, getIntersectingNodes } = useReactFlow();
   const rfStore = useStoreApi();
 
   useEffect(() => {
     window.addEventListener('message', handleCallback);
     () => window.removeEventListener('message', handleCallback);
   }, []);
-
-  useEffect(() => {
-    fitView({ duration: 400 });
-  }, [nodes, fitView]);
 
   const onConnect = useCallback(
     (connection: Connection) => {
