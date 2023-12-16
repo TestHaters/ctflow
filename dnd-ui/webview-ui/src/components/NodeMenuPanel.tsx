@@ -78,6 +78,7 @@ function NodeMenuPanel({
                 >
                   <button
                     id="anyNode"
+                    className="w-full text-left"
                     onClick={(event) => handleClick(event, node.type)}
                   >
                     {name.replace('Node', '')} Node
@@ -94,6 +95,7 @@ function NodeMenuPanel({
             <div className="hover:bg-slate-200 p-2 rounded">
               <button
                 id="group"
+                className="w-full text-left"
                 onClick={(event) => handleClick(event, 'group')}
               >
                 Group
