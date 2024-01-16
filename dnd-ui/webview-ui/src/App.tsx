@@ -6,6 +6,7 @@ import { Provider } from './context/store';
 import InitGlobalState from './InitGlobalState';
 import { ToastContainer } from 'react-toastify';
 import 'vite/modulepreload-polyfill';
+import GroupNodeProvider from './context/CollapsibleContext';
 
 declare global {
   interface Window {
@@ -18,12 +19,14 @@ declare global {
 function App() {
   return (
     <Provider>
-      <InitGlobalState>
-        <ReactFlowProvider>
-          <Flow />
-        </ReactFlowProvider>
-        <ToastContainer />
-      </InitGlobalState>
+      <GroupNodeProvider>
+        <InitGlobalState>
+          <ReactFlowProvider>
+            <Flow />
+          </ReactFlowProvider>
+          <ToastContainer />
+        </InitGlobalState>
+      </GroupNodeProvider>
     </Provider>
   );
 }

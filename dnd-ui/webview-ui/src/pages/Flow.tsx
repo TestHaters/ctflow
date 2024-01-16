@@ -44,6 +44,7 @@ import NodeMenuPanel from '../components/NodeMenuPanel';
 import SavePanel from '../components/SavePanel';
 import { useStore } from '../context/store';
 import useCopyPaste from '../hooks/useCopyPaste';
+import useExpandCollapse from '../hooks/useExpandCollapse';
 import { useGetWindowSize } from '../hooks/useGetWindowSize';
 import useUndoRedo from '../hooks/useUndoRedo';
 import AnyNode from '../nodes/AnyNode';
@@ -56,13 +57,13 @@ import ContainsNode from '../nodes/old_nodes/ContainsNode';
 import TextInputNode from '../nodes/old_nodes/TextInputNode';
 import VisitPageNode from '../nodes/old_nodes/VisitPageNode';
 import WaitNode from '../nodes/old_nodes/WaitNode';
-import { getHelperLines } from '../utilities/helperLines';
-import { vscode } from '../utilities/vscode';
 import {
   getId,
   getNodePositionInsideParent,
   sortNodes,
 } from '../utilities/groupNodes';
+import { getHelperLines } from '../utilities/helperLines';
+import { vscode } from '../utilities/vscode';
 
 const fitViewOptions: FitViewOptions = {
   padding: 0.2,
@@ -106,6 +107,10 @@ const Editor = () => {
 
   const [nodes, setNodes] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const { nodes: visibleNodes, edges: visibleEdges } = useExpandCollapse(
+    nodes,
+    edges
+  );
   const [, setSelectedNode] = useState<Node | null>(null);
   const [store, setStore] = useStore((store) => store);
   const [showMenu, setShowMenu] = useState(false);
@@ -405,13 +410,10 @@ const Editor = () => {
       }
       takeSnapshot();
     },
-    [getIntersectingNodes, setNodes, store, takeSnapshot]
+    [getIntersectingNodes, setNodes, takeSnapshot]
   );
   const onDrop: DragEventHandler<HTMLDivElement> = (event: React.DragEvent) => {
-    console.log('onDrop');
-
     event.preventDefault();
-    console.log('wrapperRef.current:', wrapperRef.current);
 
     if (wrapperRef.current) {
       const wrapperBounds = wrapperRef.current.getBoundingClientRect();
@@ -471,8 +473,8 @@ const Editor = () => {
   return (
     <div style={{ height: windowHeight, width: windowWidth }} ref={wrapperRef}>
       <ReactFlow
-        nodes={nodes}
-        edges={edges}
+        nodes={visibleNodes}
+        edges={visibleEdges}
         onNodesChange={onNodesChange}
         onNodeDragStop={onNodeDragStop}
         onEdgesChange={onEdgesChange}

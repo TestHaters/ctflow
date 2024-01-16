@@ -1,12 +1,13 @@
 // @ts-nocheck
-import { Dispatch, memo, SetStateAction, useRef } from 'react';
+import { faAngleDown, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Dispatch, memo, SetStateAction, useRef } from 'react';
 import { Panel } from 'reactflow';
-import defaultNodes from '../nodes/defaultNode.json';
-import { RFNode } from '../models/nodeFactory';
+import { useCollapsibleNodes } from '../context/CollapsibleContext';
 import { useStore } from '../context/store';
 import { useStaticClickAway } from '../hooks/useClickOutside';
-import { faAngleDown, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { RFNode } from '../models/nodeFactory';
+import defaultNodes from '../nodes/defaultNode.json';
 
 interface INodeMenuPanel {
   setShowMenu: Dispatch<SetStateAction<boolean>>;
@@ -23,6 +24,7 @@ function NodeMenuPanel({
 }: INodeMenuPanel) {
   const nodeMenuRef = useRef(null);
   const addNodeRef = useRef(null);
+  const { setGroupNodes } = useCollapsibleNodes();
   const [takeSnapshot] = useStore((store) => store.takeSnapshot);
 
   useStaticClickAway(nodeMenuRef, () => setShowMenu(false), addNodeRef);
@@ -38,6 +40,15 @@ function NodeMenuPanel({
       },
       position: { x: event.clientX - curX + 20, y: event.clientY - curY + 20 },
     });
+
+    if (newNode.type === 'group') {
+      const { width, height } = newNode;
+
+      setGroupNodes((prev) => {
+        return { ...prev, [newNode.id]: { width, height } };
+      });
+    }
+
     await setNodes((prev) => [...prev, newNode]);
     setShowMenu(false);
     takeSnapshot();
