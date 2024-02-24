@@ -16,10 +16,7 @@ export class ContainsNodeCompiler {
     return `
       cy.document().then((document) => {
         for (let selector of ${JSON.stringify(selectors)}) {
-          console.log(selector)
-          console.log(document.querySelector(selector))
           if(document.querySelector(selector) != null) {
-              console.log("click", selector)
               cy.get(selector).contains("${nodeData.inPorts.value}")
               break;
           }
