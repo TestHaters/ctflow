@@ -14,14 +14,7 @@ export class TextInputNodeCompiler {
     }
 
     return `
-    cy.document().then((document) => {
-      for (let selector of ${JSON.stringify(selectors)}) {
-        if(document.querySelector(selector) != null) {
-            cy.get(selector).type('${nodeData.inPorts.value}')
-            break;
-        }
-      }
-    })
+    cy.get('${selectors.join(', ')}').first().type('${nodeData.inPorts.value}')
     `;
   }
 }
