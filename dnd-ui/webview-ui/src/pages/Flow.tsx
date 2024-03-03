@@ -4,7 +4,13 @@ import './flow.css';
 import get from 'lodash/get';
 import omit from 'lodash/omit';
 import pick from 'lodash/pick';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  DragEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import ReactFlow, {
   Background,
   Connection,
@@ -14,6 +20,7 @@ import ReactFlow, {
   MiniMap,
   Node,
   NodeChange,
+  NodeDragHandler,
   OnNodesChange,
   OnSelectionChangeParams,
   Viewport,
@@ -22,33 +29,41 @@ import ReactFlow, {
   updateEdge,
   useEdgesState,
   useNodesState,
+  useReactFlow,
+  useStoreApi,
 } from 'reactflow';
 import YAML from 'yaml';
 
 import { toast } from 'react-toastify';
 import { Compiler } from '../compilers';
-import CollabPanel from '../components/CollabPanel';
 import CompilePanel from '../components/CompilePanel';
 import CustomEdge from '../components/CustomEdge';
+import HelperLines from '../components/HelperLine';
 import MenuPanel from '../components/MenuPanel';
 import NodeMenuPanel from '../components/NodeMenuPanel';
 import SavePanel from '../components/SavePanel';
 import { useStore } from '../context/store';
+import useCopyPaste from '../hooks/useCopyPaste';
+import useExpandCollapse from '../hooks/useExpandCollapse';
 import { useGetWindowSize } from '../hooks/useGetWindowSize';
 import useUndoRedo from '../hooks/useUndoRedo';
 import AnyNode from '../nodes/AnyNode';
 import CTFlowRecorderNode from '../nodes/CTFlowRecorderNode';
 import CustomNodeRender from '../nodes/CustomNodeRender';
+import GroupNode from '../nodes/GroupNode';
 import ButtonNode from '../nodes/old_nodes/ButtonNode';
 import CheckboxNode from '../nodes/old_nodes/CheckboxNode';
 import ContainsNode from '../nodes/old_nodes/ContainsNode';
 import TextInputNode from '../nodes/old_nodes/TextInputNode';
 import VisitPageNode from '../nodes/old_nodes/VisitPageNode';
 import WaitNode from '../nodes/old_nodes/WaitNode';
+import {
+  getId,
+  getNodePositionInsideParent,
+  sortNodes,
+} from '../utilities/groupNodes';
 import { getHelperLines } from '../utilities/helperLines';
 import { vscode } from '../utilities/vscode';
-import HelperLines from '../components/HelperLine';
-import useCopyPaste from '../hooks/useCopyPaste';
 
 const fitViewOptions: FitViewOptions = {
   padding: 0.2,
@@ -70,6 +85,7 @@ const nodeTypes = {
   CTFlowRecorderNode: CTFlowRecorderNode,
   customNode: CustomNodeRender,
   anyNode: AnyNode,
+  group: GroupNode,
 
   // TODO: remove old nodes in new version
   buttonNode: ButtonNode,
@@ -87,9 +103,14 @@ const edgeTypes = {
 const Editor = () => {
   const { height: windowHeight, width: windowWidth } = useGetWindowSize();
   const { takeSnapshot, undo, redo, setPast } = useUndoRedo();
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   const [nodes, setNodes] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const { nodes: visibleNodes, edges: visibleEdges } = useExpandCollapse(
+    nodes,
+    edges
+  );
   const [, setSelectedNode] = useState<Node | null>(null);
   const [store, setStore] = useStore((store) => store);
   const [showMenu, setShowMenu] = useState(false);
@@ -104,6 +125,8 @@ const Editor = () => {
   const canPaste = bufferedNodes.length > 0;
 
   const viewport = useRef<Viewport>(defaultViewport);
+  const { project, getIntersectingNodes } = useReactFlow();
+  const rfStore = useStoreApi();
 
   useEffect(() => {
     window.addEventListener('message', handleCallback);
@@ -240,19 +263,6 @@ const Editor = () => {
     setStore({ ...payload });
     const yamlData = YAML.stringify(payload);
 
-    // When testing on browser, the vscode.postMessage won't work
-    // we will manually emit fileUpdate event
-    // if (window) {
-    //   const simulateFileUpdateTriggerOnBrowser = new CustomEvent("message", {
-    //     detail: {
-    //       "type": 'fileUpdate',
-    //       "text": yamlData,
-    //     },
-    //   });
-
-    //   //  window.dispatchEvent(simulateFileUpdateTriggerOnBrowser)
-    // }
-
     vscode.postMessage({
       type: 'addEdit',
       data: {
@@ -280,10 +290,6 @@ const Editor = () => {
   function handleMoveEnd(_: unknown, curViewport: Viewport) {
     viewport.current = curViewport;
   }
-
-  const dragStop = useCallback(() => {
-    takeSnapshot();
-  }, [takeSnapshot]);
 
   const customApplyNodeChanges = useCallback(
     (changes: NodeChange[], nodes: Node[]): Node[] => {
@@ -325,17 +331,163 @@ const Editor = () => {
     [setNodes, customApplyNodeChanges]
   );
 
+  const onNodeDrag: NodeDragHandler = useCallback(
+    (_: React.MouseEvent, node: Node) => {
+      if (node.type !== 'anyNode' && !node.parentNode) {
+        return;
+      }
+
+      const intersections = getIntersectingNodes(node).filter(
+        (n) => n.type === 'group'
+      );
+      const groupClassName =
+        intersections.length && node.parentNode !== intersections[0]?.id
+          ? 'active'
+          : '';
+
+      setNodes((nds) => {
+        return nds.map((n) => {
+          if (n.type === 'group') {
+            return {
+              ...n,
+              className: groupClassName,
+            };
+          } else if (n.id === node.id) {
+            return {
+              ...n,
+              position: node.position,
+            };
+          }
+
+          return { ...n };
+        });
+      });
+    },
+    [getIntersectingNodes, setNodes]
+  );
+  const onNodeDragStop = useCallback(
+    (_: React.MouseEvent, node: Node) => {
+      if (node.type !== 'anyNode' && !node.parentNode) {
+        return;
+      }
+
+      const intersections = getIntersectingNodes(node).filter(
+        (n) => n.type === 'group'
+      );
+      const groupNode = intersections[0];
+
+      // when there is an intersection on drag stop, we want to attach the node to its new parent
+      if (intersections.length && node.parentNode !== groupNode?.id) {
+        const nextNodes: Node[] = rfStore
+          .getState()
+          .getNodes()
+          .map((n) => {
+            if (n.id === groupNode.id) {
+              return {
+                ...n,
+                className: '',
+              };
+            } else if (n.id === node.id) {
+              const position = getNodePositionInsideParent(n, groupNode) ?? {
+                x: 0,
+                y: 0,
+              };
+
+              return {
+                ...n,
+                position,
+                parentNode: groupNode.id,
+                // we need to set dragging = false, because the internal change of the dragging state
+                // is not applied yet, so the node would be rendered as dragging
+                dragging: false,
+                extent: 'parent' as 'parent',
+              };
+            }
+
+            return n;
+          })
+          .sort(sortNodes);
+
+        setNodes(nextNodes);
+      }
+      takeSnapshot();
+    },
+    [getIntersectingNodes, setNodes, takeSnapshot]
+  );
+  const onDrop: DragEventHandler<HTMLDivElement> = (event: React.DragEvent) => {
+    event.preventDefault();
+
+    if (wrapperRef.current) {
+      const wrapperBounds = wrapperRef.current.getBoundingClientRect();
+      const type = event.dataTransfer.getData('application/reactflow');
+      const position = project({
+        x: event.clientX - wrapperBounds.x - 20,
+        y: event.clientY - wrapperBounds.top - 20,
+      });
+      console.log('position:', position);
+      const nodeStyle =
+        type === 'group' ? { width: 400, height: 200 } : undefined;
+
+      const intersections = getIntersectingNodes({
+        x: position.x,
+        y: position.y,
+        width: 40,
+        height: 40,
+      }).filter((n) => n.type === 'group');
+      const groupNode = intersections[0];
+
+      const newNode: Node = {
+        id: getId(),
+        type,
+        position,
+        data: { label: `${type}` },
+        style: nodeStyle,
+      };
+
+      if (groupNode) {
+        // if we drop a node on a group node, we want to position the node inside the group
+        newNode.position = getNodePositionInsideParent(
+          {
+            position,
+            width: 40,
+            height: 40,
+          },
+          groupNode
+        ) ?? { x: 0, y: 0 };
+        newNode.parentNode = groupNode?.id;
+        newNode.extent = groupNode ? 'parent' : undefined;
+      }
+
+      // we need to make sure that the parents are sorted before the children
+      // to make sure that the children are rendered on top of the parents
+      const sortedNodes = rfStore
+        .getState()
+        .getNodes()
+        .concat(newNode)
+        .sort(sortNodes);
+      setNodes(sortedNodes);
+    }
+  };
+  const onDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  };
   return (
-    <div style={{ height: windowHeight, width: windowWidth }}>
+    <div style={{ height: windowHeight, width: windowWidth }} ref={wrapperRef}>
       <ReactFlow
-        nodes={nodes}
-        edges={edges}
+        nodes={visibleNodes}
+        edges={visibleEdges}
         onNodesChange={onNodesChange}
+        onNodeDragStop={onNodeDragStop}
         onEdgesChange={onEdgesChange}
         onMoveEnd={handleMoveEnd}
         onConnect={onConnect}
         onEdgeUpdate={onEdgeUpdate}
-        onNodeDragStop={dragStop}
+        onNodeDrag={onNodeDrag}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+        proOptions={{ hideAttribution: true }}
+        selectNodesOnDrag={false}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         onSelectionChange={onSelectionChange}
@@ -346,7 +498,6 @@ const Editor = () => {
         <Background style={{ backgroundColor: '#f5f5f5' }} />
         <MiniMap />
         <CompilePanel onClick={handleCompile} />
-        <CollabPanel />
         <SavePanel onClick={handleSave} />
         <NodeMenuPanel
           setShowMenu={setShowMenu}
