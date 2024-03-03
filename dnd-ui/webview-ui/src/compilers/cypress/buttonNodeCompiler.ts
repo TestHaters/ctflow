@@ -10,8 +10,14 @@ export class ButtonNodeCompiler {
   static compile(nodeData: any): string {
     // cy.contains("${nodeData.inPorts.field}").click()
     // cy.wait(500)
+
+    let selectors = [nodeData.inPorts.field];
+    if (typeof nodeData.inPorts.alternative_selectors === 'object') {
+      selectors = selectors.concat(nodeData.inPorts.alternative_selectors);
+    }
+
     return `
-      cy.get('${nodeData.inPorts.field}').click()
+      cy.get('${selectors.join(', ')}').first().click()
     `;
   }
 }
