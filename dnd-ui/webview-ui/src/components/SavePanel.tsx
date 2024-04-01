@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Panel } from 'reactflow';
+import { Panel, useEdges } from 'reactflow';
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { Compiler } from '../compilers';
 import { useStore } from '../context/store';
@@ -9,6 +9,8 @@ import { useState } from 'react';
 
 function SavePanel({ onClick }) {
   const [store] = useStore((store) => store);
+  const edges = useEdges();
+  // const nodes = useNodes();
   const [currentFileHandle, setCurrentFileHandle] = useState(null);
 
   // https://developer.mozilla.org/en-US/docs/Web/API/File_System_API
@@ -20,6 +22,12 @@ function SavePanel({ onClick }) {
   }
 
   async function exportCompiledFile() {
+    const inputEdges = edges.reduce((acc, item) => {
+      acc[item.id] = { ...item };
+      return acc;
+    }, {});
+    store.edges = inputEdges;
+
     const opts = {};
     opts.mode = 'readwrite';
 
@@ -45,7 +53,6 @@ function SavePanel({ onClick }) {
         position="top-right"
         style={{ right: 230 }}
       >
-
         <button
           className="rounded !text-white font-semibold py-2 px-5 bg-green-500	cursor-pointer"
           type="button"
